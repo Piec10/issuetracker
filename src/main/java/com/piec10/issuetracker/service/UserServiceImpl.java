@@ -1,10 +1,9 @@
 package com.piec10.issuetracker.service;
 
-import com.piec10.issuetracker.dao.UserDAO;
+import com.piec10.issuetracker.dao.UserRepository;
 import com.piec10.issuetracker.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -12,11 +11,10 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserDAO userDAO;
+    private UserRepository userRepository;
 
     @Override
-    @Transactional
     public List<User> findAll() {
-        return userDAO.findAll();
+        return userRepository.findAll();
     }
 }
