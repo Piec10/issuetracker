@@ -16,13 +16,17 @@ public class User {
     @Column(name = "enabled")
     private int enabled;
 
+    @Column(name = "email")
+    private String email;
+
     public User() {
     }
 
-    public User(String username, String password, int enabled) {
+    public User(String username, String password, int enabled, String email) {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
+        this.email = email;
     }
 
     public String getUsername() {
@@ -49,12 +53,21 @@ public class User {
         this.enabled = enabled;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

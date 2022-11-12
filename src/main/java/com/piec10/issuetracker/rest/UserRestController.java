@@ -16,9 +16,9 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
-    public List<User> findAll(){
-
-        return userService.findAll();
-    }
+//    @GetMapping("/users")
+//    public List<User> findAll(){
+//
+//        return userService.findAll();
+//    }
 }
