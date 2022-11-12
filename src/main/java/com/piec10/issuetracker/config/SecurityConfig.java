@@ -24,6 +24,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests()
                 .antMatchers("/dashboard/**").hasRole("USER")
+                .antMatchers("/resources/**").permitAll()
                 .and()
                 .formLogin().permitAll();
 
