@@ -25,6 +25,15 @@
         Role(s): <span sec:authentication="principal.authorities"></span>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto">
+
+                <div sec:authorize="hasRole('ROLE_ADMIN')">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Admin Panel</a>
+                    </li>
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Profile</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="javascript: document.logoutForm.submit()">Sign out</a>
 
