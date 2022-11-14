@@ -26,7 +26,14 @@ public class SecurityConfig {
                 .antMatchers("/dashboard/**").hasRole("USER")
                 .antMatchers("/resources/**").permitAll()
                 .and()
-                .formLogin().permitAll();
+                .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/authenticateTheUser")
+                    .defaultSuccessUrl("/dashboard/")
+                    .permitAll()
+                .and()
+                .logout()
+                .logoutSuccessUrl("/home");
 
         return http.build();
     }
