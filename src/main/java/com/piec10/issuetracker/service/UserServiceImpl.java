@@ -29,4 +29,20 @@ public class UserServiceImpl implements UserService {
         }
         else return null;
     }
+
+    @Override
+    public User findByEmail(String email) {
+
+        User user = userRepository.findByEmail(email);
+
+        if(user != null){
+            return user;
+        }
+        else return null;
+    }
+
+    @Override
+    public boolean exists(String username) {
+        return userRepository.existsById(username);
+    }
 }
