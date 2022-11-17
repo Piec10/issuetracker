@@ -9,5 +9,5 @@ public interface UserService {
 
     public List<User> findAll();
 
-    public Optional findByUsername(String username);
+    public User findByUsername(String username);
 }

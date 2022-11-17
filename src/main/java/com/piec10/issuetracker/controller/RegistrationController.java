@@ -49,8 +49,8 @@ public class RegistrationController {
         }
 
         // check the database if user already exists
-        Optional<User> existing = userService.findByUsername(formUser.getUsername());
-        if(existing.isPresent()){
+        User existing = userService.findByUsername(formUser.getUsername());
+        if(existing != null){
             theModel.addAttribute("registrationError", "User already exists.");
 
             return "registration-form";
