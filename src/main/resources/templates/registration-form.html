@@ -34,13 +34,15 @@
                     <a class="nav-link" th:href="@{/login}">Sign in</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active border rounded" aria-current="page" th:href="@{/register/showRegistrationForm}">Sign up</a>
+                    <a class="nav-link active border rounded" aria-current="page"
+                       th:href="@{/register/showRegistrationForm}">Sign up</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-<div class="bg-image" style="background-image: url('/images/background.jpeg'); background-size: cover; background-repeat: repeat;">
+<div class="bg-image"
+     style="background-image: url('/images/background.jpeg'); background-size: cover; height: 100vh;">
 
     <div class="container col-xl-10 col-xxl-8 px-4 py-5">
         <div class="row align-items-center g-lg-5 py-5">
@@ -52,60 +54,70 @@
                         Sign up
                     </div>
 
+                    <div th:if="${registrationError}">
+                        <div class="alert alert-danger mt-4">
+                            <small>
+                                <span th:text="${registrationError}"></span>
+                            </small>
+                        </div>
+                    </div>
+
                     <!-- User name -->
                     <div class="input-group mt-4">
 
-                        <input type="text" th:field="*{username}" name="username" placeholder="Username" class="form-control">
+                        <input type="text" th:field="*{username}" name="username" placeholder="Username"
+                               class="form-control">
                     </div>
                     <div th:if="${#fields.hasErrors('username')}" class="text-danger">
                         <small>
                             <ul>
-                                <li th:each="err : ${#fields.errors('username')}" th:text="${err}" />
+                                <li th:each="err : ${#fields.errors('username')}" th:text="${err}"/>
                             </ul>
                         </small>
                     </div>
 
-
                     <!-- Email -->
                     <div class="input-group mt-4">
 
-                        <input type="text" th:field="*{email}"  name="email" placeholder="Email" class="form-control">
+                        <input type="text" th:field="*{email}" name="email" placeholder="Email" class="form-control">
                     </div>
 
                     <div th:if="${#fields.hasErrors('email')}" class="text-danger">
                         <small>
-                        <ul>
-                            <li th:each="err : ${#fields.errors('email')}" th:text="${err}" />
-                        </ul>
+                            <ul>
+                                <li th:each="err : ${#fields.errors('email')}" th:text="${err}"/>
+                            </ul>
                         </small>
                     </div>
 
                     <!-- Password -->
                     <div class="input-group mt-4">
 
-                        <input type="password" th:field="*{password}" name="password" placeholder="Password" class="form-control">
+                        <input type="password" th:field="*{password}" name="password" placeholder="Password"
+                               class="form-control">
                     </div>
 
                     <div th:if="${#fields.hasErrors('password')}" class="text-danger">
                         <small>
-                        <ul>
-                            <li th:each="err : ${#fields.errors('password')}" th:text="${err}" />
-                        </ul>
+                            <ul>
+                                <li th:each="err : ${#fields.errors('password')}" th:text="${err}"/>
+                            </ul>
                         </small>
                     </div>
 
                     <!-- Confirm Password -->
                     <div class="input-group mt-4">
 
-                        <input type="password" th:field="*{matchingPassword}"  name="matchingPassword" placeholder="Confirm Password"
+                        <input type="password" th:field="*{matchingPassword}" name="matchingPassword"
+                               placeholder="Confirm Password"
                                class="form-control">
                     </div>
 
                     <div th:if="${#fields.hasErrors('matchingPassword')}" class="text-danger">
                         <small>
-                        <ul>
-                            <li th:each="err : ${#fields.errors('matchingPassword')}" th:text="${err}" />
-                        </ul>
+                            <ul>
+                                <li th:each="err : ${#fields.errors('matchingPassword')}" th:text="${err}"/>
+                            </ul>
                         </small>
                     </div>
 

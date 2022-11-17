@@ -50,36 +50,32 @@
             <div class="col-md-10 mx-auto col-lg-5">
                 <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/authenticateTheUser}" method="POST">
 
-                    <div class="form-floating mb-3 fw-bold">
+                    <div class="form-floating fw-bold">
                         Sign in
                     </div>
 
                     <!-- Check for login error -->
-                    <div th:if="${param.error}" class="form-floating mb-3">
-                        <div style="margin-bottom: 25px" class="alert alert-danger">
+                    <div th:if="${param.error}">
+                        <div class="alert alert-danger mt-4">
+                            <small>
                             Incorrect username or password.
+                            </small>
                         </div>
                     </div>
 
-                    <div class="form-floating mb-3">
+                    <!-- User name -->
+                    <div class="input-group mt-4">
 
-                        <!-- User name -->
-                        <div style="margin-bottom: 25px" class="input-group">
-
-                            <input type="text" name="username" placeholder="Username" class="form-control">
-                        </div>
-
+                        <input type="text" name="username" placeholder="Username" class="form-control">
                     </div>
-                    <div class="form-floating mb-3">
 
-                        <!-- Password -->
-                        <div style="margin-bottom: 25px" class="input-group">
+                    <!-- Password -->
+                    <div class="input-group mt-4">
 
-                            <input type="password" name="password" placeholder="Password" class="form-control">
-                        </div>
-
+                        <input type="password" name="password" placeholder="Password" class="form-control">
                     </div>
-                    <button class="w-100 btn btn-outline-secondary" type="submit">Sign in</button>
+
+                    <button class="w-100 btn btn-outline-secondary mt-4" type="submit">Sign in</button>
                     <hr class="my-4">
 
                     <div>

@@ -1,19 +1,34 @@
 package com.piec10.issuetracker.controller;
 
+import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.service.UserService;
 import com.piec10.issuetracker.user.FormUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
+
+    @Autowired
+    private UserService userService;
+
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder) {
+
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
 
     @GetMapping("/showRegistrationForm")
     public String showRegistrationPage(Model theModel) {
@@ -28,14 +43,19 @@ public class RegistrationController {
             BindingResult theBindingResult,
             Model theModel) {
 
-
-
         // form validation
         if (theBindingResult.hasErrors()){
             return "registration-form";
         }
 
         // check the database if user already exists
+        Optional<User> existing = userService.findByUsername(formUser.getUsername());
+        if(existing.isPresent()){
+            theModel.addAttribute("registrationError", "User already exists.");
+
+            return "registration-form";
+        }
+
 //        User existing = userService.findByUserName(userName);
 //        if (existing != null){
 //            theModel.addAttribute("crmUser", new CrmUser());
