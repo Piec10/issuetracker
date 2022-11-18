@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name="users")
@@ -18,6 +19,12 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
 
     public User() {
     }
@@ -61,6 +68,14 @@ public class User {
         this.email = email;
     }
 
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -68,6 +83,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
                 ", email='" + email + '\'' +
+                ", roles=" + roles +
                 '}';
     }
+
 }

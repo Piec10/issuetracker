@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class RegistrationController {
 
     @Autowired
-    private UserService userService;
+    private UserService userService;joi
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
