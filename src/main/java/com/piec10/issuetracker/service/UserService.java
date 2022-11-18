@@ -1,11 +1,12 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.entity.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     public List<User> findAll();
 

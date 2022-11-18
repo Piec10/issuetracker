@@ -12,15 +12,13 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
-import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
 
     @Autowired
-    private UserService userService;joi
+    private UserService userService;
 
     @InitBinder
     public void initBinder(WebDataBinder dataBinder) {
