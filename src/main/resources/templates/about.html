@@ -14,34 +14,7 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-light shadow fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/home}">Issue Tracker</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/home}">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/contact}">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/about}">About Project</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/login}">Sign in</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link border rounded" th:href="@{/register/showRegistrationForm}">Sign up</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<div th:replace="navbar :: navbar(active='about')"></div>
 
 <div class="bg-image" style="background-image: url('/images/background.jpeg'); height: 100vh; background-size: cover;">
 </div>
