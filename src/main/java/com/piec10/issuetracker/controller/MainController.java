@@ -14,10 +14,6 @@ import java.util.logging.Logger;
 @Controller
 public class MainController {
 
-//    @Autowired
-//    private RoleRepository roleRepository;
-//    private Logger logger = Logger.getLogger(getClass().getName());
-
     @GetMapping("/home")
     public String getHome(){
         return "home";
@@ -36,5 +32,10 @@ public class MainController {
     @GetMapping("test")
     public String getTest(){
         return "test";
+    }
+
+    @GetMapping("/access-denied")
+    public String showAccessDenied() {
+        return "access-denied";
     }
 }

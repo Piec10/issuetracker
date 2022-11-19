@@ -48,7 +48,7 @@
                         <td th:text="${tempUser.createdAt}"/>
 
                         <td>
-                            <a href="#"
+                            <a th:href="@{/dashboard/adminPanel/deleteUser(userId=${tempUser.username})}"
                                class="btn btn-danger btn-sm"
                                style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
                                onclick="if (!(confirm('Are you sure you want to delete this user?'))) return false">

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -28,8 +29,11 @@ public class AdminPanelController {
     }
 
     @GetMapping("/deleteUser")
-    public String deleteUser(){
-        return null;
+    public String deleteUser(@RequestParam("userId") String theId){
+
+        userService.deleteById(theId);
+
+        return "redirect:/dashboard/adminPanel/";
     }
 
 }

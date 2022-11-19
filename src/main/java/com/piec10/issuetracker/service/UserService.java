@@ -18,4 +18,6 @@ public interface UserService extends UserDetailsService {
     public boolean exists(String username);
 
     void save(FormUser formUser);
+
+    void deleteById(String theId);
 }
