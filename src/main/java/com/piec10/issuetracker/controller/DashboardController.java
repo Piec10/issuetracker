@@ -32,6 +32,11 @@ public class DashboardController {
         return "dashboard/admin-panel";
     }
 
+    @GetMapping("adminPanel/deleteUser")
+    public String deleteUser(){
+        return null;
+    }
+
     @GetMapping("/profile")
     public String getProfile(){
         return "dashboard/profile";

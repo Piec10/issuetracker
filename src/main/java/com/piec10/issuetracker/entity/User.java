@@ -2,6 +2,7 @@ package com.piec10.issuetracker.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 @Table(name="users")
@@ -19,6 +20,9 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "created_at")
+    private Date createdAt;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
@@ -68,6 +72,14 @@ public class User {
         this.email = email;
     }
 
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Collection<Role> getRoles() {
         return roles;
     }
@@ -83,8 +95,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
                 ", email='" + email + '\'' +
+                ", createdAt=" + createdAt +
                 ", roles=" + roles +
                 '}';
     }
-
 }
