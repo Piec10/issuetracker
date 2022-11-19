@@ -71,7 +71,7 @@ public class RegistrationController {
 //        }
 //
 //        // create user account
-//        userService.save(formUser);
+        userService.save(formUser);
 //
 //        logger.info("Successfully created user: " + userName);
 

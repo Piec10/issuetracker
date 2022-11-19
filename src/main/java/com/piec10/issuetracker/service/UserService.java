@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.user.FormUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface UserService extends UserDetailsService {
     public User findByEmail(String email);
 
     public boolean exists(String username);
+
+    void save(FormUser formUser);
 }

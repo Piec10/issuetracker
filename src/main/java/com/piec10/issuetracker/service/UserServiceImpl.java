@@ -1,19 +1,24 @@
 package com.piec10.issuetracker.service;
 
+import com.piec10.issuetracker.dao.RoleRepository;
 import com.piec10.issuetracker.dao.UserRepository;
 import com.piec10.issuetracker.entity.Role;
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.user.FormUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +26,13 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     @Override
     public List<User> findAll() {
@@ -52,6 +64,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean exists(String username) {
         return userRepository.existsById(username);
+    }
+
+    @Override
+    public void save(FormUser formUser) {
+        User user = new User();
+        user.setUsername(formUser.getUsername());
+        user.setPassword(passwordEncoder.encode(formUser.getPassword()));
+        user.setEmail(formUser.getEmail());
+
+        // give user default role of "user"
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+        // save user in the database
+        userRepository.save(user);
     }
 
     @Override
