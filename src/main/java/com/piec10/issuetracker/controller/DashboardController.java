@@ -10,12 +10,17 @@ public class DashboardController {
 
     @GetMapping("/")
     public String getDashboard(){
-        return "dashboard";
+        return "dashboard/dashboard";
     }
 
     @GetMapping("/adminPanel")
     public String getAdminPanel(){
-        return "admin-panel";
+        return "dashboard/admin-panel";
+    }
+
+    @GetMapping("/profile")
+    public String getProfile(){
+        return "dashboard/profile";
     }
 
 }
