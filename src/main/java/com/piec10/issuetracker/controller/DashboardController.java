@@ -13,4 +13,9 @@ public class DashboardController {
         return "dashboard";
     }
 
+    @GetMapping("/adminPanel")
+    public String getAdminPanel(){
+        return "admin-panel";
+    }
+
 }
