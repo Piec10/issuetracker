@@ -15,35 +15,7 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-light shadow fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" th:href="@{/dashboard/}">Issue Tracker</a>
-    <span class="navbar-brand mb-0 h1">DASHBOARD</span>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <div sec:authorize="hasRole('ROLE_ADMIN')">
-          <li class="nav-item">
-            <a class="nav-link" th:href="@{/dashboard/adminPanel}">Admin Panel</a>
-          </li>
-        </div>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/dashboard/profile}">Profile</a>
-        </li>
-        <li>
-          <a class="nav-link" href="javascript: document.logoutForm.submit()">Sign out</a>
-
-          <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-            <input hidden type="submit" value="Logout"/>
-          </form>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<div th:replace="dashboard/dashboard-navbar :: navbar(profile)"></div>
 
 <div class="bg-image" style="background-image: url('/images/background.jpeg'); height: 100vh; background-size: cover;">
 
