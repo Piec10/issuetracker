@@ -20,13 +20,6 @@ public class MainController {
 
     @GetMapping("/home")
     public String getHome(){
-
-//        Optional<Role> role = roleRepository.findById(1L);
-//        if(role.isPresent()) logger.info(role.toString());
-//
-//        Role role1 = roleRepository.findByName("ROLE_USER");
-//        logger.info(role1.toString());
-
         return "home";
     }
 
@@ -38,5 +31,10 @@ public class MainController {
     @GetMapping("/about")
     public String getAbout(){
         return "about";
+    }
+
+    @GetMapping("test")
+    public String getTest(){
+        return "test";
     }
 }
