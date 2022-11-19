@@ -11,17 +11,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/dashboard")
-public class DashboardController {
+@RequestMapping("/dashboard/adminPanel")
+public class AdminPanelController {
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/")
-    public String getDashboard(){
-        return "dashboard/dashboard";
+    public String getAdminPanel(Model model){
+
+        List<User> users = userService.findAll();
+
+        model.addAttribute("users",users);
+
+        return "dashboard/admin-panel";
     }
 
-    @GetMapping("/profile")
-    public String getProfile(){
-        return "dashboard/profile";
+    @GetMapping("/deleteUser")
+    public String deleteUser(){
+        return null;
     }
 
 }

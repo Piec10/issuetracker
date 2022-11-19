@@ -23,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests()
-                .antMatchers("/dashboard/adminPanel").hasRole("ADMIN")
+                .antMatchers("/dashboard/adminPanel/**").hasRole("ADMIN")
                 .antMatchers("/dashboard/**").hasRole("USER")
                 .antMatchers("/resources/**").permitAll()
                 .and()
