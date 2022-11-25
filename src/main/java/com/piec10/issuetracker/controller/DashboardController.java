@@ -24,4 +24,9 @@ public class DashboardController {
         return "dashboard/profile";
     }
 
+    @GetMapping("/newIssue")
+    public String showNewIssueForm(){
+        return "dashboard/issue-form";
+    }
+
 }
