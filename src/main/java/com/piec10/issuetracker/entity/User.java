@@ -30,6 +30,9 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
+    @OneToMany(mappedBy = "createdBy", cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    private Collection<Issue> issues;
+
     public User() {
     }
 
@@ -88,6 +91,14 @@ public class User {
         this.roles = roles;
     }
 
+    public Collection<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(Collection<Issue> issues) {
+        this.issues = issues;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -97,6 +108,7 @@ public class User {
                 ", email='" + email + '\'' +
                 ", createdAt=" + createdAt +
                 ", roles=" + roles +
+                ", issues=" + issues +
                 '}';
     }
 }
