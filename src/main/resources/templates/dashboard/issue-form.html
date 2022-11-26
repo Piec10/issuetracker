@@ -24,16 +24,23 @@
                 <p class="fs-3">
                     Create Issue
                 </p>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/dashboard/addNewIssue}" method="POST">
+                <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/dashboard/processNewIssue}" th:object="${formIssue}" method="POST">
                     <div class="row">
                     <div class="col">
 
                     <!-- Summary -->
                     <div class="form-floating">
 
-                        <input type="text" name="summary" id="floatingInput" placeholder="Summary" class="form-control">
+                        <input th:field="*{summary}" type="text" name="summary" id="floatingInput" placeholder="Summary" class="form-control">
                         <label for="floatingInput" class="text-secondary">Summary</label>
                     </div>
+                        <div th:if="${#fields.hasErrors('summary')}" class="text-danger">
+                            <small>
+                                <ul>
+                                    <li th:each="err : ${#fields.errors('summary')}" th:text="${err}"/>
+                                </ul>
+                            </small>
+                        </div>
 <!--                    <div class="input-group mt-4">-->
 
 <!--                        <input type="text" name="summary" placeholder="Summary" class="form-control">-->

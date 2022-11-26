@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
-    public List<User> findAll();
+    List<User> findAll();
 
-    public User findByUsername(String username);
+    User findByUsername(String username);
 
-    public User findByEmail(String email);
+    User findByEmail(String email);
 
-    public boolean exists(String username);
+    boolean exists(String username);
 
     void save(FormUser formUser);
 
