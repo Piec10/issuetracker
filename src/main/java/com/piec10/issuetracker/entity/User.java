@@ -108,7 +108,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", createdAt=" + createdAt +
                 ", roles=" + roles +
-                ", issues=" + issues +
                 '}';
     }
 }

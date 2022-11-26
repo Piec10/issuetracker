@@ -3,9 +3,11 @@ package com.piec10.issuetracker.service;
 import com.piec10.issuetracker.dao.IssueRepository;
 import com.piec10.issuetracker.entity.Issue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class IssueServiceImpl implements IssueService{
 
     @Autowired

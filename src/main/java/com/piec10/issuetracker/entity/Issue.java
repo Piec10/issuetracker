@@ -100,7 +100,7 @@ public class Issue {
                 ", priority=" + priority +
                 ", createdAt=" + createdAt +
                 ", closedAt=" + closedAt +
-                ", createdBy='" + createdBy + '\'' +
+                ", createdBy='" + createdBy.getUsername() + '\'' +
                 '}';
     }
 }
