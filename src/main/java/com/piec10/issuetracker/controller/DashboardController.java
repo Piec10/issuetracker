@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/dashboard")
 public class DashboardController {
+
+    @Autowired
+    private IssueService issueService;
 
     @GetMapping("/")
     public String getDashboard(){
