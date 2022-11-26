@@ -61,4 +61,10 @@ public class DashboardController {
 
         return "redirect:/dashboard/";
     }
+
+    @GetMapping("/issue")
+    public String issueDetails(@RequestParam("issueId") int theId){
+
+        return "dashboard/issue-details";
+    }
 }
