@@ -1,11 +1,17 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
+import com.piec10.issuetracker.dao.UserRepository;
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.issue.FormIssue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -13,6 +19,9 @@ public class IssueServiceImpl implements IssueService{
 
     @Autowired
     private IssueRepository issueRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<Issue> findAll() {
@@ -22,5 +31,18 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public void save(FormIssue formIssue) {
 
+        Issue newIssue = new Issue();
+        newIssue.setSummary(formIssue.getSummary());
+        newIssue.setDescription(formIssue.getDescription());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserName = authentication.getName();
+
+        User currentUser = userRepository.findByUsername(currentUserName);
+
+        newIssue.setCreatedBy(currentUser);
+        newIssue.setCreatedAt(new Date());
+
+        issueRepository.save(newIssue);
     }
 }

@@ -49,7 +49,18 @@
                                 <td th:text="${iteration.count}"/>
                                 <td th:text="${tempIssue.summary}"/>
                                 <td th:text="${tempIssue.priority}"/>
-                                <td th:text="${tempIssue.createdBy.username}"/>
+                                <div th:switch="${tempIssue.createdBy == null}">
+                                    <div th:case="true">
+                                        <td class="text-secondary fst-italic">
+                                            <small>
+                                                deleted user
+                                            </small>
+                                        </td>
+                                    </div>
+                                    <div th:case="false">
+                                        <td th:text="${tempIssue.createdBy.username}"/>
+                                    </div>
+                                </div>
 
                             </tr>
                             </tbody>
