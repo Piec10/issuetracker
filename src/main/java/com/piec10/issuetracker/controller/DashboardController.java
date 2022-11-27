@@ -63,7 +63,11 @@ public class DashboardController {
     }
 
     @GetMapping("/issue")
-    public String issueDetails(@RequestParam("issueId") int theId){
+    public String issueDetails(@RequestParam("issueId") int theId, Model model){
+
+        Issue issue = issueService.findById(theId);
+
+        model.addAttribute("issue", issue);
 
         return "dashboard/issue-details";
     }

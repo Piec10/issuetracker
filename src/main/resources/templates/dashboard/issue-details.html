@@ -21,7 +21,20 @@
     <div class="container px-4 py-5">
         <div class="row align-items-center py-5">
             <div class="p-4 p-md-5 border rounded-3 bg-light">
+                <div class="fs-3">
+                    #
+                    <span th:text="${issue.id}"></span>
+                    <span th:text="${issue.summary}"></span>
+                </div>
+                <hr>
+                <span th:text="${issue.description}"></span>
+                <hr>
 
+                <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or issue.createdBy.username == #authentication.getPrincipal().getUsername()}">
+                    <button class="btn btn-outline-secondary">Close Issue</button>
+
+                    <button class="btn btn-outline-secondary">Delete Issue</button>
+                </div>
             </div>
         </div>
     </div>

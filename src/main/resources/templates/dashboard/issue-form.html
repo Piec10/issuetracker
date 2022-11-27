@@ -22,7 +22,7 @@
         <div class="row align-items-center py-5">
             <div class="p-4 p-md-5 border rounded-3 bg-light">
                 <p class="fs-3">
-                    Create Issue
+                    Create New Issue
                 </p>
                 <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/dashboard/processNewIssue}" th:object="${formIssue}" method="POST">
                     <div class="row">
@@ -48,7 +48,7 @@
 
                     <!-- Description -->
                     <div class="form-floating mt-4">
-                        <textarea class="form-control" id="floatingTextarea" placeholder="Description" style="height: 100px"></textarea>
+                        <textarea th:field="*{description}" class="form-control" id="floatingTextarea" placeholder="Description" style="height: 100px"></textarea>
                         <label for="floatingTextarea" class="text-secondary">Description</label>
                     </div>
 <!--                    <div class="input-group mt-4">-->

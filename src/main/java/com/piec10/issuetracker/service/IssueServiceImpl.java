@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class IssueServiceImpl implements IssueService{
@@ -26,6 +27,17 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public List<Issue> findAll() {
         return issueRepository.findAll();
+    }
+
+    @Override
+    public Issue findById(int id) {
+        Optional<Issue> issue =  issueRepository.findById(id);
+
+        if(issue.isPresent()){
+            return issue.get();
+        }
+
+        else return null;
     }
 
     @Override

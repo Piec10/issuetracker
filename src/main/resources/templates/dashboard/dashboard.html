@@ -37,16 +37,15 @@
                             <caption>Issues</caption>
                             <thead>
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Summary</th>
                                 <th scope="col">Priority</th>
                                 <th scope="col">Reporter</th>
+                                <th scope="col">Details</th>
 
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="tempIssue,iteration : ${issues}">
-                                <td th:text="${iteration.count}"/>
+                            <tr th:each="tempIssue : ${issues}">
                                 <td th:text="${tempIssue.summary}"/>
                                 <td th:text="${tempIssue.priority}"/>
                                 <div th:switch="${tempIssue.createdBy == null}">
@@ -61,6 +60,13 @@
                                         <td th:text="${tempIssue.createdBy.username}"/>
                                     </div>
                                 </div>
+
+                                <td>
+                                    <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"
+                                       class="btn btn-sm btn-outline-secondary">
+                                        Details
+                                    </a>
+                                </td>
 
                             </tr>
                             </tbody>
