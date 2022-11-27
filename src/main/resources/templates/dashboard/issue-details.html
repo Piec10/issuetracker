@@ -30,7 +30,7 @@
                 <span th:text="${issue.description}"></span>
                 <hr>
 
-                <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or issue.createdBy.username == #authentication.getPrincipal().getUsername()}">
+                <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or isOwner}">
                     <button class="btn btn-outline-secondary">Close Issue</button>
 
                     <button class="btn btn-outline-secondary">Delete Issue</button>
