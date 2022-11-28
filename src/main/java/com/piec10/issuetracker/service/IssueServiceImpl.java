@@ -57,4 +57,9 @@ public class IssueServiceImpl implements IssueService{
 
         issueRepository.save(newIssue);
     }
+
+    @Override
+    public void deleteById(int id) {
+        issueRepository.deleteById(id);
+    }
 }

@@ -12,4 +12,6 @@ public interface IssueService {
     Issue findById(int id);
 
     void save(FormIssue formIssue);
+
+    void deleteById(int id);
 }
