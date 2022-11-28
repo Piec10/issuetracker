@@ -31,19 +31,11 @@ public class IssueController {
     }
 
     @GetMapping("/issue")
-    public String issueDetails(@RequestParam("issueId") int theId, Principal principal, Model model){
+    public String issueDetails(@RequestParam("issueId") int theId, Model model){
 
         Issue issue = issueService.findById(theId);
-        boolean isOwner = false;
-
-        if(issue.getCreatedBy() != null){
-            if(issue.getCreatedBy().getUsername().equals(principal.getName())) {
-                isOwner = true;
-            }
-        }
 
         model.addAttribute("issue", issue);
-        model.addAttribute("isOwner", isOwner);
 
         return "dashboard/issue-details";
     }
