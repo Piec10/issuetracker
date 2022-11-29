@@ -31,6 +31,10 @@ public class Issue {
     @JoinColumn(name = "created_by")
     private User createdBy;
 
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "closed_by")
+    private User closedBy;
+
     public Issue() {
 
     }
@@ -91,6 +95,14 @@ public class Issue {
         this.createdBy = createdBy;
     }
 
+    public User getClosedBy() {
+        return closedBy;
+    }
+
+    public void setClosedBy(User closedBy) {
+        this.closedBy = closedBy;
+    }
+
     @Override
     public String toString() {
         return "Issue{" +
@@ -100,7 +112,8 @@ public class Issue {
                 ", priority=" + priority +
                 ", createdAt=" + createdAt +
                 ", closedAt=" + closedAt +
-                ", createdBy='" + createdBy.getUsername() + '\'' +
+                ", createdBy=" + createdBy.getUsername() +
+                ", closedBy=" + closedBy.getUsername() +
                 '}';
     }
 }

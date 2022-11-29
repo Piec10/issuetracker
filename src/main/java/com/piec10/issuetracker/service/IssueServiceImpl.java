@@ -63,4 +63,11 @@ public class IssueServiceImpl implements IssueService{
     public void deleteById(int id) {
         issueRepository.deleteById(id);
     }
+
+    @Override
+    public void closeIssue(int theId, User closedBy) {
+
+        Issue issue = findById(theId);
+
+    }
 }
