@@ -84,4 +84,14 @@ public class IssueServiceImpl implements IssueService{
     public int getClosedIssuesCount() {
         return issueRepository.closedIssuesCount();
     }
+
+    @Override
+    public List<Issue> findOpen() {
+        return issueRepository.findOpen();
+    }
+
+    @Override
+    public List<Issue> findClosed() {
+        return issueRepository.findClosed();
+    }
 }

@@ -21,4 +21,8 @@ public interface IssueService {
     int getOpenIssuesCount();
 
     int getClosedIssuesCount();
+
+    List<Issue> findOpen();
+
+    List<Issue> findClosed();
 }

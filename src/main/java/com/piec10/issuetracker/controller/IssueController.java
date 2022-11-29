@@ -30,14 +30,34 @@ public class IssueController {
     //private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/issues")
-    public String getIssues(Model model){
+    public String getIssues(@RequestParam(value = "show", required = false) String show, Model model) {
 
-        List<Issue> issues = issueService.findAll();
+        List<Issue> issues;
 
         int openIssuesCount = issueService.getOpenIssuesCount();
         int closedIssuesCount = issueService.getClosedIssuesCount();
 
-        model.addAttribute("issues",issues);
+        if (show == null) {
+            show = "open";
+        }
+
+        switch (show) {
+            case "open":
+                issues = issueService.findOpen();
+                break;
+            case "closed":
+                issues = issueService.findClosed();
+                break;
+            case "all":
+                issues = issueService.findAll();
+                break;
+            default:
+                show = "open";
+                issues = issueService.findOpen();
+        }
+
+        model.addAttribute("issues", issues);
+        model.addAttribute("show", show);
         model.addAttribute("openIssuesCount", openIssuesCount);
         model.addAttribute("closedIssuesCount", closedIssuesCount);
 
@@ -45,7 +65,7 @@ public class IssueController {
     }
 
     @GetMapping("/issue")
-    public String issueDetails(@RequestParam("issueId") int theId, Model model){
+    public String issueDetails(@RequestParam("issueId") int theId, Model model) {
 
         Issue issue = issueService.findById(theId);
 
@@ -56,10 +76,10 @@ public class IssueController {
 
     @PostMapping("/processNewIssue")
     public String processNewIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
-                                  BindingResult theBindingResult){
+                                  BindingResult theBindingResult) {
 
         // form validation
-        if (theBindingResult.hasErrors()){
+        if (theBindingResult.hasErrors()) {
             return "dashboard/issue-form";
         }
 
@@ -69,7 +89,7 @@ public class IssueController {
     }
 
     @GetMapping("/newIssue")
-    public String showNewIssueForm(Model model){
+    public String showNewIssueForm(Model model) {
 
         model.addAttribute("formIssue", new FormIssue());
 
@@ -77,19 +97,18 @@ public class IssueController {
     }
 
     @GetMapping("/deleteIssue")
-    public String deleteIssue(@RequestParam("issueId") int theId, HttpServletRequest request){
+    public String deleteIssue(@RequestParam("issueId") int theId, HttpServletRequest request) {
 
         Issue issue = issueService.findById(theId);
 
-        if(issue == null) return "redirect:/dashboard/issues";
+        if (issue == null) return "redirect:/dashboard/issues";
 
-        if(isAdminOrOwner(issue.getCreatedBy(), request)){
+        if (isAdminOrOwner(issue.getCreatedBy(), request)) {
 
             issueService.deleteById(theId);
             return "redirect:/dashboard/issues";
 
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 
     @GetMapping("/closeIssue")
@@ -97,26 +116,25 @@ public class IssueController {
 
         Issue issue = issueService.findById(theId);
 
-        if(issue == null) return "redirect:/dashboard/issues";
+        if (issue == null) return "redirect:/dashboard/issues";
 
-        if(isAdminOrOwner(issue.getCreatedBy(), request)){
+        if (isAdminOrOwner(issue.getCreatedBy(), request)) {
 
             User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
 
-            issueService.closeIssue(theId,closedBy);
+            issueService.closeIssue(theId, closedBy);
             return "redirect:/dashboard/issues";
 
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
 
     }
 
-    private boolean isAdminOrOwner(User user, HttpServletRequest request){
+    private boolean isAdminOrOwner(User user, HttpServletRequest request) {
 
-        return request.isUserInRole("ROLE_ADMIN") || isOwner(user,request.getUserPrincipal());
+        return request.isUserInRole("ROLE_ADMIN") || isOwner(user, request.getUserPrincipal());
     }
 
-    private boolean isOwner(User user, Principal principal){
+    private boolean isOwner(User user, Principal principal) {
 
         return (user != null ? (user.getUsername().equals(principal.getName())) : false);
     }
