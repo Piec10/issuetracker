@@ -41,25 +41,17 @@
                                 </ul>
                             </small>
                         </div>
-<!--                    <div class="input-group mt-4">-->
-
-<!--                        <input type="text" name="summary" placeholder="Summary" class="form-control">-->
-<!--                    </div>-->
 
                     <!-- Description -->
                     <div class="form-floating mt-4">
                         <textarea th:field="*{description}" class="form-control" id="floatingTextarea" placeholder="Description" style="height: 100px"></textarea>
                         <label for="floatingTextarea" class="text-secondary">Description</label>
                     </div>
-<!--                    <div class="input-group mt-4">-->
-
-<!--                        <input type="text" name="description" placeholder="Description" class="form-control">-->
-<!--                    </div>-->
 
                     </div>
                     <div class="col">
                         <div class="form-floating">
-                            <select class="form-select" id="floatingSelect">
+                            <select th:field="*{priority}" class="form-select" id="floatingSelect">
                                 <option value="0">High</option>
                                 <option selected value="1">Normal</option>
                                 <option value="2">Low</option>
@@ -78,7 +70,7 @@
 
                        </div>
                        <div class="col">
-                        <a class="w-100 btn btn-outline-secondary" th:href="@{/dashboard/}">Cancel</a>
+                        <a class="w-100 btn btn-outline-secondary" th:href="@{/dashboard/issues}">Cancel</a>
 
                        </div>
                    </div>

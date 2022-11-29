@@ -13,6 +13,8 @@ public class FormIssue {
 
     private String description;
 
+    private int priority = 1;
+
     public FormIssue(){}
 
     public String getSummary() {
@@ -29,5 +31,13 @@ public class FormIssue {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

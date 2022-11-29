@@ -46,6 +46,7 @@ public class IssueServiceImpl implements IssueService{
         Issue newIssue = new Issue();
         newIssue.setSummary(formIssue.getSummary());
         newIssue.setDescription(formIssue.getDescription());
+        newIssue.setPriority(formIssue.getPriority());
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUserName = authentication.getName();
