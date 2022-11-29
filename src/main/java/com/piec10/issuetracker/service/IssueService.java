@@ -17,4 +17,8 @@ public interface IssueService {
     void deleteById(int id);
 
     void closeIssue(int theId, User closedBy);
+
+    int getOpenIssuesCount();
+
+    int getClosedIssuesCount();
 }

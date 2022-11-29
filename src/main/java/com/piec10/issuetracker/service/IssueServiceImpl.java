@@ -73,4 +73,15 @@ public class IssueServiceImpl implements IssueService{
 
         issueRepository.save(issue);
     }
+
+    @Override
+    public int getOpenIssuesCount() {
+
+        return issueRepository.openIssuesCount();
+    }
+
+    @Override
+    public int getClosedIssuesCount() {
+        return issueRepository.closedIssuesCount();
+    }
 }

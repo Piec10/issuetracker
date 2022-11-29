@@ -6,7 +6,6 @@ import com.piec10.issuetracker.issue.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -27,12 +27,19 @@ public class IssueController {
     @Autowired
     private UserService userService;
 
+    //private Logger logger = Logger.getLogger(getClass().getName());
+
     @GetMapping("/issues")
     public String getIssues(Model model){
 
         List<Issue> issues = issueService.findAll();
 
+        int openIssuesCount = issueService.getOpenIssuesCount();
+        int closedIssuesCount = issueService.getClosedIssuesCount();
+
         model.addAttribute("issues",issues);
+        model.addAttribute("openIssuesCount", openIssuesCount);
+        model.addAttribute("closedIssuesCount", closedIssuesCount);
 
         return "dashboard/issues";
     }
