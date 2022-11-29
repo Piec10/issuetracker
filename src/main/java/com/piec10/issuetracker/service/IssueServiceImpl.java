@@ -68,6 +68,9 @@ public class IssueServiceImpl implements IssueService{
     public void closeIssue(int theId, User closedBy) {
 
         Issue issue = findById(theId);
+        issue.setClosedBy(closedBy);
+        issue.setClosedAt(new Date());
 
+        issueRepository.save(issue);
     }
 }

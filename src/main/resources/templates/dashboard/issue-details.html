@@ -33,7 +33,11 @@
 
                 <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (issue.createdBy != null ? (issue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
 
-                    <button class="btn btn-outline-secondary">Close Issue</button>
+                    <a th:href="@{/dashboard/closeIssue(issueId=${issue.id})}"
+                       class="btn btn-outline-secondary"
+                       onclick="if (!(confirm('Are you sure you want to close this issue?'))) return false">
+                        Close Issue
+                    </a>
 
                     <a th:href="@{/dashboard/deleteIssue(issueId=${issue.id})}"
                        class="btn btn-outline-secondary"
