@@ -44,7 +44,12 @@
                        onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">
                         Delete Issue
                     </a>
+                <hr>
                 </div>
+                <a th:href="@{/dashboard/issues}"
+                   class="btn btn-outline-secondary">
+                    Back
+                </a>
             </div>
         </div>
     </div>
