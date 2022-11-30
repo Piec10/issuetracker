@@ -81,6 +81,7 @@
                             <caption>Issues</caption>
                             <thead>
                             <tr>
+                                <th scope="col">Id</th>
                                 <th scope="col">Summary</th>
                                 <th scope="col">Priority</th>
                                 <th scope="col">Reporter</th>
@@ -91,6 +92,7 @@
                             </thead>
                             <tbody>
                             <tr th:each="tempIssue : ${issues}">
+                                <td>#<span th:text="${tempIssue.id}"/></td>
                                 <td th:text="${tempIssue.summary}"/>
                                 <td th:text="${tempIssue.priority}"/>
                                 <div th:switch="${tempIssue.createdBy == null}">
