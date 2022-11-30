@@ -85,6 +85,9 @@
                                 <th scope="col">Summary</th>
                                 <th scope="col">Priority</th>
                                 <th scope="col">Reporter</th>
+
+                                <th th:if="${show == 'closed' or show == 'all'}" scope="col">Closed by</th>
+
                                 <th scope="col">Details</th>
                                 <th scope="col"></th>
 
@@ -95,18 +98,35 @@
                                 <td>#<span th:text="${tempIssue.id}"/></td>
                                 <td th:text="${tempIssue.summary}"/>
                                 <td th:text="${tempIssue.priority}"/>
+                                <td>
                                 <div th:switch="${tempIssue.createdBy == null}">
                                     <div th:case="true">
-                                        <td class="text-secondary fst-italic">
-                                            <small>
+                                            <small class="text-secondary fst-italic">
                                                 deleted user
                                             </small>
-                                        </td>
                                     </div>
                                     <div th:case="false">
-                                        <td th:text="${tempIssue.createdBy.username}"/>
+                                        <span th:text="${tempIssue.createdBy.username}"/>
                                     </div>
                                 </div>
+                                    <small><span th:text="${tempIssue.createdAt}"/></small>
+                                </td>
+
+                                    <td th:if="${show == 'closed' or show == 'all'}">
+                                        <div th:if="${tempIssue.closedAt != null}">
+                                        <div th:switch="${tempIssue.closedBy == null}">
+                                            <div th:case="true">
+                                                <small class="text-secondary fst-italic">
+                                                    deleted user
+                                                </small>
+                                            </div>
+                                            <div th:case="false">
+                                                <span th:text="${tempIssue.closedBy.username}"/>
+                                            </div>
+                                        </div>
+                                        <small><span th:text="${tempIssue.closedAt}"/></small>
+                                        </div>
+                                    </td>
 
                                 <td>
                                     <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"
