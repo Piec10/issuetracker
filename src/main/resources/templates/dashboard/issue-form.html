@@ -31,6 +31,9 @@
                     <!-- Summary -->
                     <div class="form-floating">
 
+                        <!-- Add hidden form field to handle update -->
+                        <input type="hidden" th:field="*{id}" />
+
                         <input th:field="*{summary}" type="text" name="summary" id="floatingInput" placeholder="Summary" class="form-control">
                         <label for="floatingInput" class="text-secondary">Summary</label>
                     </div>
@@ -65,7 +68,7 @@
                    <div class="row">
                        <div class="col">
 
-                    <button class="w-100 btn btn-outline-secondary" type="submit">Create</button>
+                    <button class="w-100 btn btn-outline-secondary" type="submit">Save</button>
 
 
                        </div>

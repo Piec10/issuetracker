@@ -32,7 +32,7 @@
                         <div class="col d-flex flex-column align-items-end">
                             <div th:unless="${issue.closedAt}">
                                 <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (issue.createdBy != null ? (issue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
-                                    <a th:href="@{/dashboard/issues}"
+                                    <a th:href="@{/dashboard/editIssue(issueId=${issue.id})}"
                                        class="btn btn-outline-secondary">
                                         Edit
                                     </a>

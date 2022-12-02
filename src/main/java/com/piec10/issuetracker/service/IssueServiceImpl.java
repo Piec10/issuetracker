@@ -43,6 +43,8 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public void save(FormIssue formIssue) {
 
+        if(formIssue.getId() == 0){
+
         Issue newIssue = new Issue();
         newIssue.setSummary(formIssue.getSummary());
         newIssue.setDescription(formIssue.getDescription());
@@ -57,6 +59,15 @@ public class IssueServiceImpl implements IssueService{
         newIssue.setCreatedAt(new Date());
 
         issueRepository.save(newIssue);
+        }
+        else{
+            Issue issue = findById(formIssue.getId());
+            issue.setSummary(formIssue.getSummary());
+            issue.setDescription(formIssue.getDescription());
+            issue.setPriority(formIssue.getPriority());
+
+            issueRepository.save(issue);
+        }
     }
 
     @Override

@@ -96,6 +96,28 @@ public class IssueController {
         return "dashboard/issue-form";
     }
 
+    @GetMapping("/editIssue")
+    public String showEditIssueForm(@RequestParam("issueId") int theId, Model model, HttpServletRequest request) {
+
+        Issue issue = issueService.findById(theId);
+        FormIssue formIssue = new FormIssue();
+
+        model.addAttribute("formIssue", formIssue);
+
+        if(issue == null) return "dashboard/issue-form";
+
+        if(isAdminOrOwner(issue.getCreatedBy(), request)){
+
+            formIssue.setId(issue.getId());
+            formIssue.setSummary(issue.getSummary());
+            formIssue.setDescription(issue.getDescription());
+            formIssue.setPriority(issue.getPriority());
+
+            return "dashboard/issue-form";
+        }
+        else return "redirect:/access-denied";
+    }
+
     @GetMapping("/deleteIssue")
     public String deleteIssue(@RequestParam("issueId") int theId, HttpServletRequest request) {
 

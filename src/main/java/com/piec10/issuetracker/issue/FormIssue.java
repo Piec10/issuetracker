@@ -6,6 +6,8 @@ import javax.validation.constraints.Size;
 
 public class FormIssue {
 
+    private int id;
+
     @NotNull(message = "Summary is required")
     @Size(min = 1, message = "Summary is required")
     private String summary;
@@ -16,6 +18,14 @@ public class FormIssue {
     private int priority = 1;
 
     public FormIssue(){}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getSummary() {
         return summary;

@@ -113,7 +113,6 @@ public class Issue {
                 ", createdAt=" + createdAt +
                 ", closedAt=" + closedAt +
                 ", createdBy=" + createdBy.getUsername() +
-                ", closedBy=" + closedBy.getUsername() +
                 '}';
     }
 }
