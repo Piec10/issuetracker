@@ -25,4 +25,6 @@ public interface IssueService {
     List<Issue> findOpen();
 
     List<Issue> findClosed();
+
+    void reopenIssue(int theId);
 }

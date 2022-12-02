@@ -105,4 +105,14 @@ public class IssueServiceImpl implements IssueService{
     public List<Issue> findClosed() {
         return issueRepository.findClosed();
     }
+
+    @Override
+    public void reopenIssue(int theId) {
+
+        Issue issue = findById(theId);
+        issue.setClosedBy(null);
+        issue.setClosedAt(null);
+
+        issueRepository.save(issue);
+    }
 }

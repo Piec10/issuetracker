@@ -150,7 +150,24 @@ public class IssueController {
             return "redirect:/dashboard/issues";
 
         } else return "redirect:/access-denied";
+    }
 
+    @GetMapping("/reopenIssue")
+    public String reopenIssue(@RequestParam("issueId") int theId, HttpServletRequest request) {
+
+        Issue issue = issueService.findById(theId);
+
+        if (issue == null) return "redirect:/dashboard/issues";
+
+        if (isAdminOrOwner(issue.getCreatedBy(), request)) {
+
+            if(issue.getClosedAt() != null){
+
+                issueService.reopenIssue(theId);
+            }
+            return "redirect:/dashboard/issues";
+
+        } else return "redirect:/access-denied";
     }
 
     private boolean isAdminOrOwner(User user, HttpServletRequest request) {
