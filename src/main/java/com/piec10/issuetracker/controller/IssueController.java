@@ -142,9 +142,11 @@ public class IssueController {
 
         if (isAdminOrOwner(issue.getCreatedBy(), request)) {
 
-            User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
+            if(issue.getClosedAt() == null){
 
-            issueService.closeIssue(theId, closedBy);
+                User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
+                issueService.closeIssue(theId, closedBy);
+            }
             return "redirect:/dashboard/issues";
 
         } else return "redirect:/access-denied";
