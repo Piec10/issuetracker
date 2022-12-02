@@ -19,12 +19,16 @@
             transition-timing-function: ease-in-out;
         }
         .clickable-row:hover {
-
-             background-color: #d4dcd4;
+            background-color: #e6e6e7;
             transition: 0.15s;
             transition-timing-function: ease-in-out;
-            color: white;
         }
+        .hr-table {
+            margin: 0;
+            color: #dee2e6;
+            opacity: 1;
+        }
+
 
     </style>
 </head>
@@ -72,6 +76,7 @@
                 </div>
 
                 <hr>
+                <div class="text-secondary py-2">Issues</div>
 
                 <div th:switch="${#lists.isEmpty(issues)}">
                     <div th:case="true">
@@ -91,100 +96,96 @@
                     </div>
                     <div th:case="false">
 
-                        <div class="container-fluid">
-
-                            <div class="row p-2">
-                                <div class="col">Id</div>
-                                <div class="col">Summary</div>
-                                <div class="col">Priority</div>
-                                <div class="col">Reporter</div>
-                                <div class="col">Closed by</div>
-
-
-                            </div>
-
-                            <hr>
-
-                            <div class="row clickable-row border border-secondary rounded-3 p-2 position-relative">
-                                <div class="col">Id</div>
-                                <div class="col">Summary</div>
-                                <div class="col">Priority</div>
-                                <div class="col">Reporter</div>
-                                <div class="col">Closed by</div>
-
-                                <a href="#" class="stretched-link"></a>
-                            </div>
+                        <div class="row p-2 mx-0 fw-bold">
+                            <div class="col-1">Id</div>
+                            <div class="col">Summary</div>
+                            <div class="col-1">Priority</div>
+                            <div class="col-2">Reporter</div>
+                            <div th:if="${show == 'closed' or show == 'all'}" class="col-2">Closed by</div>
+                            <div class="col-1" sec:authorize="hasRole('ROLE_ADMIN')"></div>
                         </div>
 
+                        <div th:each="tempIssue : ${issues}">
+
+                            <hr class="hr-table">
+
+                            <div class="row clickable-row p-2 mx-0 position-relative">
+                                <div class="col-1">#<span th:text="${tempIssue.id}"/></div>
+                                <div class="col"><span th:text="${tempIssue.summary}"/></div>
+                                <div class="col-1"><span th:text="${tempIssue.priority}"/></div>
+                                <div class="col-2">
+                                    <div th:switch="${tempIssue.createdBy == null}">
+                                        <div th:case="true">
+                                            <small class="text-secondary fst-italic">
+                                                deleted user
+                                            </small>
+                                        </div>
+                                        <div th:case="false">
+                                            <span th:text="${tempIssue.createdBy.username}"/>
+                                        </div>
+                                    </div>
+                                    <small><span th:text="${tempIssue.createdAt}"/></small>
+                                </div>
+                                <div class="col-2" th:if="${show == 'closed' or show == 'all'}">
+                                    <div th:if="${tempIssue.closedAt != null}">
+                                        <div th:switch="${tempIssue.closedBy == null}">
+                                            <div th:case="true">
+                                                <small class="text-secondary fst-italic">
+                                                    deleted user
+                                                </small>
+                                            </div>
+                                            <div th:case="false">
+                                                <span th:text="${tempIssue.closedBy.username}"/>
+                                            </div>
+                                        </div>
+                                        <small><span th:text="${tempIssue.closedAt}"/></small>
+                                    </div>
+                                </div>
+                                <div class="col-1" sec:authorize="hasRole('ROLE_ADMIN')">
+                                    <a th:href="@{/dashboard/deleteIssue(issueId=${tempIssue.id})}"
+                                       class="btn btn-sm btn-outline-secondary"
+                                       onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">
+                                        Delete
+                                    </a>
+                                </div>
+
+                                <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}" class="stretched-link"></a>
+                            </div>
+                        </div>
                     </div>
 
-                    <!--                <div th:switch="${#lists.isEmpty(issues)}">-->
-                    <!--                    <div th:case="true">-->
-
-                    <!--                        <div th:switch="${show}">-->
-                    <!--                            <div th:case="open">-->
-                    <!--                                <span>There are no open issues yet.</span>-->
-                    <!--                            </div>-->
-                    <!--                            <div th:case="closed">-->
-                    <!--                                <span>There are no closed issues yet.</span>-->
-                    <!--                            </div>-->
-                    <!--                            <div th:case="all">-->
-                    <!--                                <span>There are no issues yet.</span>-->
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-
-                    <!--                    </div>-->
-                    <!--                    <div th:case="false">-->
-
-                    <!--                        <table class="table table-hover caption-top">-->
-                    <!--                            <caption>Issues</caption>-->
-                    <!--                            <thead>-->
-                    <!--                            <tr>-->
-                    <!--                                <th scope="col">Id</th>-->
-                    <!--                                <th scope="col">Summary</th>-->
-                    <!--                                <th scope="col">Priority</th>-->
-                    <!--                                <th scope="col">Reporter</th>-->
-
-                    <!--                                <th th:if="${show == 'closed' or show == 'all'}" scope="col">Closed by</th>-->
-
-                    <!--                                <th scope="col">Details</th>-->
-                    <!--                                <th scope="col"></th>-->
-
-                    <!--                            </tr>-->
-                    <!--                            </thead>-->
-                    <!--                            <tbody>-->
                     <!--                            <tr th:each="tempIssue : ${issues}">-->
                     <!--                                <td>#<span th:text="${tempIssue.id}"/></td>-->
                     <!--                                <td th:text="${tempIssue.summary}"/>-->
                     <!--                                <td th:text="${tempIssue.priority}"/>-->
                     <!--                                <td>-->
-                    <!--                                <div th:switch="${tempIssue.createdBy == null}">-->
-                    <!--                                    <div th:case="true">-->
-                    <!--                                            <small class="text-secondary fst-italic">-->
-                    <!--                                                deleted user-->
-                    <!--                                            </small>-->
-                    <!--                                    </div>-->
-                    <!--                                    <div th:case="false">-->
-                    <!--                                        <span th:text="${tempIssue.createdBy.username}"/>-->
-                    <!--                                    </div>-->
-                    <!--                                </div>-->
-                    <!--                                    <small><span th:text="${tempIssue.createdAt}"/></small>-->
+                    <!--                                                    <div th:switch="${tempIssue.createdBy == null}">-->
+                    <!--                                                        <div th:case="true">-->
+                    <!--                                                                <small class="text-secondary fst-italic">-->
+                    <!--                                                                    deleted user-->
+                    <!--                                                                </small>-->
+                    <!--                                                        </div>-->
+                    <!--                                                        <div th:case="false">-->
+                    <!--                                                            <span th:text="${tempIssue.createdBy.username}"/>-->
+                    <!--                                                        </div>-->
+                    <!--                                                    </div>-->
+                    <!--                                                        <small><span th:text="${tempIssue.createdAt}"/></small>-->
                     <!--                                </td>-->
 
-                    <!--                                    <td th:if="${show == 'closed' or show == 'all'}">-->
-                    <!--                                        <div th:if="${tempIssue.closedAt != null}">-->
-                    <!--                                        <div th:switch="${tempIssue.closedBy == null}">-->
-                    <!--                                            <div th:case="true">-->
-                    <!--                                                <small class="text-secondary fst-italic">-->
-                    <!--                                                    deleted user-->
-                    <!--                                                </small>-->
-                    <!--                                            </div>-->
-                    <!--                                            <div th:case="false">-->
-                    <!--                                                <span th:text="${tempIssue.closedBy.username}"/>-->
-                    <!--                                            </div>-->
-                    <!--                                        </div>-->
-                    <!--                                        <small><span th:text="${tempIssue.closedAt}"/></small>-->
-                    <!--                                        </div>-->
+                    <!--                                                        <td th:if="${show == 'closed' or show == 'all'}">-->
+                    <!--                                                            <div th:if="${tempIssue.closedAt != null}">-->
+                    <!--                                                            <div th:switch="${tempIssue.closedBy == null}">-->
+                    <!--                                                                <div th:case="true">-->
+                    <!--                                                                    <small class="text-secondary fst-italic">-->
+                    <!--                                                                        deleted user-->
+                    <!--                                                                    </small>-->
+                    <!--                                                                </div>-->
+                    <!--                                                                <div th:case="false">-->
+                    <!--                                                                    <span th:text="${tempIssue.closedBy.username}"/>-->
+                    <!--                                                                </div>-->
+                    <!--                                                            </div>-->
+                    <!--                                                            <small><span th:text="${tempIssue.closedAt}"/></small>-->
+                    <!--                                                            </div>-->
                     <!--                                    </td>-->
 
                     <!--                                <td>-->
@@ -194,12 +195,12 @@
                     <!--                                    </a>-->
                     <!--                                </td>-->
 
-                    <!--                                <td sec:authorize="hasRole('ROLE_ADMIN')">-->
-                    <!--                                    <a th:href="@{/dashboard/deleteIssue(issueId=${tempIssue.id})}"-->
-                    <!--                                       class="btn btn-sm btn-outline-secondary"-->
-                    <!--                                       onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">-->
-                    <!--                                        Delete-->
-                    <!--                                    </a>-->
+                    <!--                                                    <td sec:authorize="hasRole('ROLE_ADMIN')">-->
+                    <!--                                                        <a th:href="@{/dashboard/deleteIssue(issueId=${tempIssue.id})}"-->
+                    <!--                                                           class="btn btn-sm btn-outline-secondary"-->
+                    <!--                                                           onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">-->
+                    <!--                                                            Delete-->
+                    <!--                                                        </a>-->
                     <!--                                </td>-->
 
                     <!--                            </tr>-->

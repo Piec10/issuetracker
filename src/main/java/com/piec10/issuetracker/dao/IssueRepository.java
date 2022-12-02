@@ -16,7 +16,7 @@ public interface IssueRepository extends JpaRepository<Issue, Integer> {
             nativeQuery = true)
     int closedIssuesCount();
 
-    @Query(value = "SELECT * FROM issues WHERE closed_at IS NULL",
+    @Query(value = "SELECT * FROM issues WHERE closed_at IS NULL ORDER BY id DESC",
             nativeQuery = true)
     List<Issue> findOpen();
 
@@ -24,4 +24,8 @@ public interface IssueRepository extends JpaRepository<Issue, Integer> {
             nativeQuery = true)
     List<Issue> findClosed();
 
+    @Override
+    @Query(value = "SELECT * FROM issues ORDER BY id DESC",
+            nativeQuery = true)
+    List<Issue> findAll();
 }
