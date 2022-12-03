@@ -76,17 +76,22 @@ public class IssueController {
 
     @PostMapping("/processNewIssue")
     public String processNewIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
-                                  BindingResult theBindingResult) {
+                                  BindingResult theBindingResult, HttpServletRequest request) {
 
         // form validation
         if (theBindingResult.hasErrors()) {
             return "dashboard/issue-form";
         }
 
-        issueService.save(formIssue);
+        if(isNotGuest(request)){
 
-        return "redirect:/dashboard/issues";
+            issueService.save(formIssue);
+            return "redirect:/dashboard/issues";
+        }
+        else return "redirect:/access-denied";
+
     }
+
 
     @GetMapping("/newIssue")
     public String showNewIssueForm(Model model) {
@@ -178,5 +183,9 @@ public class IssueController {
     private boolean isOwner(User user, Principal principal) {
 
         return (user != null ? (user.getUsername().equals(principal.getName())) : false);
+    }
+
+    private boolean isNotGuest(HttpServletRequest request) {
+        return !request.isUserInRole("ROLE_GUEST");
     }
 }
