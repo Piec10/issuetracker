@@ -51,15 +51,22 @@
                 opacity: 1;
             }
         }
+        .base-color {
+
+        background: rgb(190,190,190);
+        background: linear-gradient(135deg, rgba(190,190,190,1) 0%, rgba(245,245,245,1) 100%);
+        }
+
     </style>
 
 </head>
 <body>
 <div th:replace="navbar :: navbar(home)"></div>
 
-<div class="bg-image" style="background-image: url('/images/background.jpeg'); height: 100vh; background-size: cover;">
+<!--<div class="bg-image" style="background-image: url('/images/background.jpeg'); height: 100vh; background-size: cover;">-->
+    <div class="base-color">
 
-    <div class="container h-100">
+    <div class="container" style="height: 100vh;">
         <div class="row h-100 align-items-center">
             <div class="col text-center">
 
