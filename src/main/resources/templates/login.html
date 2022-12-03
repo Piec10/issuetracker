@@ -3,13 +3,17 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Login Page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{/css/background.css}"/>
+    <link rel="stylesheet" th:href="@{/css/home-fade.css}"/>
+
+    <title>Issue Tracker | Login Page</title>
 
     <script>
         function guestSubmit(){
@@ -18,64 +22,65 @@
             document.loginForm.password.value = "Guest";
             document.loginForm.submit();
         }
+
     </script>
 </head>
 
 <body>
 <div th:replace="navbar :: navbar(login)"></div>
 
-<div class="bg-image" style="background-image: url('/images/background.jpeg'); height: 100vh; background-size: cover;">
+<div class="base-color">
+        <div class="container col-xl-10 col-xxl-8 px-4 py-5" style="height: 100vh;">
+            <div class="row align-items-center g-lg-5 py-5">
 
-    <div class="container col-xl-10 col-xxl-8 px-4 py-5">
-        <div class="row align-items-center g-lg-5 py-5">
+                <div class="col-md-10 mx-auto col-lg-5">
+                    <form name="loginForm" class="p-4 p-md-5 border rounded-3 bg-light"
+                          th:action="@{/authenticateTheUser}" method="POST">
 
-            <div class="col-md-10 mx-auto col-lg-5">
-                <form name="loginForm" class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/authenticateTheUser}" method="POST">
+                        <div class="form-floating fw-bold">
+                            Sign in
+                        </div>
 
-                    <div class="form-floating fw-bold">
-                        Sign in
-                    </div>
+                        <!-- Check for login error -->
+                        <div th:if="${param.error}">
+                            <div class="alert alert-danger mt-4">
+                                <small>
+                                    Incorrect username or password.
+                                </small>
+                            </div>
+                        </div>
 
-                    <!-- Check for login error -->
-                    <div th:if="${param.error}">
-                        <div class="alert alert-danger mt-4">
+                        <!-- User name -->
+                        <div class="input-group mt-4">
+
+                            <input type="text" name="username" placeholder="Username" class="form-control">
+                        </div>
+
+                        <!-- Password -->
+                        <div class="input-group mt-4">
+
+                            <input type="password" name="password" placeholder="Password" class="form-control">
+                        </div>
+
+                        <button class="w-100 btn btn-outline-secondary mt-4" type="submit">Sign in</button>
+                        <hr class="my-4">
+
+                        <div class="text-center">
                             <small>
-                            Incorrect username or password.
+                                Don't have an account?
+                                <a th:href="@{/register/showRegistrationForm}" class="ms-1">Sign up.</a>
                             </small>
                         </div>
-                    </div>
-
-                    <!-- User name -->
-                    <div class="input-group mt-4">
-
-                        <input type="text" name="username" placeholder="Username" class="form-control">
-                    </div>
-
-                    <!-- Password -->
-                    <div class="input-group mt-4">
-
-                        <input type="password" name="password" placeholder="Password" class="form-control">
-                    </div>
-
-                    <button class="w-100 btn btn-outline-secondary mt-4" type="submit">Sign in</button>
-                    <hr class="my-4">
-
-                    <div class="text-center">
-                        <small>
-                            Don't have an account?
-                            <a th:href="@{/register/showRegistrationForm}" class="ms-1">Sign up.</a>
-                        </small>
-                    </div>
-                    <div class="mt-2 text-center">
-                        <small>
-                            Just want to check?
-                            <a href="javascript: guestSubmit()" class="ms-1">Sign in as Guest.</a>
-                        </small>
-                    </div>
-                </form>
+                        <div class="mt-2 text-center">
+                            <small>
+                                Just want to check?
+                                <a href="javascript: guestSubmit()" class="ms-1">Sign in as Guest.</a>
+                            </small>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 </div>
 
 <!-- JavaScript Bundle with Popper -->
