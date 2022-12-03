@@ -1,0 +1,14 @@
+         .clickable-row {
+            transition: 0.15s;
+            transition-timing-function: ease-in-out;
+        }
+        .clickable-row:hover {
+            background-color: #e6e6e7;
+            transition: 0.15s;
+            transition-timing-function: ease-in-out;
+        }
+        .hr-table {
+            margin: 0;
+            color: #dee2e6;
+            opacity: 1;
+        }
