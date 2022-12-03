@@ -1,0 +1,5 @@
+.base-color {
+
+    background: rgb(190,190,190);
+    background: linear-gradient(135deg, rgba(190,190,190,1) 0%, rgba(245,245,245,1) 100%);
+}
