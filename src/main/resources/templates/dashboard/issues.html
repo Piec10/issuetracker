@@ -109,7 +109,7 @@
                                         <div class="col-1">#<span th:text="${tempIssue.id}"/></div>
                                         <div class="col"><span th:text="${tempIssue.summary}"/></div>
 
-                                        <div class="col-1"><span th:text="${priority.getName(tempIssue.priority)}"/></div>
+                                        <div class="col-1"><span th:text="${priorities.getName(tempIssue.priority)}"/></div>
 
                                         <div class="col-2">
                                             <div th:switch="${tempIssue.createdBy == null}">

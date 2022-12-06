@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.util;
 
-public class Priority {
+public class Priorities {
 
     private final String[] priorities = {
                                             "High",
@@ -8,7 +8,11 @@ public class Priority {
                                             "Low"
                                         };
 
-    public Priority() {
+    public Priorities() {
+    }
+
+    public String[] getPriorities(){
+        return priorities;
     }
 
     public String getName(int index){

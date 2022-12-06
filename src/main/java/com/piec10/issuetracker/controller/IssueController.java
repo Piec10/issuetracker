@@ -5,7 +5,7 @@ import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.issue.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.UserService;
-import com.piec10.issuetracker.util.Priority;
+import com.piec10.issuetracker.util.Priorities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -61,7 +60,7 @@ public class IssueController {
         model.addAttribute("show", show);
         model.addAttribute("openIssuesCount", openIssuesCount);
         model.addAttribute("closedIssuesCount", closedIssuesCount);
-        model.addAttribute("priority", new Priority());
+        //model.addAttribute("priorities", new Priorities());
 
         return "dashboard/issues";
     }
@@ -82,6 +81,7 @@ public class IssueController {
 
         // form validation
         if (theBindingResult.hasErrors()) {
+
             return "dashboard/issue-form";
         }
 
@@ -99,6 +99,7 @@ public class IssueController {
     public String showNewIssueForm(Model model) {
 
         model.addAttribute("formIssue", new FormIssue());
+        //model.addAttribute("priorities", new Priorities());
 
         return "dashboard/issue-form";
     }
@@ -110,6 +111,7 @@ public class IssueController {
         FormIssue formIssue = new FormIssue();
 
         model.addAttribute("formIssue", formIssue);
+        //model.addAttribute("priorities", new Priorities());
 
         if(issue == null) return "dashboard/issue-form";
 
