@@ -25,6 +25,7 @@ public class IssueServiceTest {
     @Autowired
     IssueService issueService;
 
+
     @Test
     public void findAllService() {
 
@@ -65,6 +66,7 @@ public class IssueServiceTest {
         formIssue.setId(0);
         formIssue.setSummary("summary");
         formIssue.setDescription("description");
+        formIssue.setPriority(1);
 
         User user = new User();
         user.setUsername("user");
@@ -140,6 +142,56 @@ public class IssueServiceTest {
 
         assertEquals(closedBy.getUsername(), capturedIssue.getValue().getClosedBy().getUsername(), "Issue closedBy user should not change");
         assertEquals(closedAt, capturedIssue.getValue().getClosedAt(), "Issue close date should not change");
+    }
+
+    @Test
+    public void closeIssueService() {
+
+        int id = 4;
+
+        Issue issue = new Issue();
+        issue.setId(id);
+        issue.setSummary("summary");
+        issue.setDescription("description");
+        issue.setPriority(0);
+
+        User createdBy = new User();
+        createdBy.setUsername("user");
+        Date createdAt = new Date(new Date().getTime() - 1000);
+
+
+        issue.setCreatedBy(createdBy);
+        issue.setCreatedAt(createdAt);
+
+        when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
+
+        ArgumentCaptor<Issue> capturedIssue = ArgumentCaptor.forClass(Issue.class);
+
+        User closedBy = new User();
+        closedBy.setUsername("user2");
+
+        issueService.closeIssue(id, closedBy);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(issue.getId(), capturedIssue.getValue().getId(), "Issue id should not change");
+        assertEquals(issue.getSummary(), capturedIssue.getValue().getSummary(), "Issue summary should not change");
+        assertEquals(issue.getDescription(), capturedIssue.getValue().getDescription(), "Issue description should not change");
+        assertEquals(issue.getPriority(), capturedIssue.getValue().getPriority(), "Issue priority should not change");
+
+        assertEquals(issue.getCreatedBy().getUsername(), capturedIssue.getValue().getCreatedBy().getUsername(), "Issue creator should not change");
+        assertEquals(issue.getCreatedAt(), capturedIssue.getValue().getCreatedAt(), "Issue creation date should not change");
+
+        assertEquals(closedBy.getUsername(), capturedIssue.getValue().getClosedBy().getUsername(), "Issue closedBy user should match");
+        assertNotNull(capturedIssue.getValue().getClosedAt(), "Issue close date should not be null");
+
+        assertTrue(issue.getCreatedAt().getTime() < capturedIssue.getValue().getClosedAt().getTime(), "Issue close date should be older than create date");
+
+    }
+
+    @Test
+    public void reopenIssueService() {
+
     }
 
 }
