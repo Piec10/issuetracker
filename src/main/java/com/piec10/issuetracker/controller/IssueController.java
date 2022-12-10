@@ -5,7 +5,6 @@ import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.issue.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.UserService;
-import com.piec10.issuetracker.util.Priorities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,7 +59,6 @@ public class IssueController {
         model.addAttribute("show", show);
         model.addAttribute("openIssuesCount", openIssuesCount);
         model.addAttribute("closedIssuesCount", closedIssuesCount);
-        //model.addAttribute("priorities", new Priorities());
 
         return "dashboard/issues";
     }
@@ -79,7 +77,6 @@ public class IssueController {
     public String showNewIssueForm(Model model) {
 
         model.addAttribute("formIssue", new FormIssue());
-        //model.addAttribute("priorities", new Priorities());
 
         return "dashboard/issue-form";
     }
@@ -91,7 +88,6 @@ public class IssueController {
         FormIssue formIssue = new FormIssue();
 
         model.addAttribute("formIssue", formIssue);
-        //model.addAttribute("priorities", new Priorities());
 
         if(issue == null) return "dashboard/issue-form";
 

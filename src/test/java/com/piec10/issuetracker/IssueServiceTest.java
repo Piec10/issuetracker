@@ -2,21 +2,19 @@ package com.piec10.issuetracker;
 
 import com.piec10.issuetracker.dao.IssueRepository;
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.issue.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class IssueServiceTest {
@@ -38,7 +36,7 @@ public class IssueServiceTest {
 
         when(issueRepository.findAll()).thenReturn(issues);
 
-        assertEquals(3,issueService.findAll().size());
+        assertEquals(3,issueService.findAll().size(),"Should return list with 3 issues");
 
     }
 
@@ -49,7 +47,7 @@ public class IssueServiceTest {
         issue.setId(1);
         when(issueRepository.findById(1)).thenReturn(Optional.of(issue));
 
-        assertEquals(1, issueService.findById(1).getId());
+        assertEquals(1, issueService.findById(1).getId(), "Should return issue with id=1");
     }
 
     @Test
@@ -57,22 +55,42 @@ public class IssueServiceTest {
 
         when(issueRepository.findById(0)).thenReturn(Optional.empty());
 
-        assertNull(issueService.findById(0));
+        assertNull(issueService.findById(0), "There should be no issue with id=0");
     }
 
     @Test
-    public void saveNewValidIssueService() {
+    public void createNewValidIssueService() {
 
         FormIssue formIssue = new FormIssue();
         formIssue.setSummary("summary");
+        formIssue.setDescription("description");
 
-        //issueService.save(formIssue);
+        User user = new User();
+        user.setUsername("user");
 
+        ArgumentCaptor<Issue> capturedIssue = ArgumentCaptor.forClass(Issue.class);
+
+        issueService.createIssue(formIssue, user);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(formIssue.getId(), capturedIssue.getValue().getId(), "Issue id should match and be 0 for new issue");
+        assertEquals(formIssue.getSummary(), capturedIssue.getValue().getSummary(), "Issue summary should match");
+        assertEquals(formIssue.getDescription(), capturedIssue.getValue().getDescription(), "Issue description should match");
+        assertEquals(formIssue.getPriority(), capturedIssue.getValue().getPriority(), "Issue priority should match");
+
+        assertEquals(user.getUsername(), capturedIssue.getValue().getCreatedBy().getUsername(), "Issue creator name should match");
+
+        assertNotNull(capturedIssue.getValue().getCreatedAt(), "Issue creation date should not be null");
+        assertTrue(new Date().getTime() > capturedIssue.getValue().getCreatedAt().getTime(), "Issue creation date should be older than current date");
+
+        assertNull(capturedIssue.getValue().getClosedBy(), "Issue closed by should be null for new issue");
+        assertNull(capturedIssue.getValue().getClosedAt(), "Issue close date should be null for new issue");
 
     }
 
     @Test
-    public void saveUpdateIssueService() {
+    public void updateValidIssueService() {
 
 
     }

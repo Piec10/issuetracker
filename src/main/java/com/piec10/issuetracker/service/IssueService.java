@@ -12,11 +12,15 @@ public interface IssueService {
 
     Issue findById(int id);
 
-//    void save(FormIssue formIssue);
+    void createIssue(FormIssue formIssue, User createdBy);
+
+    void updateIssue(FormIssue formIssue);
 
     void deleteById(int id);
 
     void closeIssue(int theId, User closedBy);
+
+    void reopenIssue(int theId);
 
     int getOpenIssuesCount();
 
@@ -26,9 +30,4 @@ public interface IssueService {
 
     List<Issue> findClosed();
 
-    void reopenIssue(int theId);
-
-    void createIssue(FormIssue formIssue, User createdBy);
-
-    void updateIssue(FormIssue formIssue);
 }
