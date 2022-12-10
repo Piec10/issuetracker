@@ -40,34 +40,58 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public void save(FormIssue formIssue) {
-
-        if(formIssue.getId() == 0){
+    public void createIssue(FormIssue formIssue, User createdBy) {
 
         Issue newIssue = new Issue();
         newIssue.setSummary(formIssue.getSummary());
         newIssue.setDescription(formIssue.getDescription());
         newIssue.setPriority(formIssue.getPriority());
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserName = authentication.getName();
-
-        User currentUser = userRepository.findByUsername(currentUserName);
-
-        newIssue.setCreatedBy(currentUser);
+        newIssue.setCreatedBy(createdBy);
         newIssue.setCreatedAt(new Date());
 
         issueRepository.save(newIssue);
-        }
-        else{
-            Issue issue = findById(formIssue.getId());
-            issue.setSummary(formIssue.getSummary());
-            issue.setDescription(formIssue.getDescription());
-            issue.setPriority(formIssue.getPriority());
-
-            issueRepository.save(issue);
-        }
     }
+
+    @Override
+    public void updateIssue(FormIssue formIssue) {
+
+        Issue issue = findById(formIssue.getId());
+        issue.setSummary(formIssue.getSummary());
+        issue.setDescription(formIssue.getDescription());
+        issue.setPriority(formIssue.getPriority());
+
+        issueRepository.save(issue);
+    }
+
+//    @Override
+//    public void save(FormIssue formIssue) {
+//
+//        if(formIssue.getId() == 0){
+//
+//        Issue newIssue = new Issue();
+//        newIssue.setSummary(formIssue.getSummary());
+//        newIssue.setDescription(formIssue.getDescription());
+//        newIssue.setPriority(formIssue.getPriority());
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String currentUserName = authentication.getName();
+//
+//        User currentUser = userRepository.findByUsername(currentUserName);
+//
+//        newIssue.setCreatedBy(currentUser);
+//        newIssue.setCreatedAt(new Date());
+//
+//        issueRepository.save(newIssue);
+//        }
+//        else{
+//            Issue issue = findById(formIssue.getId());
+//            issue.setSummary(formIssue.getSummary());
+//            issue.setDescription(formIssue.getDescription());
+//            issue.setPriority(formIssue.getPriority());
+//
+//            issueRepository.save(issue);
+//        }
+//    }
 
     @Override
     public void deleteById(int id) {
@@ -114,4 +138,5 @@ public class IssueServiceImpl implements IssueService{
 
         issueRepository.save(issue);
     }
+
 }

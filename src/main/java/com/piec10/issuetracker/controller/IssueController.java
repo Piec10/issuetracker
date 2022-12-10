@@ -75,26 +75,6 @@ public class IssueController {
         return "dashboard/issue-details";
     }
 
-    @PostMapping("/processNewIssue")
-    public String processNewIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
-                                  BindingResult theBindingResult, HttpServletRequest request) {
-
-        // form validation
-        if (theBindingResult.hasErrors()) {
-
-            return "dashboard/issue-form";
-        }
-
-        if(isNotGuest(request)){
-
-            issueService.save(formIssue);
-            return "redirect:/dashboard/issues";
-        }
-        else return "redirect:/access-denied";
-
-    }
-
-
     @GetMapping("/newIssue")
     public String showNewIssueForm(Model model) {
 
@@ -126,6 +106,36 @@ public class IssueController {
         }
         else return "redirect:/access-denied";
     }
+
+    @PostMapping("/processIssue")
+    public String processNewIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
+                                  BindingResult theBindingResult, HttpServletRequest request) {
+
+        // form validation
+        if (theBindingResult.hasErrors()) {
+
+            return "dashboard/issue-form";
+        }
+
+        if(isNotGuest(request)){
+
+            if(formIssue.getId() == 0){
+
+                User createdBy = userService.findByUsername(request.getUserPrincipal().getName());
+
+                issueService.createIssue(formIssue, createdBy);
+            }
+            else{
+                issueService.updateIssue(formIssue);
+            }
+
+            return "redirect:/dashboard/issues";
+        }
+        else return "redirect:/access-denied";
+
+    }
+
+
 
     @GetMapping("/deleteIssue")
     public String deleteIssue(@RequestParam("issueId") int theId, HttpServletRequest request) {
