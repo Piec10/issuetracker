@@ -159,7 +159,6 @@ public class IssueServiceTest {
         createdBy.setUsername("user");
         Date createdAt = new Date(new Date().getTime() - 1000);
 
-
         issue.setCreatedBy(createdBy);
         issue.setCreatedAt(createdAt);
 
@@ -191,6 +190,47 @@ public class IssueServiceTest {
 
     @Test
     public void reopenIssueService() {
+
+        int id = 4;
+
+        Issue issue = new Issue();
+        issue.setId(id);
+        issue.setSummary("summary");
+        issue.setDescription("description");
+        issue.setPriority(0);
+
+        User createdBy = new User();
+        createdBy.setUsername("user");
+        Date createdAt = new Date(new Date().getTime() - 1000);
+
+        issue.setCreatedBy(createdBy);
+        issue.setCreatedAt(createdAt);
+
+        User closedBy = new User();
+        closedBy.setUsername("user2");
+        Date closedAt = new Date();
+
+        issue.setClosedBy(closedBy);
+        issue.setClosedAt(closedAt);
+
+        when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
+
+        ArgumentCaptor<Issue> capturedIssue = ArgumentCaptor.forClass(Issue.class);
+
+        issueService.reopenIssue(id);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(issue.getId(), capturedIssue.getValue().getId(), "Issue id should not change");
+        assertEquals(issue.getSummary(), capturedIssue.getValue().getSummary(), "Issue summary should not change");
+        assertEquals(issue.getDescription(), capturedIssue.getValue().getDescription(), "Issue description should not change");
+        assertEquals(issue.getPriority(), capturedIssue.getValue().getPriority(), "Issue priority should not change");
+
+        assertEquals(issue.getCreatedBy().getUsername(), capturedIssue.getValue().getCreatedBy().getUsername(), "Issue creator should not change");
+        assertEquals(issue.getCreatedAt(), capturedIssue.getValue().getCreatedAt(), "Issue creation date should not change");
+
+        assertNull(capturedIssue.getValue().getClosedBy(), "Issue closedBy should be null");
+        assertNull(capturedIssue.getValue().getClosedAt(), "Issue close date should be null");
 
     }
 
