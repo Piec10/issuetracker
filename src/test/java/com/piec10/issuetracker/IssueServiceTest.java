@@ -5,8 +5,10 @@ import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.issue.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,11 +22,50 @@ import static org.mockito.Mockito.*;
 public class IssueServiceTest {
 
     @MockBean
-    IssueRepository issueRepository;
+    private IssueRepository issueRepository;
 
     @Autowired
-    IssueService issueService;
+    private IssueService issueService;
 
+    @Captor
+    private ArgumentCaptor<Issue> capturedIssue;
+
+    private FormIssue formIssue;
+
+    private Issue issue;
+
+    private User createdBy;
+
+    private User closedBy;
+
+    private Date createdAt;
+
+    private Date closedAt;
+
+    @BeforeEach
+    public void beforeEach() {
+
+        formIssue = new FormIssue();
+        formIssue.setSummary("new summary");
+        formIssue.setDescription("new description");
+
+        createdBy = new User();
+        createdBy.setUsername("user");
+
+        closedBy = new User();
+        closedBy.setUsername("user2");
+
+        createdAt = new Date(new Date().getTime() - 1000);
+        closedAt = new Date();
+
+        issue = new Issue();
+        issue.setSummary("summary");
+        issue.setDescription("description");
+        issue.setPriority(0);
+        issue.setCreatedBy(createdBy);
+        issue.setCreatedAt(createdAt);
+
+    }
 
     @Test
     public void findAllService() {
@@ -62,18 +103,7 @@ public class IssueServiceTest {
     @Test
     public void createNewValidIssueService() {
 
-        FormIssue formIssue = new FormIssue();
-        formIssue.setId(0);
-        formIssue.setSummary("summary");
-        formIssue.setDescription("description");
-        formIssue.setPriority(1);
-
-        User user = new User();
-        user.setUsername("user");
-
-        ArgumentCaptor<Issue> capturedIssue = ArgumentCaptor.forClass(Issue.class);
-
-        issueService.createIssue(formIssue, user);
+        issueService.createIssue(formIssue, createdBy);
 
         verify(issueRepository).save(capturedIssue.capture());
 
@@ -82,7 +112,7 @@ public class IssueServiceTest {
         assertEquals(formIssue.getDescription(), capturedIssue.getValue().getDescription(), "Issue description should match");
         assertEquals(formIssue.getPriority(), capturedIssue.getValue().getPriority(), "Issue priority should match");
 
-        assertEquals(user.getUsername(), capturedIssue.getValue().getCreatedBy().getUsername(), "Issue creator name should match");
+        assertEquals(createdBy.getUsername(), capturedIssue.getValue().getCreatedBy().getUsername(), "Issue creator name should match");
 
         assertNotNull(capturedIssue.getValue().getCreatedAt(), "Issue creation date should not be null");
         assertTrue(new Date().getTime() > capturedIssue.getValue().getCreatedAt().getTime(), "Issue creation date should be older than current date");
@@ -96,37 +126,14 @@ public class IssueServiceTest {
     public void updateValidIssueService() {
 
         int id = 2;
-        //updated issue details
-        FormIssue formIssue = new FormIssue();
         formIssue.setId(id);
-        formIssue.setSummary("new summary");
-        formIssue.setDescription("new description");
-        formIssue.setPriority(2);
 
-        User createdBy = new User();
-        createdBy.setUsername("user");
-        Date createdAt = new Date();
-
-        User closedBy = new User();
-        closedBy.setUsername("user2");
-        Date closedAt = new Date();
-
-        //old issue details
-        Issue issue = new Issue();
         issue.setId(id);
-        issue.setSummary("old summary");
-        issue.setDescription("old description");
-        issue.setPriority(0);
-
-        issue.setCreatedBy(createdBy);
-        issue.setCreatedAt(createdAt);
 
         issue.setClosedBy(closedBy);
         issue.setClosedAt(closedAt);
 
         when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
-
-        ArgumentCaptor<Issue> capturedIssue = ArgumentCaptor.forClass(Issue.class);
 
         issueService.updateIssue(formIssue);
 
@@ -149,25 +156,9 @@ public class IssueServiceTest {
 
         int id = 4;
 
-        Issue issue = new Issue();
         issue.setId(id);
-        issue.setSummary("summary");
-        issue.setDescription("description");
-        issue.setPriority(0);
-
-        User createdBy = new User();
-        createdBy.setUsername("user");
-        Date createdAt = new Date(new Date().getTime() - 1000);
-
-        issue.setCreatedBy(createdBy);
-        issue.setCreatedAt(createdAt);
 
         when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
-
-        ArgumentCaptor<Issue> capturedIssue = ArgumentCaptor.forClass(Issue.class);
-
-        User closedBy = new User();
-        closedBy.setUsername("user2");
 
         issueService.closeIssue(id, closedBy);
 
@@ -193,29 +184,12 @@ public class IssueServiceTest {
 
         int id = 4;
 
-        Issue issue = new Issue();
         issue.setId(id);
-        issue.setSummary("summary");
-        issue.setDescription("description");
-        issue.setPriority(0);
-
-        User createdBy = new User();
-        createdBy.setUsername("user");
-        Date createdAt = new Date(new Date().getTime() - 1000);
-
-        issue.setCreatedBy(createdBy);
-        issue.setCreatedAt(createdAt);
-
-        User closedBy = new User();
-        closedBy.setUsername("user2");
-        Date closedAt = new Date();
 
         issue.setClosedBy(closedBy);
         issue.setClosedAt(closedAt);
 
         when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
-
-        ArgumentCaptor<Issue> capturedIssue = ArgumentCaptor.forClass(Issue.class);
 
         issueService.reopenIssue(id);
 

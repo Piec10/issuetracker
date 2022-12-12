@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(formUser.getUsername());
         user.setPassword(passwordEncoder.encode(formUser.getPassword()));
         user.setEmail(formUser.getEmail());
+        user.setCreatedAt(new Date());
 
         // give user default role of "user"
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
