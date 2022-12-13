@@ -20,4 +20,6 @@ public interface UserService extends UserDetailsService {
     void save(FormUser formUser);
 
     void deleteById(String theId);
+
+    void changePassword(String username, String newPassword);
 }

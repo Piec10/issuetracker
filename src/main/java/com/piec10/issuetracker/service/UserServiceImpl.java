@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(formUser.getPassword()));
         user.setEmail(formUser.getEmail());
         user.setCreatedAt(new Date());
+        user.setEnabled(1);
 
         // give user default role of "user"
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
@@ -74,6 +75,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(String theId) {
         userRepository.deleteById(theId);
+    }
+
+    @Override
+    public void changePassword(String username, String newPassword) {
+
+        User user = findByUsername(username);
+        if(user != null){
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+        }
     }
 
     @Override
