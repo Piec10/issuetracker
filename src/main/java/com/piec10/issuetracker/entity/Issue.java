@@ -35,6 +35,10 @@ public class Issue {
     @JoinColumn(name = "closed_by")
     private User closedBy;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "project_id")
+    private Project project;
+
     public Issue() {
 
     }
@@ -103,6 +107,14 @@ public class Issue {
         this.closedBy = closedBy;
     }
 
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
     @Override
     public String toString() {
         return "Issue{" +
@@ -113,6 +125,8 @@ public class Issue {
                 ", createdAt=" + createdAt +
                 ", closedAt=" + closedAt +
                 ", createdBy=" + createdBy.getUsername() +
+                ", closedBy=" + closedBy.getUsername() +
+                ", project=" + project.getTitle() +
                 '}';
     }
 }
