@@ -80,28 +80,28 @@ public class Project {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-//
-//    public Collection<Issue> getIssues() {
-//        return issues;
-//    }
-//
-//    public void setIssues(Collection<Issue> issues) {
-//        this.issues = issues;
-//    }
-//
-//    public Collection<User> getGuestUsers() {
-//        return guestUsers;
-//    }
-//
-//    public void setGuestUsers(Collection<User> guestUsers) {
-//        this.guestUsers = guestUsers;
-//    }
-//
-//    public Collection<User> getCollaborators() {
-//        return collaborators;
-//    }
-//
-//    public void setCollaborators(Collection<User> collaborators) {
-//        this.collaborators = collaborators;
-//    }
+
+    public Collection<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(Collection<Issue> issues) {
+        this.issues = issues;
+    }
+
+    public Collection<User> getGuestUsers() {
+        return guestUsers;
+    }
+
+    public void setGuestUsers(Collection<User> guestUsers) {
+        this.guestUsers = guestUsers;
+    }
+
+    public Collection<User> getCollaborators() {
+        return collaborators;
+    }
+
+    public void setCollaborators(Collection<User> collaborators) {
+        this.collaborators = collaborators;
+    }
 }
