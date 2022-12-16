@@ -113,6 +113,22 @@ public class User {
         this.issues = issues;
     }
 
+    public Collection<Project> getGuestProjects() {
+        return guestProjects;
+    }
+
+    public void setGuestProjects(Collection<Project> guestProjects) {
+        this.guestProjects = guestProjects;
+    }
+
+    public Collection<Project> getCollaborationProjects() {
+        return collaborationProjects;
+    }
+
+    public void setCollaborationProjects(Collection<Project> collaborationProjects) {
+        this.collaborationProjects = collaborationProjects;
+    }
+
     @Override
     public String toString() {
         return "User{" +
