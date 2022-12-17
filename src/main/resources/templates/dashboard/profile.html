@@ -27,39 +27,36 @@
             <div class="p-4 p-md-5 border text-center rounded-3 bg-light">
                 <div class="row row-cols-2">
                     <div class="col border rounded-3">
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    Username:
-                                </td>
-                                <td>
-                                    User
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Email:
-                                </td>
-                                <td>
-                                    Email
-                                </td>
-                            </tr>
-
-                            </tbody>
-
-                        </table>
-                        <!--          <div class="row">-->
-                        <!--            <div class="col">-->
-                        <!--              User-->
-                        <!--            </div>-->
-                        <!--            <div class="col">-->
-                        <!--              Username-->
-                        <!--            </div>-->
-                        <!--          </div>-->
+                        <div class="row">
+                            <div class="col">
+                                Username:
+                            </div>
+                            <div class="col">
+                                <span th:text="${user.username}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                Email:
+                            </div>
+                            <div class="col">
+                                <span th:text="${user.email}"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="col">
-                        You have no open issues.
+                        <div class="row">
+                            <span>Your projects:</span>
+                            <div th:each="tempProject : ${user.collaborationProjects}">
+                                <span th:text="${tempProject.title}"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <span>Guest projects:</span>
+                            <div th:each="tempProject : ${user.guestProjects}">
+                                <span th:text="${tempProject.title}"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
