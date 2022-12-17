@@ -52,7 +52,7 @@
                                 <div class="row">
                                     <div class="col-1">Id</div>
                                     <div class="col">Title</div>
-                                    <div class="col-2">Owner</div>
+                                    <div class="col-2">Creator</div>
                                     <div class="col-1">Issues</div>
                                     <div class="col-2">Role</div>
                                 </div>
@@ -67,48 +67,35 @@
                     <div class="row clickable-row p-2 mx-0">
                         <div class="col">
                             <div class="row position-relative">
+
+                                <div class="col-1">#<span th:text="${tempProject.id}"/></div>
+                                <div class="col"><span th:text="${tempProject.title}"/></div>
+                                <div class="col-2">
+                                    <div th:switch="${tempProject.createdBy == null}">
+                                        <div th:case="true">
+                                            <small class="text-secondary fst-italic">
+                                                deleted user
+                                            </small>
+                                        </div>
+                                        <div th:case="false">
+                                            <span th:text="${tempProject.createdBy.username}"/>
+                                        </div>
+                                    </div>
+                                    <small><span th:text="${tempProject.createdAt}"/></small>
+                                </div>
+                                <div class="col-1"><span th:text="${#lists.size(tempProject.issues)}"/></div>
+                                <div class="col-2"></div>
+<!--                                <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"-->
+<!--                                   class="stretched-link"></a>-->
                             </div>
                         </div>
+                        <div class="col-1"></div>
                     </div>
 
                 </div>
 
 
-<!--                                <div class="col-1">#<span th:text="${tempIssue.id}"/></div>-->
-<!--                                <div class="col"><span th:text="${tempIssue.summary}"/></div>-->
 
-<!--                                <div class="col-1"><span th:text="${priorities.getName(tempIssue.priority)}"/></div>-->
-
-<!--                                <div class="col-2">-->
-<!--                                    <div th:switch="${tempIssue.createdBy == null}">-->
-<!--                                        <div th:case="true">-->
-<!--                                            <small class="text-secondary fst-italic">-->
-<!--                                                deleted user-->
-<!--                                            </small>-->
-<!--                                        </div>-->
-<!--                                        <div th:case="false">-->
-<!--                                            <span th:text="${tempIssue.createdBy.username}"/>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <small><span th:text="${tempIssue.createdAt}"/></small>-->
-<!--                                </div>-->
-<!--                                <div class="col-2" th:if="${show == 'closed' or show == 'all'}">-->
-<!--                                    <div th:if="${tempIssue.closedAt != null}">-->
-<!--                                        <div th:switch="${tempIssue.closedBy == null}">-->
-<!--                                            <div th:case="true">-->
-<!--                                                <small class="text-secondary fst-italic">-->
-<!--                                                    deleted user-->
-<!--                                                </small>-->
-<!--                                            </div>-->
-<!--                                            <div th:case="false">-->
-<!--                                                <span th:text="${tempIssue.closedBy.username}"/>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                        <small><span th:text="${tempIssue.closedAt}"/></small>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"-->
-<!--                                   class="stretched-link"></a>-->
 <!--                            </div>-->
 <!--                        </div>-->
 <!--                        <div class="col-1">-->
