@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.form.FormProject;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,5 +26,13 @@ public class ProjectController {
         model.addAttribute("user", currentUser);
 
         return "dashboard/projects";
+    }
+
+    @GetMapping("/newProject")
+    public String showNewProjectForm(Model model) {
+
+        model.addAttribute("formProject", new FormProject());
+
+        return "dashboard/project-form";
     }
 }

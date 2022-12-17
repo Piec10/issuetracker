@@ -2,7 +2,7 @@ package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.User;
-import com.piec10.issuetracker.issue.FormIssue;
+import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +29,12 @@ public class IssueController {
     //private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/issues")
-    public String getIssues(@RequestParam(value = "show", required = false) String show, Model model) {
+    public String getIssues(@RequestParam(value = "projectId") int projectId, @RequestParam(value = "show", required = false) String show, Model model) {
 
         List<Issue> issues;
 
-        int openIssuesCount = issueService.getOpenIssuesCount();
-        int closedIssuesCount = issueService.getClosedIssuesCount();
+        int openIssuesCount = issueService.getOpenIssuesCount(projectId);
+        int closedIssuesCount = issueService.getClosedIssuesCount(projectId);
 
         if (show == null) {
             show = "open";
@@ -59,6 +59,7 @@ public class IssueController {
         model.addAttribute("show", show);
         model.addAttribute("openIssuesCount", openIssuesCount);
         model.addAttribute("closedIssuesCount", closedIssuesCount);
+        model.addAttribute("projectId", projectId);
 
         return "dashboard/issues";
     }

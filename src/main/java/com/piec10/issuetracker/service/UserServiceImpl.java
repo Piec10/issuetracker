@@ -4,7 +4,7 @@ import com.piec10.issuetracker.dao.RoleRepository;
 import com.piec10.issuetracker.dao.UserRepository;
 import com.piec10.issuetracker.entity.Role;
 import com.piec10.issuetracker.entity.User;
-import com.piec10.issuetracker.user.FormUser;
+import com.piec10.issuetracker.form.FormUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.issue;
+package com.piec10.issuetracker.form;
 
 
 import javax.validation.constraints.NotNull;

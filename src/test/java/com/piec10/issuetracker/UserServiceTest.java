@@ -4,7 +4,7 @@ import com.piec10.issuetracker.dao.UserRepository;
 import com.piec10.issuetracker.entity.Role;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.UserService;
-import com.piec10.issuetracker.user.FormUser;
+import com.piec10.issuetracker.form.FormUser;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;

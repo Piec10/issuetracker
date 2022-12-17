@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.user;
+package com.piec10.issuetracker.form;
 
 
 import com.piec10.issuetracker.validation.FieldMatch;

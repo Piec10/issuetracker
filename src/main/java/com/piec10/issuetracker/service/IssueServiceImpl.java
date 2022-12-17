@@ -3,7 +3,7 @@ package com.piec10.issuetracker.service;
 import com.piec10.issuetracker.dao.IssueRepository;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.User;
-import com.piec10.issuetracker.issue.FormIssue;
+import com.piec10.issuetracker.form.FormIssue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,14 +83,14 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public int getOpenIssuesCount() {
+    public int getOpenIssuesCount(int projectId) {
 
-        return issueRepository.openIssuesCount();
+        return issueRepository.openIssuesCount(projectId);
     }
 
     @Override
-    public int getClosedIssuesCount() {
-        return issueRepository.closedIssuesCount();
+    public int getClosedIssuesCount(int projectId) {
+        return issueRepository.closedIssuesCount(projectId);
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.User;
-import com.piec10.issuetracker.issue.FormIssue;
+import com.piec10.issuetracker.form.FormIssue;
 
 import java.util.List;
 
@@ -22,9 +22,9 @@ public interface IssueService {
 
     void reopenIssue(int theId);
 
-    int getOpenIssuesCount();
+    int getOpenIssuesCount(int projectId);
 
-    int getClosedIssuesCount();
+    int getClosedIssuesCount(int projectId);
 
     List<Issue> findOpen();
 
