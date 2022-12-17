@@ -48,25 +48,18 @@
                     <div th:case="false">
 
                         <div class="row p-2 mx-0 fw-bold">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="col-1">Id</div>
-                                    <div class="col">Title</div>
-                                    <div class="col-2">Creator</div>
-                                    <div class="col-1">Issues</div>
-                                    <div class="col-2">Role</div>
-                                </div>
-                            </div>
-                            <div class="col-1"></div>
+                            <div class="col-1">Id</div>
+                            <div class="col">Title</div>
+                            <div class="col-2">Creator</div>
+                            <div class="col-1">Issues</div>
+                            <div class="col-2">Role</div>
                         </div>
 
-                <div th:each="tempProject : ${user.guestProjects}">
+                        <div th:each="tempProject : ${user.guestProjects}">
 
-                    <hr class="hr-table">
+                            <hr class="hr-table">
 
-                    <div class="row clickable-row p-2 mx-0">
-                        <div class="col">
-                            <div class="row position-relative">
+                            <div class="row clickable-row p-2 mx-0 position-relative">
 
                                 <div class="col-1">#<span th:text="${tempProject.id}"/></div>
                                 <div class="col"><span th:text="${tempProject.title}"/></div>
@@ -84,60 +77,60 @@
                                     <small><span th:text="${tempProject.createdAt}"/></small>
                                 </div>
                                 <div class="col-1"><span th:text="${#lists.size(tempProject.issues)}"/></div>
-                                <div class="col-2"></div>
-<!--                                <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"-->
-<!--                                   class="stretched-link"></a>-->
+                                <div class="col-2">
+                                    <span th:text="${(tempProject.createdBy != null ? (tempProject.createdBy.username == #authentication.getPrincipal().getUsername()) : false)
+                                    ? 'Owner' : (#lists.contains(tempProject.collaborators, user) ? 'Collaborator' : 'Guest')}"/>
+                                </div>
+                                <!--                                <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"-->
+                                <!--                                   class="stretched-link"></a>-->
+
                             </div>
+
                         </div>
-                        <div class="col-1"></div>
-                    </div>
-
-                </div>
 
 
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <!--                        <div class="col-1">-->
+                        <!--                            <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">-->
 
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="col-1">-->
-<!--                            <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">-->
-
-<!--                                <div class="dropdown">-->
-<!--                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"-->
-<!--                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-<!--                                        Action-->
-<!--                                    </button>-->
-<!--                                    <ul class="dropdown-menu">-->
+                        <!--                                <div class="dropdown">-->
+                        <!--                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"-->
+                        <!--                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+                        <!--                                        Action-->
+                        <!--                                    </button>-->
+                        <!--                                    <ul class="dropdown-menu">-->
 
 
-<!--                                        <div th:switch="${tempIssue.closedAt == null}">-->
-<!--                                            <div th:case="true">-->
-<!--                                                <li><a class="dropdown-item"-->
-<!--                                                       th:href="@{/dashboard/editIssue(issueId=${tempIssue.id})}">Edit</a>-->
-<!--                                                </li>-->
-<!--                                                <li><a class="dropdown-item"-->
-<!--                                                       th:href="@{/dashboard/closeIssue(issueId=${tempIssue.id})}"-->
-<!--                                                       onclick="if (!(confirm('Are you sure you want to close this issue?'))) return false">Close</a>-->
-<!--                                                </li>-->
-<!--                                            </div>-->
-<!--                                            <div th:case="false">-->
-<!--                                                <li><a class="dropdown-item"-->
-<!--                                                       th:href="@{/dashboard/reopenIssue(issueId=${tempIssue.id})}"-->
-<!--                                                       onclick="if (!(confirm('Are you sure you want to reopen this issue?'))) return false">Reopen</a>-->
-<!--                                                </li>-->
-<!--                                            </div>-->
-<!--                                        </div>-->
+                        <!--                                        <div th:switch="${tempIssue.closedAt == null}">-->
+                        <!--                                            <div th:case="true">-->
+                        <!--                                                <li><a class="dropdown-item"-->
+                        <!--                                                       th:href="@{/dashboard/editIssue(issueId=${tempIssue.id})}">Edit</a>-->
+                        <!--                                                </li>-->
+                        <!--                                                <li><a class="dropdown-item"-->
+                        <!--                                                       th:href="@{/dashboard/closeIssue(issueId=${tempIssue.id})}"-->
+                        <!--                                                       onclick="if (!(confirm('Are you sure you want to close this issue?'))) return false">Close</a>-->
+                        <!--                                                </li>-->
+                        <!--                                            </div>-->
+                        <!--                                            <div th:case="false">-->
+                        <!--                                                <li><a class="dropdown-item"-->
+                        <!--                                                       th:href="@{/dashboard/reopenIssue(issueId=${tempIssue.id})}"-->
+                        <!--                                                       onclick="if (!(confirm('Are you sure you want to reopen this issue?'))) return false">Reopen</a>-->
+                        <!--                                                </li>-->
+                        <!--                                            </div>-->
+                        <!--                                        </div>-->
 
-<!--                                        <li><a class="dropdown-item"-->
-<!--                                               th:href="@{/dashboard/deleteIssue(issueId=${tempIssue.id})}"-->
-<!--                                               onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">Delete</a>-->
-<!--                                        </li>-->
-<!--                                    </ul>-->
-<!--                                </div>-->
+                        <!--                                        <li><a class="dropdown-item"-->
+                        <!--                                               th:href="@{/dashboard/deleteIssue(issueId=${tempIssue.id})}"-->
+                        <!--                                               onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">Delete</a>-->
+                        <!--                                        </li>-->
+                        <!--                                    </ul>-->
+                        <!--                                </div>-->
 
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <!--                    </div>-->
+                        <!--                </div>-->
 
                     </div>
                 </div>
