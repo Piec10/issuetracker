@@ -23,7 +23,7 @@ public class DashboardController {
     @GetMapping("/")
     public String getDashboard(){
 
-        return "redirect:/dashboard/issues";
+        return "redirect:/dashboard/projects";
     }
 
     @GetMapping("/profile")
