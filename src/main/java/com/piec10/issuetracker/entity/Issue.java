@@ -35,7 +35,7 @@ public class Issue {
     @JoinColumn(name = "closed_by")
     private User closedBy;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinColumn(name = "project_id")
     private Project project;
 

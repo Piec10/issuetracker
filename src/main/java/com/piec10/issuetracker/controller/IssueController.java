@@ -192,12 +192,12 @@ public class IssueController {
 
         Issue issue = issueService.findById(theId);
 
-        if (issue == null) return "redirect:/dashboard/issues";
+        if (issue == null) return "redirect:/dashboard/projects";
 
         if (isAdminOrOwner(issue.getCreatedBy(), request)) {
 
             issueService.deleteById(theId);
-            return "redirect:/dashboard/issues";
+            return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 
         } else return "redirect:/access-denied";
     }
@@ -207,7 +207,7 @@ public class IssueController {
 
         Issue issue = issueService.findById(theId);
 
-        if (issue == null) return "redirect:/dashboard/issues";
+        if (issue == null) return "redirect:/dashboard/projects";
 
         if (isAdminOrOwner(issue.getCreatedBy(), request)) {
 
@@ -216,7 +216,7 @@ public class IssueController {
                 User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
                 issueService.closeIssue(theId, closedBy);
             }
-            return "redirect:/dashboard/issues";
+            return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 
         } else return "redirect:/access-denied";
     }
@@ -226,7 +226,7 @@ public class IssueController {
 
         Issue issue = issueService.findById(theId);
 
-        if (issue == null) return "redirect:/dashboard/issues";
+        if (issue == null) return "redirect:/dashboard/projects";
 
         if (isAdminOrOwner(issue.getCreatedBy(), request)) {
 
@@ -234,7 +234,7 @@ public class IssueController {
 
                 issueService.reopenIssue(theId);
             }
-            return "redirect:/dashboard/issues";
+            return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 
         } else return "redirect:/access-denied";
     }
