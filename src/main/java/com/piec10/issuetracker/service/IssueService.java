@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IssueService {
 
-    List<Issue> findAll();
+    List<Issue> findAll(int projectId);
 
     Issue findById(int id);
 
@@ -26,8 +26,8 @@ public interface IssueService {
 
     int getClosedIssuesCount(int projectId);
 
-    List<Issue> findOpen();
+    List<Issue> findOpen(int projectId);
 
-    List<Issue> findClosed();
+    List<Issue> findClosed(int projectId);
 
 }

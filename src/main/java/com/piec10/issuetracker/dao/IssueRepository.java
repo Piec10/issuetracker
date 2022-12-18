@@ -17,16 +17,16 @@ public interface IssueRepository extends JpaRepository<Issue, Integer> {
             nativeQuery = true)
     int closedIssuesCount(@Param("projectId")int projectId);
 
-    @Query(value = "SELECT * FROM issues WHERE closed_at IS NULL ORDER BY id DESC",
+    @Query(value = "SELECT * FROM issues WHERE closed_at IS NULL AND project_id = :projectId ORDER BY id DESC",
             nativeQuery = true)
-    List<Issue> findOpen();
+    List<Issue> findOpen(@Param("projectId") int projectId);
 
-    @Query(value = "SELECT * FROM issues WHERE closed_at IS NOT NULL ORDER BY closed_at DESC",
+    @Query(value = "SELECT * FROM issues WHERE closed_at IS NOT NULL AND project_id = :projectId ORDER BY closed_at DESC",
             nativeQuery = true)
-    List<Issue> findClosed();
+    List<Issue> findClosed(@Param("projectId") int projectId);
 
-    @Override
-    @Query(value = "SELECT * FROM issues ORDER BY id DESC",
+
+    @Query(value = "SELECT * FROM issues WHERE project_id = :projectId ORDER BY id DESC",
             nativeQuery = true)
-    List<Issue> findAll();
+    List<Issue> findAll(@Param("projectId") int projectId);
 }

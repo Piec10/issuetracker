@@ -76,9 +76,9 @@ public class IssueServiceTest {
 
         List<Issue> issues = new ArrayList<>(Arrays.asList(issue1,issue2,issue3));
 
-        when(issueRepository.findAll()).thenReturn(issues);
+        when(issueRepository.findAll(1)).thenReturn(issues);
 
-        assertEquals(3,issueService.findAll().size(),"Should return list with 3 issues");
+        assertEquals(3,issueService.findAll(1).size(),"Should return list with 3 issues");
 
     }
 

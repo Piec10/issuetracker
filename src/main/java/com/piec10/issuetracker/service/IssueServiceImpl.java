@@ -18,8 +18,8 @@ public class IssueServiceImpl implements IssueService{
     private IssueRepository issueRepository;
 
     @Override
-    public List<Issue> findAll() {
-        return issueRepository.findAll();
+    public List<Issue> findAll(int projectId) {
+        return issueRepository.findAll(projectId);
     }
 
     @Override
@@ -94,12 +94,12 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public List<Issue> findOpen() {
-        return issueRepository.findOpen();
+    public List<Issue> findOpen(int projectId) {
+        return issueRepository.findOpen(projectId);
     }
 
     @Override
-    public List<Issue> findClosed() {
-        return issueRepository.findClosed();
+    public List<Issue> findClosed(int projectId) {
+        return issueRepository.findClosed(projectId);
     }
 }

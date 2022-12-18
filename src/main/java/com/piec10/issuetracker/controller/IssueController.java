@@ -1,9 +1,11 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
+import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,42 +28,61 @@ public class IssueController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ProjectService projectService;
+
     //private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/issues")
-    public String getIssues(@RequestParam(value = "projectId") int projectId, @RequestParam(value = "show", required = false) String show, Model model) {
+    public String getIssues(@RequestParam(value = "projectId") int projectId,
+                            @RequestParam(value = "show", required = false) String show,
+                            Model model,
+                            Principal principal) {
 
-        List<Issue> issues;
+        Project project = projectService.findById(projectId);
 
-        int openIssuesCount = issueService.getOpenIssuesCount(projectId);
-        int closedIssuesCount = issueService.getClosedIssuesCount(projectId);
+        if(project == null) return "redirect:/dashboard/projects";
 
-        if (show == null) {
-            show = "open";
-        }
+        User currentUser = userService.findByUsername(principal.getName());
 
-        switch (show) {
-            case "open":
-                issues = issueService.findOpen();
-                break;
-            case "closed":
-                issues = issueService.findClosed();
-                break;
-            case "all":
-                issues = issueService.findAll();
-                break;
-            default:
+        if(project.getGuestUsers().contains(currentUser)){
+
+            List<Issue> issues;
+
+            int openIssuesCount = issueService.getOpenIssuesCount(projectId);
+            int closedIssuesCount = issueService.getClosedIssuesCount(projectId);
+
+            if (show == null) {
                 show = "open";
-                issues = issueService.findOpen();
+            }
+
+            switch (show) {
+                case "open":
+                    issues = issueService.findOpen(projectId);
+                    break;
+                case "closed":
+                    issues = issueService.findClosed(projectId);
+                    break;
+                case "all":
+                    issues = issueService.findAll(projectId);
+                    break;
+                default:
+                    show = "open";
+                    issues = issueService.findOpen(projectId);
+            }
+
+            model.addAttribute("issues", issues);
+            model.addAttribute("show", show);
+            model.addAttribute("openIssuesCount", openIssuesCount);
+            model.addAttribute("closedIssuesCount", closedIssuesCount);
+            model.addAttribute("projectId", projectId);
+
+            return "dashboard/issues";
         }
+        else return "redirect:/access-denied";
 
-        model.addAttribute("issues", issues);
-        model.addAttribute("show", show);
-        model.addAttribute("openIssuesCount", openIssuesCount);
-        model.addAttribute("closedIssuesCount", closedIssuesCount);
-        model.addAttribute("projectId", projectId);
 
-        return "dashboard/issues";
+
     }
 
     @GetMapping("/issue")
