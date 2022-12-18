@@ -46,9 +46,7 @@ public class IssueController {
 
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, principal);
 
-        User currentUser = userService.findByUsername(principal.getName());
-
-        if(project.getGuestUsers().contains(currentUser)){
+        if(userProjectRoles.isGuest()){
 
             List<Issue> issues;
 
@@ -79,27 +77,13 @@ public class IssueController {
             model.addAttribute("openIssuesCount", openIssuesCount);
             model.addAttribute("closedIssuesCount", closedIssuesCount);
             model.addAttribute("project", project);
+            model.addAttribute("projectRoles", userProjectRoles);
 
             return "dashboard/issues";
         }
         else return "redirect:/access-denied";
-
-
-
     }
 
-    private UserProjectRoles getUserProjectRoles(Project project, Principal principal) {
-
-        User currentUser = userService.findByUsername(principal.getName());
-
-        UserProjectRoles userProjectRoles = new UserProjectRoles();
-
-        userProjectRoles.setGuest(project.getGuestUsers().contains(currentUser));
-        userProjectRoles.setCollaborator(project.getCollaborators().contains(currentUser));
-        userProjectRoles.setOwner(project.getCreatedBy().equals(currentUser));
-
-        return userProjectRoles;
-    }
 
     @GetMapping("/issue")
     public String issueDetails(@RequestParam("issueId") int theId, Model model) {
@@ -247,5 +231,17 @@ public class IssueController {
 
     private boolean isNotGuest(HttpServletRequest request) {
         return !request.isUserInRole("ROLE_GUEST");
+    }
+    private UserProjectRoles getUserProjectRoles(Project project, Principal principal) {
+
+        User currentUser = userService.findByUsername(principal.getName());
+
+        UserProjectRoles userProjectRoles = new UserProjectRoles();
+
+        userProjectRoles.setGuest(project.getGuestUsers().contains(currentUser));
+        userProjectRoles.setCollaborator(project.getCollaborators().contains(currentUser));
+        userProjectRoles.setOwner(project.getCreatedBy().equals(currentUser));
+
+        return userProjectRoles;
     }
 }
