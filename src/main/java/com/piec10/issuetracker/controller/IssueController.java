@@ -7,6 +7,7 @@ import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
+import com.piec10.issuetracker.util.UserProjectRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +43,8 @@ public class IssueController {
         Project project = projectService.findById(projectId);
 
         if(project == null) return "redirect:/dashboard/projects";
+
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, principal);
 
         User currentUser = userService.findByUsername(principal.getName());
 
@@ -83,6 +86,19 @@ public class IssueController {
 
 
 
+    }
+
+    private UserProjectRoles getUserProjectRoles(Project project, Principal principal) {
+
+        User currentUser = userService.findByUsername(principal.getName());
+
+        UserProjectRoles userProjectRoles = new UserProjectRoles();
+
+        userProjectRoles.setGuest(project.getGuestUsers().contains(currentUser));
+        userProjectRoles.setCollaborator(project.getCollaborators().contains(currentUser));
+        userProjectRoles.setOwner(project.getCreatedBy().equals(currentUser));
+
+        return userProjectRoles;
     }
 
     @GetMapping("/issue")
