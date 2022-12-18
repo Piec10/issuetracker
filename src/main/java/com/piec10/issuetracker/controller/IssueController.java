@@ -86,9 +86,11 @@ public class IssueController {
 
 
     @GetMapping("/issue")
-    public String issueDetails(@RequestParam("issueId") int theId, Model model) {
+    public String issueDetails(@RequestParam("issueId") int theId, Model model, Principal principal) {
 
         Issue issue = issueService.findById(theId);
+
+        if(issue == null) return "redirect:/dashboard/projects";
 
         model.addAttribute("issue", issue);
 
@@ -103,11 +105,14 @@ public class IssueController {
 
         if(project == null) return "redirect:/dashboard/projects";
 
-        User currentUser = userService.findByUsername(principal.getName());
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, principal);
 
-        if(project.getCollaborators().contains(currentUser)){
+        if(userProjectRoles.isCollaborator()){
 
-            model.addAttribute("formIssue", new FormIssue());
+            FormIssue formIssue = new FormIssue();
+            formIssue.setProjectId(projectId);
+
+            model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";
         }

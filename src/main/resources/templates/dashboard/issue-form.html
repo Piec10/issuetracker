@@ -37,6 +37,9 @@
                         <!-- Add hidden form field to handle update -->
                         <input type="hidden" th:field="*{id}" />
 
+                        <!-- Add hidden form field for projectId -->
+                        <input type="hidden" th:field="*{projectId}" />
+
                         <input th:field="*{summary}" type="text" name="summary" id="floatingInput" placeholder="Summary" class="form-control">
                         <label for="floatingInput" class="text-secondary">Summary</label>
                     </div>

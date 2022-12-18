@@ -12,10 +12,11 @@ public class FormIssue {
     @Size(min = 1, message = "Summary is required")
     private String summary;
 
-
     private String description;
 
     private int priority = 1;
+
+    private int projectId;
 
     public FormIssue(){}
 
@@ -49,5 +50,13 @@ public class FormIssue {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 }
