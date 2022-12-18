@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
 
@@ -12,7 +13,7 @@ public interface IssueService {
 
     Issue findById(int id);
 
-    void createIssue(FormIssue formIssue, User createdBy);
+    void createIssue(FormIssue formIssue, User createdBy, Project project);
 
     void updateIssue(FormIssue formIssue);
 

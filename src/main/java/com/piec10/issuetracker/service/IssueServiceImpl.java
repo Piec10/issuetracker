@@ -2,6 +2,7 @@ package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public void createIssue(FormIssue formIssue, User createdBy) {
+    public void createIssue(FormIssue formIssue, User createdBy, Project project) {
 
         Issue newIssue = new Issue();
         newIssue.setSummary(formIssue.getSummary());
@@ -42,6 +43,7 @@ public class IssueServiceImpl implements IssueService{
         newIssue.setPriority(formIssue.getPriority());
         newIssue.setCreatedBy(createdBy);
         newIssue.setCreatedAt(new Date());
+        newIssue.setProject(project);
 
         issueRepository.save(newIssue);
     }

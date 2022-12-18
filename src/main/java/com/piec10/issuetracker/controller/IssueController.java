@@ -92,9 +92,18 @@ public class IssueController {
 
         if(issue == null) return "redirect:/dashboard/projects";
 
-        model.addAttribute("issue", issue);
+        Project project = projectService.findById(issue.getProject().getId());
 
-        return "dashboard/issue-details";
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, principal);
+
+        if(userProjectRoles.isGuest()){
+
+            model.addAttribute("issue", issue);
+
+            return "dashboard/issue-details";
+        }
+        else return "redirect:/access-denied";
+
     }
 
     @GetMapping("/newIssue")
@@ -124,18 +133,20 @@ public class IssueController {
     public String showEditIssueForm(@RequestParam("issueId") int theId, Model model, HttpServletRequest request) {
 
         Issue issue = issueService.findById(theId);
-        FormIssue formIssue = new FormIssue();
 
-        model.addAttribute("formIssue", formIssue);
-
-        if(issue == null) return "dashboard/issue-form";
+        if(issue == null) return "redirect:/dashboard/projects";
 
         if(isAdminOrOwner(issue.getCreatedBy(), request)){
+
+            FormIssue formIssue = new FormIssue();
 
             formIssue.setId(issue.getId());
             formIssue.setSummary(issue.getSummary());
             formIssue.setDescription(issue.getDescription());
             formIssue.setPriority(issue.getPriority());
+            formIssue.setProjectId(issue.getProject().getId());
+
+            model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";
         }
@@ -152,19 +163,23 @@ public class IssueController {
             return "dashboard/issue-form";
         }
 
-        if(isNotGuest(request)){
+        Project project = projectService.findById(formIssue.getProjectId());
+
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, request.getUserPrincipal());
+
+        if(isAdmin(request) || userProjectRoles.isCollaborator()){
 
             if(formIssue.getId() == 0){
 
                 User createdBy = userService.findByUsername(request.getUserPrincipal().getName());
 
-                issueService.createIssue(formIssue, createdBy);
+                issueService.createIssue(formIssue, createdBy, project);
             }
             else{
                 issueService.updateIssue(formIssue);
             }
 
-            return "redirect:/dashboard/issues";
+            return "redirect:/dashboard/issues?projectId=" + project.getId();
         }
         else return "redirect:/access-denied";
 
@@ -237,6 +252,11 @@ public class IssueController {
     private boolean isNotGuest(HttpServletRequest request) {
         return !request.isUserInRole("ROLE_GUEST");
     }
+
+    private boolean isAdmin(HttpServletRequest request) {
+        return request.isUserInRole("ROLE_ADMIN");
+    }
+
     private UserProjectRoles getUserProjectRoles(Project project, Principal principal) {
 
         User currentUser = userService.findByUsername(principal.getName());

@@ -2,6 +2,7 @@ package com.piec10.issuetracker;
 
 import com.piec10.issuetracker.dao.IssueRepository;
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
@@ -42,6 +43,8 @@ public class IssueServiceTest {
 
     private Date closedAt;
 
+    private Project project;
+
     @BeforeEach
     public void beforeEach() {
 
@@ -64,6 +67,11 @@ public class IssueServiceTest {
         issue.setPriority(0);
         issue.setCreatedBy(createdBy);
         issue.setCreatedAt(createdAt);
+
+        project = new Project();
+        project.setId(1);
+        project.setTitle("title");
+        project.setDescription("description");
 
     }
 
@@ -103,7 +111,7 @@ public class IssueServiceTest {
     @Test
     public void createNewValidIssueService() {
 
-        issueService.createIssue(formIssue, createdBy);
+        issueService.createIssue(formIssue, createdBy, project);
 
         verify(issueRepository).save(capturedIssue.capture());
 
@@ -120,6 +128,7 @@ public class IssueServiceTest {
         assertNull(capturedIssue.getValue().getClosedBy(), "Issue closed by should be null for new issue");
         assertNull(capturedIssue.getValue().getClosedAt(), "Issue close date should be null for new issue");
 
+        assertEquals(project.getId(), capturedIssue.getValue().getProject().getId(), "Project id should match");
     }
 
     @Test
