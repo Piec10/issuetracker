@@ -32,7 +32,9 @@
                     <div class="row">
                         <div class="col">
                             <div th:unless="${#authorization.expression('hasAuthority(''ROLE_GUEST'')')}">
-                                <a class="btn btn-outline-secondary" th:href="@{/dashboard/newIssue}">New Issue</a>
+                                <div th:if="">
+                                <a class="btn btn-outline-secondary" th:href="@{/dashboard/newIssue(projectId=${project.id})}">New Issue</a>
+                                </div>
                             </div>
                         </div>
                         <div class="col">

@@ -96,11 +96,23 @@ public class IssueController {
     }
 
     @GetMapping("/newIssue")
-    public String showNewIssueForm(Model model) {
+    public String showNewIssueForm(@RequestParam(value = "projectId") int projectId,
+                                   Model model, Principal principal) {
 
-        model.addAttribute("formIssue", new FormIssue());
+        Project project = projectService.findById(projectId);
 
-        return "dashboard/issue-form";
+        if(project == null) return "redirect:/dashboard/projects";
+
+        User currentUser = userService.findByUsername(principal.getName());
+
+        if(project.getCollaborators().contains(currentUser)){
+
+            model.addAttribute("formIssue", new FormIssue());
+
+            return "dashboard/issue-form";
+        }
+        else return "redirect:/access-denied";
+
     }
 
     @GetMapping("/editIssue")
