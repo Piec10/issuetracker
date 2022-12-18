@@ -35,25 +35,28 @@
                                 <a class="btn btn-outline-secondary" th:href="@{/dashboard/newIssue}">New Issue</a>
                             </div>
                         </div>
+                        <div class="col">
+                            <span class="fw-bold fs-4" th:text="${project.title}"/>
+                        </div>
                         <div class="col d-flex flex-column align-items-end">
 
                             <div class="btn-group">
 
-                                <a th:href="@{/dashboard/issues(projectId=${projectId},show=open)}" class="btn btn-outline-secondary"
+                                <a th:href="@{/dashboard/issues(projectId=${project.id},show=open)}" class="btn btn-outline-secondary"
                                    th:classappend="${show} == 'open' ? 'active' : ''"
                                    th:attr="aria-current=${show} == 'open' ? 'page'">
 
                                     Open (<span th:text="${openIssuesCount}"></span>)
                                 </a>
 
-                                <a th:href="@{/dashboard/issues(projectId=${projectId},show=closed)}" class="btn btn-outline-secondary"
+                                <a th:href="@{/dashboard/issues(projectId=${project.id},show=closed)}" class="btn btn-outline-secondary"
                                    th:classappend="${show} == 'closed' ? 'active' : ''"
                                    th:attr="aria-current=${show} == 'closed' ? 'page'">
 
                                     Closed (<span th:text="${closedIssuesCount}"></span>)
                                 </a>
 
-                                <a th:href="@{/dashboard/issues(projectId=${projectId},show=all)}" class="btn btn-outline-secondary"
+                                <a th:href="@{/dashboard/issues(projectId=${project.id},show=all)}" class="btn btn-outline-secondary"
                                    th:classappend="${show} == 'all' ? 'active' : ''"
                                    th:attr="aria-current=${show} == 'all' ? 'page'">
 

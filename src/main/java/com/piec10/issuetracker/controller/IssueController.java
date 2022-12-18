@@ -75,7 +75,7 @@ public class IssueController {
             model.addAttribute("show", show);
             model.addAttribute("openIssuesCount", openIssuesCount);
             model.addAttribute("closedIssuesCount", closedIssuesCount);
-            model.addAttribute("projectId", projectId);
+            model.addAttribute("project", project);
 
             return "dashboard/issues";
         }
