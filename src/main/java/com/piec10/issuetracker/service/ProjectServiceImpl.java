@@ -7,7 +7,6 @@ import com.piec10.issuetracker.form.FormProject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
@@ -74,5 +73,10 @@ public class ProjectServiceImpl implements ProjectService{
 
             projectRepository.save(project);
         }
+    }
+
+    @Override
+    public void deleteById(int projectId) {
+        projectRepository.deleteById(projectId);
     }
 }

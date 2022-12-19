@@ -88,9 +88,9 @@ public class IssueController {
 
 
     @GetMapping("/issue")
-    public String issueDetails(@RequestParam("issueId") int theId, Model model, HttpServletRequest request) {
+    public String issueDetails(@RequestParam("issueId") int issueId, Model model, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(theId);
+        Issue issue = issueService.findById(issueId);
 
         if(issue == null) return "redirect:/dashboard/projects";
 
@@ -132,9 +132,9 @@ public class IssueController {
     }
 
     @GetMapping("/editIssue")
-    public String showEditIssueForm(@RequestParam("issueId") int theId, Model model, HttpServletRequest request) {
+    public String showEditIssueForm(@RequestParam("issueId") int issueId, Model model, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(theId);
+        Issue issue = issueService.findById(issueId);
 
         if(issue == null) return "redirect:/dashboard/projects";
 
@@ -190,24 +190,24 @@ public class IssueController {
     }
 
     @GetMapping("/deleteIssue")
-    public String deleteIssue(@RequestParam("issueId") int theId, HttpServletRequest request) {
+    public String deleteIssue(@RequestParam("issueId") int issueId, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(theId);
+        Issue issue = issueService.findById(issueId);
 
         if (issue == null) return "redirect:/dashboard/projects";
 
         if (isAdminOrOwner(issue.getCreatedBy(), request)) {
 
-            issueService.deleteById(theId);
+            issueService.deleteById(issueId);
             return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 
         } else return "redirect:/access-denied";
     }
 
     @GetMapping("/closeIssue")
-    public String closeIssue(@RequestParam("issueId") int theId, HttpServletRequest request) {
+    public String closeIssue(@RequestParam("issueId") int issueId, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(theId);
+        Issue issue = issueService.findById(issueId);
 
         if (issue == null) return "redirect:/dashboard/projects";
 
@@ -216,7 +216,7 @@ public class IssueController {
             if(issue.getClosedAt() == null){
 
                 User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
-                issueService.closeIssue(theId, closedBy);
+                issueService.closeIssue(issueId, closedBy);
             }
             return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 
@@ -224,9 +224,9 @@ public class IssueController {
     }
 
     @GetMapping("/reopenIssue")
-    public String reopenIssue(@RequestParam("issueId") int theId, HttpServletRequest request) {
+    public String reopenIssue(@RequestParam("issueId") int issueId, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(theId);
+        Issue issue = issueService.findById(issueId);
 
         if (issue == null) return "redirect:/dashboard/projects";
 
@@ -234,7 +234,7 @@ public class IssueController {
 
             if(issue.getClosedAt() != null){
 
-                issueService.reopenIssue(theId);
+                issueService.reopenIssue(issueId);
             }
             return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 

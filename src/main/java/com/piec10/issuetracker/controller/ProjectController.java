@@ -101,4 +101,19 @@ public class ProjectController {
         }
         else return "redirect:/access-denied";
     }
+
+    @GetMapping("/deleteProject")
+    public String deleteProject(@RequestParam("projectId") int projectId, Model model, HttpServletRequest request) {
+
+        Project project = projectService.findById(projectId);
+
+        if(project == null) return "redirect:/dashboard/projects";
+
+        if(isAdminOrOwner(project.getCreatedBy(),request)){
+
+            projectService.deleteById(projectId);
+            return "redirect:/dashboard/projects";
+        }
+        else return "redirect:/access-denied";
+    }
 }

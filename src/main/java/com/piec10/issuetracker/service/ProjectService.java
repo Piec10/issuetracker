@@ -15,4 +15,6 @@ public interface ProjectService {
     Collection<Project> findAll();
 
     void updateProject(FormProject formProject);
+
+    void deleteById(int projectId);
 }
