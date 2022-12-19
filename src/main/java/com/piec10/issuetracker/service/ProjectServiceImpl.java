@@ -30,6 +30,11 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
+    public Collection<Project> findAll() {
+        return projectRepository.findAll();
+    }
+
+    @Override
     public void createProject(FormProject formProject, User createdBy) {
 
         Project newProject = new Project();
@@ -47,7 +52,27 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public Collection<Project> findAll() {
-        return projectRepository.findAll();
+    public void updateProject(FormProject formProject) {
+
+        Project project = findById(formProject.getId());
+
+        if(project != null) {
+
+            project.setTitle(formProject.getTitle());
+            project.setDescription(formProject.getDescription());
+
+            //add owner if he deleted himself
+            if(!formProject.getCollaborators().contains(project.getCreatedBy())){
+                formProject.getCollaborators().add(project.getCreatedBy());
+            }
+            if(!formProject.getGuestUsers().contains(project.getCreatedBy())){
+                formProject.getGuestUsers().add(project.getCreatedBy());
+            }
+
+            project.setGuestUsers(formProject.getGuestUsers());
+            project.setCollaborators(formProject.getCollaborators());
+
+            projectRepository.save(project);
+        }
     }
 }

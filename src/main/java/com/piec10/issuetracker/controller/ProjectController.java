@@ -95,7 +95,7 @@ public class ProjectController {
                 projectService.createProject(formProject, createdBy);
             }
             else{
-
+                projectService.updateProject(formProject);
             }
             return "redirect:/dashboard/projects";
         }

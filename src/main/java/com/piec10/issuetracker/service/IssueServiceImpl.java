@@ -52,11 +52,14 @@ public class IssueServiceImpl implements IssueService{
     public void updateIssue(FormIssue formIssue) {
 
         Issue issue = findById(formIssue.getId());
-        issue.setSummary(formIssue.getSummary());
-        issue.setDescription(formIssue.getDescription());
-        issue.setPriority(formIssue.getPriority());
 
-        issueRepository.save(issue);
+        if(issue != null) {
+            issue.setSummary(formIssue.getSummary());
+            issue.setDescription(formIssue.getDescription());
+            issue.setPriority(formIssue.getPriority());
+
+            issueRepository.save(issue);
+        }
     }
 
     @Override
@@ -68,20 +71,26 @@ public class IssueServiceImpl implements IssueService{
     public void closeIssue(int theId, User closedBy) {
 
         Issue issue = findById(theId);
-        issue.setClosedBy(closedBy);
-        issue.setClosedAt(new Date());
 
-        issueRepository.save(issue);
+        if(issue != null) {
+            issue.setClosedBy(closedBy);
+            issue.setClosedAt(new Date());
+
+            issueRepository.save(issue);
+        }
     }
 
     @Override
     public void reopenIssue(int theId) {
 
         Issue issue = findById(theId);
-        issue.setClosedBy(null);
-        issue.setClosedAt(null);
 
-        issueRepository.save(issue);
+        if(issue != null) {
+            issue.setClosedBy(null);
+            issue.setClosedAt(null);
+
+            issueRepository.save(issue);
+        }
     }
 
     @Override

@@ -13,4 +13,6 @@ public interface ProjectService {
     void createProject(FormProject formProject, User createdBy);
 
     Collection<Project> findAll();
+
+    void updateProject(FormProject formProject);
 }
