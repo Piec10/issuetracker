@@ -38,15 +38,15 @@ public class IssueController {
     public String getIssues(@RequestParam(value = "projectId") int projectId,
                             @RequestParam(value = "show", required = false) String show,
                             Model model,
-                            Principal principal) {
+                            HttpServletRequest request) {
 
         Project project = projectService.findById(projectId);
 
         if(project == null) return "redirect:/dashboard/projects";
 
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, principal);
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, request.getUserPrincipal());
 
-        if(userProjectRoles.isGuest()){
+        if(isAdmin(request) || userProjectRoles.isGuest()){
 
             List<Issue> issues;
 
@@ -86,7 +86,7 @@ public class IssueController {
 
 
     @GetMapping("/issue")
-    public String issueDetails(@RequestParam("issueId") int theId, Model model, Principal principal) {
+    public String issueDetails(@RequestParam("issueId") int theId, Model model, HttpServletRequest request) {
 
         Issue issue = issueService.findById(theId);
 
@@ -94,9 +94,9 @@ public class IssueController {
 
         Project project = projectService.findById(issue.getProject().getId());
 
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, principal);
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, request.getUserPrincipal());
 
-        if(userProjectRoles.isGuest()){
+        if(isAdmin(request) || userProjectRoles.isGuest()){
 
             model.addAttribute("issue", issue);
 
