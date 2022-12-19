@@ -65,7 +65,17 @@ public class ProjectController {
 
         if(isAdminOrOwner(project.getCreatedBy(),request)){
 
-            return null;
+            FormProject formProject = new FormProject();
+
+            formProject.setId(projectId);
+            formProject.setTitle(project.getTitle());
+            formProject.setDescription(project.getDescription());
+            formProject.setGuestUsers(project.getGuestUsers());
+            formProject.setCollaborators(project.getCollaborators());
+
+            model.addAttribute("formProject", formProject);
+
+            return "dashboard/project-form";
         }
         else return "redirect:/access-denied";
     }
