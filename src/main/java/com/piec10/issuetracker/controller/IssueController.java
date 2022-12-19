@@ -154,7 +154,7 @@ public class IssueController {
     }
 
     @PostMapping("/processIssue")
-    public String processNewIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
+    public String processIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
                                   BindingResult theBindingResult, HttpServletRequest request) {
 
         // form validation
@@ -164,6 +164,8 @@ public class IssueController {
         }
 
         Project project = projectService.findById(formIssue.getProjectId());
+
+        if(project == null) return "redirect:/dashboard/projects";
 
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, request.getUserPrincipal());
 
@@ -184,8 +186,6 @@ public class IssueController {
         else return "redirect:/access-denied";
 
     }
-
-
 
     @GetMapping("/deleteIssue")
     public String deleteIssue(@RequestParam("issueId") int theId, HttpServletRequest request) {
@@ -247,10 +247,6 @@ public class IssueController {
     private boolean isOwner(User user, Principal principal) {
 
         return (user != null ? (user.getUsername().equals(principal.getName())) : false);
-    }
-
-    private boolean isNotGuest(HttpServletRequest request) {
-        return !request.isUserInRole("ROLE_GUEST");
     }
 
     private boolean isAdmin(HttpServletRequest request) {
