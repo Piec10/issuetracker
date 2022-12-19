@@ -4,6 +4,7 @@ import com.piec10.issuetracker.entity.User;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class FormProject {
@@ -16,9 +17,9 @@ public class FormProject {
 
     private String description;
 
-    private Collection<User> guestUsers;
+    private Collection<User> guestUsers = new ArrayList<>();
 
-    private Collection<User> collaborators;
+    private Collection<User> collaborators = new ArrayList<>();
 
     public FormProject() {
     }

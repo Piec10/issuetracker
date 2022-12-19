@@ -1,5 +1,6 @@
 package com.piec10.issuetracker.controller;
 
+import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.form.FormProject;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Collection;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -29,10 +31,16 @@ public class ProjectController {
     ProjectService projectService;
 
     @GetMapping("/projects")
-    public String getProjects(Principal principal, Model model) {
+    public String getProjects(Model model, HttpServletRequest request) {
 
-        User currentUser =  userService.findByUsername(principal.getName());
+        Collection<Project> projects;
 
+        User currentUser =  userService.findByUsername(request.getUserPrincipal().getName());
+
+        if(isAdmin(request)) projects = projectService.findAll();
+        else projects = currentUser.getGuestProjects();
+
+        model.addAttribute("projects", projects);
         model.addAttribute("user", currentUser);
 
         return "dashboard/projects";
@@ -73,5 +81,9 @@ public class ProjectController {
 
     private boolean isNotGuest(HttpServletRequest request) {
         return !request.isUserInRole("ROLE_GUEST");
+    }
+
+    private boolean isAdmin(HttpServletRequest request) {
+        return request.isUserInRole("ROLE_ADMIN");
     }
 }

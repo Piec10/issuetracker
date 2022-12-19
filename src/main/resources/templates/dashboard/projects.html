@@ -41,7 +41,7 @@
 
                 <div class="text-secondary py-2">Your Projects</div>
 
-                <div th:switch="${#lists.isEmpty(user.guestProjects)}">
+                <div th:switch="${#lists.isEmpty(projects)}">
                     <div th:case="true">
                         <span>You have no projects.</span>
                     </div>
@@ -55,7 +55,7 @@
                             <div class="col-2">Your Role</div>
                         </div>
 
-                        <div th:each="tempProject : ${user.guestProjects}">
+                        <div th:each="tempProject : ${projects}">
 
                             <hr class="hr-table">
 

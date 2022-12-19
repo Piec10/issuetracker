@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
@@ -36,9 +37,17 @@ public class ProjectServiceImpl implements ProjectService{
         newProject.setDescription(formProject.getDescription());
         newProject.setCreatedBy(createdBy);
         newProject.setCreatedAt(new Date());
-        newProject.setGuestUsers(Arrays.asList(createdBy));
-        newProject.setCollaborators(Arrays.asList(createdBy));
+        formProject.getGuestUsers().add(createdBy);
+        formProject.getCollaborators().add(createdBy);
+
+        newProject.setGuestUsers(formProject.getGuestUsers());
+        newProject.setCollaborators(formProject.getCollaborators());
 
         projectRepository.save(newProject);
+    }
+
+    @Override
+    public Collection<Project> findAll() {
+        return projectRepository.findAll();
     }
 }
