@@ -19,6 +19,8 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
+import static com.piec10.issuetracker.config.GlobalRolesAndOwnerCheckMethods.*;
+
 @Controller
 @RequestMapping("/dashboard")
 public class IssueController {
@@ -237,20 +239,6 @@ public class IssueController {
             return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 
         } else return "redirect:/access-denied";
-    }
-
-    private boolean isAdminOrOwner(User user, HttpServletRequest request) {
-
-        return request.isUserInRole("ROLE_ADMIN") || isOwner(user, request.getUserPrincipal());
-    }
-
-    private boolean isOwner(User user, Principal principal) {
-
-        return (user != null ? (user.getUsername().equals(principal.getName())) : false);
-    }
-
-    private boolean isAdmin(HttpServletRequest request) {
-        return request.isUserInRole("ROLE_ADMIN");
     }
 
     private UserProjectRoles getUserProjectRoles(Project project, Principal principal) {

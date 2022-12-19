@@ -10,15 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.Collection;
+
+import static com.piec10.issuetracker.config.GlobalRolesAndOwnerCheckMethods.*;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -57,6 +56,20 @@ public class ProjectController {
         else return "redirect:/access-denied";
     }
 
+    @GetMapping("/editProject")
+    public String showEditProjectForm(@RequestParam("projectId") int projectId, Model model, HttpServletRequest request) {
+
+        Project project = projectService.findById(projectId);
+
+        if(project == null) return "redirect:/dashboard/projects";
+
+        if(isAdminOrOwner(project.getCreatedBy(),request)){
+
+            return null;
+        }
+        else return "redirect:/access-denied";
+    }
+
     @PostMapping("/processProject")
     public String processProject(@Valid @ModelAttribute("formProject") FormProject formProject,
                                  BindingResult theBindingResult, HttpServletRequest request) {
@@ -77,13 +90,5 @@ public class ProjectController {
             return "redirect:/dashboard/projects";
         }
         else return "redirect:/access-denied";
-    }
-
-    private boolean isNotGuest(HttpServletRequest request) {
-        return !request.isUserInRole("ROLE_GUEST");
-    }
-
-    private boolean isAdmin(HttpServletRequest request) {
-        return request.isUserInRole("ROLE_ADMIN");
     }
 }
