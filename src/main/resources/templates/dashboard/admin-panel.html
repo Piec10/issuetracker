@@ -34,7 +34,7 @@
                         <th scope="col">Email</th>
                         <th scope="col">Authority</th>
                         <th scope="col">Registration Date</th>
-                        <th scope="col">Action</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -46,17 +46,27 @@
                             <span th:each="role : ${tempUser.roles}">
                                 <span th:text="${role.name} == ROLE_USER ? 'USER'">name</span>
                                 <span th:text="${role.name} == ROLE_ADMIN ? ', ADMIN'">name</span>
+                                <span th:text="${role.name} == ROLE_GUEST ? ', GUEST'">name</span>
                             </span>
                         </td>
                         <td th:text="${tempUser.createdAt}"/>
 
                         <td>
-                            <a th:href="@{/dashboard/adminPanel/deleteUser(userId=${tempUser.username})}"
-                               class="btn btn-danger btn-sm"
-                               style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"
-                               onclick="if (!(confirm('Are you sure you want to delete this user?'))) return false">
-                                Delete
-                            </a>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Action
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item"
+                                           href="#">Change password</a>
+                                    </li>
+                                    <li><a class="dropdown-item"
+                                           th:href="@{/dashboard/adminPanel/deleteUser(userId=${tempUser.username})}"
+                                           onclick="if (!(confirm('Are you sure you want to delete this user?'))) return false">Delete</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </td>
 
                     </tr>
