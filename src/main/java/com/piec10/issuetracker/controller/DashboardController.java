@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.form.FormPasswordChange;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,13 @@ public class DashboardController {
         return "dashboard/profile";
     }
 
+    @GetMapping("/changePassword")
+    public String showChangePassword(Principal principal, Model model) {
+
+        FormPasswordChange formPasswordChange = new FormPasswordChange();
+
+         return null;
+    }
 
 
 
