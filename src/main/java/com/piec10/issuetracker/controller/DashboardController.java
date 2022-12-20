@@ -8,8 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.logging.Logger;
+
+import static com.piec10.issuetracker.config.GlobalRolesAndOwnerCheckMethods.*;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -41,15 +44,24 @@ public class DashboardController {
     }
 
     @GetMapping("/changePassword")
-    public String showChangePassword(Principal principal, Model model) {
+    public String showChangePassword(@RequestParam("userId") String userId, HttpServletRequest request, Model model) {
 
-        FormPasswordChange formPasswordChange = new FormPasswordChange();
+        if(isGuest(request)) return "redirect:/access-denied";
 
-         return null;
+        User user = userService.findByUsername(userId);
+
+        if(user == null) return "redirect:/dashboard/projects";
+
+        if(isAdminOrOwner(user,request)){
+
+            FormPasswordChange formPasswordChange = new FormPasswordChange();
+            formPasswordChange.setUsername(user.getUsername());
+
+            model.addAttribute("formPassword", formPasswordChange);
+
+            return "dashboard/password-change";
+        }
+        else return "redirect:/access-denied";
     }
-
-
-
-
 
 }

@@ -7,6 +7,10 @@ import java.security.Principal;
 
 public class GlobalRolesAndOwnerCheckMethods {
 
+    public static boolean isGuest(HttpServletRequest request) {
+        return request.isUserInRole("ROLE_GUEST");
+    }
+
     public static boolean isNotGuest(HttpServletRequest request) {
         return !request.isUserInRole("ROLE_GUEST");
     }
