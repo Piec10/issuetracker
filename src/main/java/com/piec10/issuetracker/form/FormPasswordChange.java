@@ -9,6 +9,9 @@ import javax.validation.constraints.Size;
 public class FormPasswordChange {
 
     private String username;
+
+    @NotNull(message = "Password is required")
+    @Size(min = 1, message = "Password is required")
     private String oldPassword;
 
     @NotNull(message = "New password is required")
