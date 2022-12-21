@@ -59,7 +59,7 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item"
-                                           href="#">Change password</a>
+                                           th:href="@{/dashboard/changePassword(userId=${tempUser.username})}">Change password</a>
                                     </li>
                                     <li><a class="dropdown-item"
                                            th:href="@{/dashboard/adminPanel/deleteUser(userId=${tempUser.username})}"
