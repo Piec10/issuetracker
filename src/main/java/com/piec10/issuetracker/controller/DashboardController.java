@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.logging.Logger;
 
 import static com.piec10.issuetracker.config.GlobalRolesAndOwnerCheckMethods.*;
 
@@ -22,7 +21,7 @@ public class DashboardController {
     UserService userService;
 
 
-    private Logger logger = Logger.getLogger(getClass().getName());
+//    private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/")
     public String getDashboard(){
@@ -36,9 +35,6 @@ public class DashboardController {
         User currentUser =  userService.findByUsername(principal.getName());
 
         model.addAttribute("user", currentUser);
-
-//        logger.info(String.valueOf(currentUser.getGuestProjects().size()));
-//        logger.info(currentUser.getGuestProjects().stream().toList().get(0).getTitle());
 
         return "dashboard/profile";
     }
@@ -64,4 +60,9 @@ public class DashboardController {
         else return "redirect:/access-denied";
     }
 
+    @PostMapping("/processPasswordChange")
+    public String processPasswordChange() {
+
+        return null;
+    }
 }

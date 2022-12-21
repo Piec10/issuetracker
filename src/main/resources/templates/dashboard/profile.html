@@ -43,6 +43,18 @@
                                 <span th:text="${user.email}"></span>
                             </div>
                         </div>
+                        <div class="row">
+
+                            <hr>
+
+                        </div>
+                        <div class="row">
+                            <div class="col" th:unless="${#authorization.expression('hasAuthority(''ROLE_GUEST'')')}">
+                                <a th:href="@{/dashboard/changePassword(userId=${user.username})}" class="btn btn-outline-secondary">Change password</a>
+                            </div>
+                            <div class="col">
+                            </div>
+                        </div>
                     </div>
                     <div class="col">
                         <div class="row">
