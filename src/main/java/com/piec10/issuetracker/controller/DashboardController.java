@@ -2,13 +2,16 @@ package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormPasswordChange;
+import com.piec10.issuetracker.form.FormUser;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.security.Principal;
 
 import static com.piec10.issuetracker.config.GlobalRolesAndOwnerCheckMethods.*;
@@ -61,8 +64,16 @@ public class DashboardController {
     }
 
     @PostMapping("/processPasswordChange")
-    public String processPasswordChange() {
+    public String processPasswordChange(@Valid @ModelAttribute("formPassword") FormPasswordChange formPassword,
+                                        BindingResult theBindingResult,
+                                        Model model) {
 
-        return null;
+        // form validation
+        if (theBindingResult.hasErrors()){
+
+            return "dashboard/password-change";
+        }
+
+        return "redirect:/dashboard/projects";
     }
 }
