@@ -95,7 +95,7 @@ public class DashboardController {
         if (isAdmin(request)) {
 
             userService.changePassword(formPassword.getUsername(), formPassword.getNewPassword());
-            return "redirect:/dashboard/admin-panel";
+            return "redirect:/dashboard/adminPanel/";
         }
 
         return "redirect:/access-denied";
