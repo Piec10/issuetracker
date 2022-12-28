@@ -17,62 +17,67 @@
 
 <div th:fragment="navbar(active)">
 
-    <nav class="navbar navbar-expand-lg bg-light shadow fixed-top">
+    <nav class="navbar navbar-expand-md bg-light shadow fixed-top">
         <div class="container-fluid">
-            <div class="row">
-                <div class="col">
+            <!--            <div class="row">-->
+            <div class="col col-md-auto d-flex flex-column align-items-center align-items-md-start">
                 <a class="navbar-brand" th:href="@{/dashboard/}">Issue Tracker DASHBOARD</a>
-                </div>
-                <div class="col">
+            </div>
+            <div class="d-flex flex-column flex-grow-1 col-12 col-md-auto align-items-center align-items-md-start order-3">
                 <a class="navbar-brand" th:href="@{/dashboard/profile}">
                     <span class="fw-bold" sec:authentication="name"></span>
-
-
                 </a>
-                </div>
             </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+            <!--            </div>-->
+            <div class="col-auto order-2 order-md-4 d-flex flex-column align-items-end">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="col-auto order-5">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto">
+                        <div sec:authorize="hasRole('ROLE_ADMIN')">
+                            <li class="nav-item">
+
+                                <a class="nav-link" th:classappend="${active} == 'admin' ? 'active' : ''"
+                                   th:attr="aria-current=${active} == 'admin' ? 'page'"
+                                   th:href="@{/dashboard/adminPanel/}">
+
+                                    Admin Panel
+
+                                </a>
+                            </li>
+                        </div>
                         <li class="nav-item">
 
-                            <a class="nav-link" th:classappend="${active} == 'admin' ? 'active' : ''"
-                               th:attr="aria-current=${active} == 'admin' ? 'page'" th:href="@{/dashboard/adminPanel/}">
+                            <a class="nav-link" th:classappend="${active} == 'profile' ? 'active' : ''"
+                               th:attr="aria-current=${active} == 'profile' ? 'page'" th:href="@{/dashboard/profile}">
 
-                                Admin Panel
+                                Profile
 
                             </a>
                         </li>
-                    </div>
-                    <li class="nav-item">
+                        <li class="nav-item">
 
-                        <a class="nav-link" th:classappend="${active} == 'profile' ? 'active' : ''"
-                           th:attr="aria-current=${active} == 'profile' ? 'page'" th:href="@{/dashboard/profile}">
+                            <a class="nav-link" href="javascript: document.logoutForm.submit()">
 
-                            Profile
+                                Sign out
 
-                        </a>
-                    </li>
-                    <li class="nav-item">
+                            </a>
 
-                        <a class="nav-link" href="javascript: document.logoutForm.submit()">
-
-                            Sign out
-
-                        </a>
-
-                        <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
-                            <input hidden type="submit" value="Logout"/>
-                        </form>
-                    </li>
-                </ul>
+                            <form name="logoutForm" th:action="@{/logout}" method="post" th:hidden="true">
+                                <input hidden type="submit" value="Logout"/>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </nav>
+</div>
+</nav>
 </div>
 
 <!-- JavaScript Bundle with Popper -->
