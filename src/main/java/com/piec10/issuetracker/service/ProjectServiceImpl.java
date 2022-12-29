@@ -41,8 +41,9 @@ public class ProjectServiceImpl implements ProjectService{
         newProject.setDescription(formProject.getDescription());
         newProject.setCreatedBy(createdBy);
         newProject.setCreatedAt(new Date());
-        formProject.getGuestUsers().add(createdBy);
+
         formProject.getCollaborators().add(createdBy);
+        formProject.getGuestUsers().add(createdBy);
 
         newProject.setGuestUsers(formProject.getGuestUsers());
         newProject.setCollaborators(formProject.getCollaborators());
