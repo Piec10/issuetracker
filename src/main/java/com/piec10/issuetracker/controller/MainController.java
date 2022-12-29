@@ -10,10 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Logger;
 
 @Controller
@@ -53,6 +50,7 @@ public class MainController {
         project.setGuestUsers(Arrays.asList(testUser));
         project.setCollaborators(Arrays.asList(testUser));
         project.setIssues(new ArrayList<>());
+        project.setCreatedAt(new Date());
 
         Project project2 = new Project();
 
@@ -63,6 +61,7 @@ public class MainController {
         project2.setGuestUsers(Arrays.asList(testUser));
         project2.setCollaborators(Arrays.asList(testUser));
         project2.setIssues(new ArrayList<>());
+        project2.setCreatedAt(new Date());
 
         projects.add(project);
         projects.add(project2);
