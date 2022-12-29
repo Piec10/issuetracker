@@ -125,111 +125,116 @@
                                     <div class="accordion" th:id="'accordion'+${tempIssue.id}">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" th:id="'heading'+${tempIssue.id}">
-                                                <div class="btn-group w-100" role="group" aria-label="Basic example">
-                                                    <button type="button" class="btn text-left">
-                                                        <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}" style="color:inherit">
-                                                            <span th:text="${tempIssue.summary}"/>
-                                                        </a>
+                                                <div class="btn-group w-100 border-bottom rounded-0" role="group" aria-label="Basic example">
+                                                    <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"
+                                                       class="btn btn-light text-start " style="">
+                                                        <span th:text="${tempIssue.summary}"/>
+                                                    </a>
+
+                                                    <button class="accordion-button bg-light collapsed" style="width: 60px;"
+                                                            type="button" data-bs-toggle="collapse"
+                                                            th:data-bs-target="'#collapse'+${tempIssue.id}"
+                                                            aria-expanded="false"
+                                                            th:aria-controls="'collapse'+${tempIssue.id}">
 
                                                     </button>
-                                                <button class="accordion-button collapsed" style="width: 60px;" type="button" data-bs-toggle="collapse" th:data-bs-target="'#collapse'+${tempIssue.id}" aria-expanded="false" th:aria-controls="'collapse'+${tempIssue.id}">
-
-                                                </button>
                                                 </div>
                                             </h2>
-                                            <div th:id="'collapse'+${tempIssue.id}" class="accordion-collapse collapse" th:aria-labelledby="'heading'+${tempIssue.id}" >
+                                            <div th:id="'collapse'+${tempIssue.id}" class="accordion-collapse collapse"
+                                                 th:aria-labelledby="'heading'+${tempIssue.id}">
                                                 <div class="accordion-body">
 
-                                                        <div class="row gy-3">
-                                                            <div class="col-6">
-                                                                #<span th:text="${tempIssue.id}"/>
-                                                            </div>
-                                                            <div class="col-6 text-end">
-                                                                <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
+                                                    <div class="row gy-3">
+                                                        <div class="col-6">
+                                                            #<span th:text="${tempIssue.id}"/>
+                                                        </div>
+                                                        <div class="col-6 text-end">
+                                                            <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
 
-                                                                    <div class="dropdown">
-                                                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                                                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                            Action
-                                                                        </button>
-                                                                        <ul class="dropdown-menu">
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                                            type="button" data-bs-toggle="dropdown"
+                                                                            aria-expanded="false">
+                                                                        Action
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
 
 
-                                                                            <div th:switch="${tempIssue.closedAt == null}">
-                                                                                <div th:case="true">
-                                                                                    <li><a class="dropdown-item"
-                                                                                           th:href="@{/dashboard/editIssue(issueId=${tempIssue.id})}">Edit</a>
-                                                                                    </li>
-                                                                                    <li><a class="dropdown-item"
-                                                                                           th:href="@{/dashboard/closeIssue(issueId=${tempIssue.id})}"
-                                                                                           onclick="if (!(confirm('Are you sure you want to close this issue?'))) return false">Close</a>
-                                                                                    </li>
-                                                                                </div>
-                                                                                <div th:case="false">
-                                                                                    <li><a class="dropdown-item"
-                                                                                           th:href="@{/dashboard/reopenIssue(issueId=${tempIssue.id})}"
-                                                                                           onclick="if (!(confirm('Are you sure you want to reopen this issue?'))) return false">Reopen</a>
-                                                                                    </li>
-                                                                                </div>
+                                                                        <div th:switch="${tempIssue.closedAt == null}">
+                                                                            <div th:case="true">
+                                                                                <li><a class="dropdown-item"
+                                                                                       th:href="@{/dashboard/editIssue(issueId=${tempIssue.id})}">Edit</a>
+                                                                                </li>
+                                                                                <li><a class="dropdown-item"
+                                                                                       th:href="@{/dashboard/closeIssue(issueId=${tempIssue.id})}"
+                                                                                       onclick="if (!(confirm('Are you sure you want to close this issue?'))) return false">Close</a>
+                                                                                </li>
                                                                             </div>
+                                                                            <div th:case="false">
+                                                                                <li><a class="dropdown-item"
+                                                                                       th:href="@{/dashboard/reopenIssue(issueId=${tempIssue.id})}"
+                                                                                       onclick="if (!(confirm('Are you sure you want to reopen this issue?'))) return false">Reopen</a>
+                                                                                </li>
+                                                                            </div>
+                                                                        </div>
 
-                                                                            <li><a class="dropdown-item"
-                                                                                   th:href="@{/dashboard/deleteIssue(issueId=${tempIssue.id})}"
-                                                                                   onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">Delete</a>
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
+                                                                        <li><a class="dropdown-item"
+                                                                               th:href="@{/dashboard/deleteIssue(issueId=${tempIssue.id})}"
+                                                                               onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">Delete</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
 
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div th:switch="${tempIssue.description == null}">
+                                                                <div th:case="true">
+                                                                    <span>No description</span>
+                                                                </div>
+                                                                <div th:case="false">
+                                                                    <span th:text="${tempIssue.description}"/>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-12">
-                                                                <div th:switch="${tempIssue.description == null}">
-                                                                    <div th:case="true">
-                                                                        <span>No description</span>
-                                                                    </div>
-                                                                    <div th:case="false">
-                                                                        <span th:text="${tempIssue.description}"/>
-                                                                    </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            Priority:
+                                                            <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div th:switch="${tempIssue.createdBy == null}">
+                                                                <div th:case="true">
+                                                                    Reporter:
+                                                                    <small class="text-secondary fst-italic">
+                                                                        deleted user
+                                                                    </small>
+                                                                </div>
+                                                                <div th:case="false">
+                                                                    Reporter:
+                                                                    <span th:text="${tempIssue.createdBy.username}"/>
                                                                 </div>
                                                             </div>
-                                                            <div class="col-12">
-                                                                Priority:
-                                                                <span th:text="${priorities.getName(tempIssue.priority)}"/>
-                                                            </div>
-                                                            <div class="col-12">
-                                                                <div th:switch="${tempIssue.createdBy == null}">
+                                                            <small><span th:text="${tempIssue.createdAt}"/></small>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div th:if="${tempIssue.closedAt != null}">
+                                                                <div th:switch="${tempIssue.closedBy == null}">
                                                                     <div th:case="true">
-                                                                        Reporter:
+                                                                        Closed by:
                                                                         <small class="text-secondary fst-italic">
                                                                             deleted user
                                                                         </small>
                                                                     </div>
                                                                     <div th:case="false">
-                                                                        Reporter:
-                                                                        <span th:text="${tempIssue.createdBy.username}"/>
+                                                                        Closed by:
+                                                                        <span th:text="${tempIssue.closedBy.username}"/>
                                                                     </div>
                                                                 </div>
-                                                                <small><span th:text="${tempIssue.createdAt}"/></small>
+                                                                <small><span th:text="${tempIssue.closedAt}"/></small>
                                                             </div>
-                                                            <div class="col-12">
-                                                                <div th:if="${tempIssue.closedAt != null}">
-                                                                    <div th:switch="${tempIssue.closedBy == null}">
-                                                                        <div th:case="true">
-                                                                            Closed by:
-                                                                            <small class="text-secondary fst-italic">
-                                                                                deleted user
-                                                                            </small>
-                                                                        </div>
-                                                                        <div th:case="false">
-                                                                            Closed by:
-                                                                            <span th:text="${tempIssue.closedBy.username}"/>
-                                                                        </div>
-                                                                    </div>
-                                                                    <small><span th:text="${tempIssue.closedAt}"/></small>
-                                                                </div>
 
-                                                            </div>
                                                         </div>
+                                                    </div>
 
 
                                                 </div>
@@ -247,7 +252,8 @@
                                                 <div class="col-1">#<span th:text="${tempIssue.id}"/></div>
                                                 <div class="col"><span th:text="${tempIssue.summary}"/></div>
 
-                                                <div class="col-1"><span th:text="${priorities.getName(tempIssue.priority)}"/></div>
+                                                <div class="col-1"><span
+                                                        th:text="${priorities.getName(tempIssue.priority)}"/></div>
 
                                                 <div class="col-2">
                                                     <div th:switch="${tempIssue.createdBy == null}">
@@ -286,7 +292,8 @@
 
                                                 <div class="dropdown">
                                                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            type="button" data-bs-toggle="dropdown"
+                                                            aria-expanded="false">
                                                         Action
                                                     </button>
                                                     <ul class="dropdown-menu">

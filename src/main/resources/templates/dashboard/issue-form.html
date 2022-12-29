@@ -21,67 +21,73 @@
 <div th:replace="dashboard/dashboard-navbar :: navbar(dashboard)"></div>
 
 <div class="base-color">
-    <div class="container px-4 py-5 min-vh-100">
-        <div class="row align-items-center py-5">
-            <div class="p-4 p-md-5 border rounded-3 bg-light">
+    <div class="container-fluid py-5 min-vh-100">
+        <div class="row py-2 py-md-0"></div>
+        <div class="row justify-content-center py-5">
+            <div class="col-11 py-5 border rounded-3 bg-light">
                 <p class="fs-3">
                     Create New Issue
                 </p>
-                <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/dashboard/processIssue}" th:object="${formIssue}" method="POST">
+                <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/dashboard/processIssue}"
+                      th:object="${formIssue}" method="POST">
                     <div class="row">
-                    <div class="col">
+                        <div class="col-12 col-md-6">
 
-                    <!-- Summary -->
-                    <div class="form-floating">
+                            <!-- Summary -->
+                            <div class="form-floating">
 
-                        <!-- Add hidden form field to handle update -->
-                        <input type="hidden" th:field="*{id}" />
+                                <!-- Add hidden form field to handle update -->
+                                <input type="hidden" th:field="*{id}"/>
 
-                        <!-- Add hidden form field for projectId -->
-                        <input type="hidden" th:field="*{projectId}" />
+                                <!-- Add hidden form field for projectId -->
+                                <input type="hidden" th:field="*{projectId}"/>
 
-                        <input th:field="*{summary}" type="text" name="summary" id="floatingInput" placeholder="Summary" class="form-control">
-                        <label for="floatingInput" class="text-secondary">Summary</label>
-                    </div>
-                        <div th:if="${#fields.hasErrors('summary')}" class="text-danger">
-                            <small>
-                                <ul>
-                                    <li th:each="err : ${#fields.errors('summary')}" th:text="${err}"/>
-                                </ul>
-                            </small>
+                                <input th:field="*{summary}" type="text" name="summary" id="floatingInput"
+                                       placeholder="Summary" class="form-control">
+                                <label for="floatingInput" class="text-secondary">Summary</label>
+                            </div>
+                            <div th:if="${#fields.hasErrors('summary')}" class="text-danger">
+                                <small>
+                                    <ul>
+                                        <li th:each="err : ${#fields.errors('summary')}" th:text="${err}"/>
+                                    </ul>
+                                </small>
+                            </div>
+
+                            <!-- Description -->
+                            <div class="form-floating mt-4">
+                                <textarea th:field="*{description}" class="form-control" id="floatingTextarea"
+                                          placeholder="Description" style="height: 100px"></textarea>
+                                <label for="floatingTextarea" class="text-secondary">Description</label>
+                            </div>
+
                         </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-floating mt-4 mt-md-0">
+                                <select th:field="*{priority}" class="form-select" id="floatingSelect">
+                                    <option th:each="tempPriority, iteration : ${priorities.getPriorities()}"
+                                            th:value="${iteration.index}" th:text="${tempPriority}">
+                                    </option>
+                                </select>
+                                <label for="floatingSelect">Priority</label>
+                            </div>
 
-                    <!-- Description -->
-                    <div class="form-floating mt-4">
-                        <textarea th:field="*{description}" class="form-control" id="floatingTextarea" placeholder="Description" style="height: 100px"></textarea>
-                        <label for="floatingTextarea" class="text-secondary">Description</label>
-                    </div>
-
-                    </div>
-                    <div class="col">
-                        <div class="form-floating">
-                            <select th:field="*{priority}" class="form-select" id="floatingSelect">
-                                <option th:each="tempPriority, iteration : ${priorities.getPriorities()}" th:value="${iteration.index}" th:text="${tempPriority}">
-                                </option>
-                            </select>
-                            <label for="floatingSelect">Priority</label>
                         </div>
-
                     </div>
+                    <hr class="my-4">
+                    <div class="row">
+                        <div class="col">
+
+                            <button class="w-100 btn btn-outline-secondary" type="submit">Save</button>
+
+
+                        </div>
+                        <div class="col">
+                            <a class="w-100 btn btn-outline-secondary"
+                               th:href="@{/dashboard/issues(projectId=${formIssue.projectId})}">Cancel</a>
+
+                        </div>
                     </div>
-                        <hr class="my-4">
-                   <div class="row">
-                       <div class="col">
-
-                    <button class="w-100 btn btn-outline-secondary" type="submit">Save</button>
-
-
-                       </div>
-                       <div class="col">
-                        <a class="w-100 btn btn-outline-secondary" th:href="@{/dashboard/issues(projectId=${formIssue.projectId})}">Cancel</a>
-
-                       </div>
-                   </div>
                 </form>
             </div>
         </div>
