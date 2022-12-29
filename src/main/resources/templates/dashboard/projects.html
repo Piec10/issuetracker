@@ -14,6 +14,7 @@
     <link rel="stylesheet" th:href="@{/css/background.css}"/>
     <link rel="stylesheet" th:href="@{/css/home-fade.css}"/>
     <link rel="stylesheet" th:href="@{/css/issues-table.css}"/>
+    <link rel="stylesheet" th:href="@{/css/cards.css}"/>
 
     <title>Issue Tracker | Projects</title>
 
@@ -26,21 +27,19 @@
     <div class="container-fluid py-5 min-vh-100">
         <div class="row py-2 py-md-0"></div>
         <div class="row justify-content-center py-5">
-            <div class="col-11 p-5 border rounded-3 bg-light">
+            <div class="col-11 py-5 border rounded-3 bg-light">
 
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col">
                             <div th:unless="${#authorization.expression('hasAuthority(''ROLE_GUEST'')')}">
                                 <a class="btn btn-outline-secondary" th:href="@{/dashboard/newProject}">New Project</a>
                             </div>
+                                <hr>
+                                <div class="text-secondary py-2">Your Projects</div>
                         </div>
                     </div>
                 </div>
-
-                <hr>
-
-                <div class="text-secondary py-2">Your Projects</div>
 
                 <div th:switch="${#lists.isEmpty(projects)}">
                     <div th:case="true">
@@ -48,82 +47,79 @@
                     </div>
                     <div th:case="false">
 
-                        <div class="row p-2 mx-0 fw-bold">
+                        <div class="container-fluid">
                             <div class="col">
-                                <div class="row">
-                                    <div class="col-1 align-self-center align-self-md-start me-1">Id</div>
-                                    <div class="col">
-                                        <div class="row">
-                                            <div class="col-8 col-md-4 col-lg-auto flex-grow-1">Title</div>
-                                            <div class="col-2 col-md-2 col-lg-1">Issues</div>
-                                            <div class="col-8 col-md-5 col-lg-4 col-xl-3 col-xxl-3">Creator</div>
-                                            <div class="col-3 col-sm-4 col-md-3 col-lg-2 col-xl-2 col-xxl-2">Your Role
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-4 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-flex flex-column align-items-end align-self-center align-self-md-start"></div>
-                        </div>
+                                <div th:each="tempProject : ${projects}">
+                                    <div class="card border-dark mb-3">
+                                        <div class="card-header">
 
-                        <div th:each="tempProject : ${projects}">
-
-                            <hr class="hr-table">
-
-                            <div class="row clickable-row p-2 mx-0">
-                                <div class="col">
-                                    <div class="row position-relative">
-
-                                        <div class="col-1 align-self-center align-self-md-start me-1">#<span
-                                                th:text="${tempProject.id}"/></div>
-
-                                        <div class="col">
                                             <div class="row">
-                                                <div class="col-8 col-md-4 col-lg-auto flex-grow-1 fw-bold"><span
-                                                        th:text="${tempProject.title}"/></div>
-                                                <div class="col-2 col-md-2 col-lg-1"><span
-                                                        th:text="${#lists.size(tempProject.issues)}"/>
+                                                <div class="col align-self-center">
+                                                    #<span th:text="${tempProject.id}"/>
                                                 </div>
-                                                <div class="col-8 col-md-5 col-lg-4 col-xl-3 col-xxl-3">
-                                                    <div th:switch="${tempProject.createdBy == null}">
-                                                        <div th:case="true">
-                                                            <small class="text-secondary fst-italic">
-                                                                deleted user
-                                                            </small>
-                                                        </div>
-                                                        <div th:case="false">
-                                                            <span th:text="${tempProject.createdBy.username}"/>
+                                                <div class="col align-self-center text-end">
+                                                    <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (tempProject.createdBy != null ? (tempProject.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                                                    type="button" data-bs-toggle="dropdown"
+                                                                    aria-expanded="false">
+                                                                Action
+                                                            </button>
+                                                            <ul class="dropdown-menu">
+                                                                <li><a class="dropdown-item"
+                                                                       th:href="@{/dashboard/editProject(projectId=${tempProject.id})}">Edit</a>
+                                                                </li>
+                                                                <li><a class="dropdown-item"
+                                                                       th:href="@{/dashboard/deleteProject(projectId=${tempProject.id})}"
+                                                                       onclick="if (!(confirm('Are you sure you want to delete this Project? This will also delete all its issues. Confirm?'))) return false">Delete</a>
+                                                                </li>
+                                                            </ul>
                                                         </div>
                                                     </div>
-                                                    <small><span th:text="${tempProject.createdAt}"/></small>
                                                 </div>
-                                                <div class="col-3 col-sm-4 col-md-3 col-lg-2 col-xl-2 col-xxl-2">
-                                    <span th:text="${(tempProject.createdBy != null ? (tempProject.createdBy.username == #authentication.getPrincipal().getUsername()) : false)
-                                    ? 'Owner' : (#lists.contains(tempProject.collaborators, user) ? 'Collaborator' : 'Guest')}"/>
-                                                </div>
-                                                <a th:href="@{/dashboard/issues(projectId=${tempProject.id})}"
-                                                   class="stretched-link"></a>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <!--                                Action Menu-->
-                                <div class="col-4 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-flex flex-column align-items-end align-self-center align-self-md-start">
-                                    <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (tempProject.createdBy != null ? (tempProject.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
-                                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                Action
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li><a class="dropdown-item"
-                                                       th:href="@{/dashboard/editProject(projectId=${tempProject.id})}">Edit</a>
-                                                </li>
-                                                <li><a class="dropdown-item"
-                                                       th:href="@{/dashboard/deleteProject(projectId=${tempProject.id})}"
-                                                       onclick="if (!(confirm('Are you sure you want to delete this Project? This will also delete all its issues. Confirm?'))) return false">Delete</a>
-                                                </li>
-                                            </ul>
+                                        <div class="card-body text-dark position-relative clickable-card">
+                                            <h5 class="card-title" th:text="${tempProject.title}">Dark card title</h5>
+                                            <p class="card-text" th:text="${tempProject.description}">text</p>
+
+                                            <div class="row gy-2">
+                                                <div class="col-12 col-md-3">
+                                                    Issues:
+                                                    <span th:text="${#lists.size(tempProject.issues)}"/>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-auto">
+
+                                                            <div th:switch="${tempProject.createdBy == null}">
+                                                                <div th:case="true">
+                                                                    Creator:
+                                                                    <small class="text-secondary fst-italic">
+                                                                        deleted user
+                                                                    </small>
+                                                                </div>
+                                                                <div th:case="false">
+                                                                    Creator:
+                                                                    <span th:text="${tempProject.createdBy.username}"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-auto">
+                                                            <small><span
+                                                                    th:text="${tempProject.createdAt}"/></small>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-12 col-md-3">
+                                                    Your Role:
+                                                    <span th:text="${(tempProject.createdBy != null ? (tempProject.createdBy.username == #authentication.getPrincipal().getUsername()) : false) ? 'Owner' : (#lists.contains(tempProject.collaborators, user) ? 'Collaborator' : 'Guest')}"/>
+                                                </div>
+                                            </div>
+                                            <a th:href="@{/dashboard/issues(projectId=${tempProject.id})}"
+                                               class="stretched-link"></a>
                                         </div>
                                     </div>
                                 </div>
@@ -134,6 +130,7 @@
             </div>
         </div>
     </div>
+
 </div>
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"

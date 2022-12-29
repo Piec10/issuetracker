@@ -1,0 +1,11 @@
+         .clickable-card {
+            transition: 0.15s;
+            transition-timing-function: ease-in-out;
+        }
+        .clickable-card:hover {
+            background-color: #e6e6e7;
+            border-bottom-left-radius:.325rem;
+            border-bottom-right-radius:.325rem;
+            transition: 0.15s;
+            transition-timing-function: ease-in-out;
+        }

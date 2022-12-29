@@ -41,13 +41,11 @@
                     </div>
                 </div>
 
-
                 <div th:switch="${#lists.isEmpty(projects)}">
                     <div th:case="true">
                         <span>You have no projects.</span>
                     </div>
                     <div th:case="false">
-                        <!-- New Project table -->
 
                         <div class="container-fluid">
                             <div class="col">
@@ -128,130 +126,7 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
-                        <!--                            <hr class="hr-table">-->
-                        <!--                            <div class="row clickable-row">-->
-                        <!--                                <div class="col">-->
-                        <!--                                    <div class="row">-->
-                        <!--                                        <div class="col-1">-->
-                        <!--                                            #<span th:text="${tempProject.id}"/>-->
-                        <!--                                        </div>-->
-                        <!--                                        <div class="col">-->
-                        <!--                                            <span th:text="${tempProject.title}"/>-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
-                        <!--                                    <div class="row">-->
-                        <!--                                        <div class="col">-->
-                        <!--                                                                    <div class="collapse" th:id="'project'+${tempProject.id}">-->
-
-                        <!--                                                                        Some placeholder content for the collapse component. This panel is-->
-                        <!--                                                                        hidden by-->
-                        <!--                                                                        default but revealed when the user activates the relevant trigger.-->
-
-                        <!--                                                                    </div>-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
-                        <!--                                    <div class="row">-->
-                        <!--                                        <div class="col">-->
-                        <!--                                                                    <button class="btn btn-sm btn-toggle btn-outline-secondary w-100" type="button"-->
-                        <!--                                                                            data-bs-toggle="collapse"-->
-                        <!--                                                                            th:data-bs-target="'#project'+${tempProject.id}"-->
-                        <!--                                                                            aria-expanded="false"-->
-                        <!--                                                                            th:aria-controls="'project'+${tempProject.id}">-->
-                        <!--                                                                        Project Details-->
-                        <!--                                                                    </button>-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
-                        <!--                                </div>-->
-
-                        <!--                            </div>-->
-
-                        <!--                        </div>-->
-
-
-                        <!-- Old Project table -->
-                        <!--                        <div class="row p-2 mx-0 fw-bold">-->
-                        <!--                            <div class="col">-->
-                        <!--                                <div class="row">-->
-                        <!--                                    <div class="col-1 align-self-center align-self-md-start me-1">Id</div>-->
-                        <!--                                    <div class="col">-->
-                        <!--                                        <div class="row">-->
-                        <!--                                            <div class="col-8 col-md-4 col-lg-auto flex-grow-1">Title</div>-->
-                        <!--                                            <div class="col-2 col-md-2 col-lg-1">Issues</div>-->
-                        <!--                                            <div class="col-8 col-md-5 col-lg-4 col-xl-3 col-xxl-3">Creator</div>-->
-                        <!--                                            <div class="col-3 col-sm-4 col-md-3 col-lg-2 col-xl-2 col-xxl-2">Your Role-->
-                        <!--                                            </div>-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
-                        <!--                                </div>-->
-                        <!--                            </div>-->
-                        <!--                            <div class="col-4 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-flex flex-column align-items-end align-self-center align-self-md-start"></div>-->
-                        <!--                        </div>-->
-
-                        <!--                        <div th:each="tempProject : ${projects}">-->
-
-                        <!--                            <hr class="hr-table">-->
-
-                        <!--                            <div class="row clickable-row p-2 mx-0">-->
-                        <!--                                <div class="col">-->
-                        <!--                                    <div class="row position-relative">-->
-
-                        <!--                                        <div class="col-1 align-self-center align-self-md-start me-1">#<span-->
-                        <!--                                                th:text="${tempProject.id}"/></div>-->
-
-                        <!--                                        <div class="col">-->
-                        <!--                                            <div class="row">-->
-                        <!--                                                <div class="col-8 col-md-4 col-lg-auto flex-grow-1 fw-bold"><span-->
-                        <!--                                                        th:text="${tempProject.title}"/></div>-->
-                        <!--                                                <div class="col-2 col-md-2 col-lg-1"><span-->
-                        <!--                                                        th:text="${#lists.size(tempProject.issues)}"/>-->
-                        <!--                                                </div>-->
-                        <!--                                                <div class="col-8 col-md-5 col-lg-4 col-xl-3 col-xxl-3">-->
-                        <!--                                                    <div th:switch="${tempProject.createdBy == null}">-->
-                        <!--                                                        <div th:case="true">-->
-                        <!--                                                            <small class="text-secondary fst-italic">-->
-                        <!--                                                                deleted user-->
-                        <!--                                                            </small>-->
-                        <!--                                                        </div>-->
-                        <!--                                                        <div th:case="false">-->
-                        <!--                                                            <span th:text="${tempProject.createdBy.username}"/>-->
-                        <!--                                                        </div>-->
-                        <!--                                                    </div>-->
-                        <!--                                                    <small><span th:text="${tempProject.createdAt}"/></small>-->
-                        <!--                                                </div>-->
-                        <!--                                                <div class="col-3 col-sm-4 col-md-3 col-lg-2 col-xl-2 col-xxl-2">-->
-                        <!--                                    <span th:text="Guest"/>-->
-                        <!--                                                </div>-->
-                        <!--                                                <a th:href="@{/dashboard/issues(projectId=${tempProject.id})}"-->
-                        <!--                                                   class="stretched-link"></a>-->
-                        <!--                                            </div>-->
-                        <!--                                        </div>-->
-                        <!--                                    </div>-->
-                        <!--                                </div>-->
-                        <!--                                Action Menu-->
-                        <!--                                                        <div class="col-4 col-sm-3 col-md-2 col-lg-2 col-xl-1 d-flex flex-column align-items-end align-self-center align-self-md-start">-->
-                        <!--                                                            <div>-->
-                        <!--                                                                <div class="dropdown">-->
-                        <!--                                                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle"-->
-                        <!--                                                                            type="button" data-bs-toggle="dropdown" aria-expanded="false">-->
-                        <!--                                                                        Action-->
-                        <!--                                                                    </button>-->
-                        <!--                                                                    <ul class="dropdown-menu">-->
-                        <!--                                                                        <li><a class="dropdown-item"-->
-                        <!--                                                                               th:href="@{/dashboard/editProject(projectId=${tempProject.id})}">Edit</a>-->
-                        <!--                                                                        </li>-->
-                        <!--                                                                        <li><a class="dropdown-item"-->
-                        <!--                                                                               th:href="@{/dashboard/deleteProject(projectId=${tempProject.id})}"-->
-                        <!--                                                                               onclick="if (!(confirm('Are you sure you want to delete this Project? This will also delete all its issues. Confirm?'))) return false">Delete</a>-->
-                        <!--                                                                        </li>-->
-                        <!--                                                                    </ul>-->
-                        <!--                                                                </div>-->
-                        <!--                                                            </div>-->
-                        <!--                                                        </div>-->
-                        <!--                                                    </div>-->
-                        <!--                                                </div>-->
                     </div>
                 </div>
             </div>
