@@ -22,41 +22,39 @@
 
 <div class="base-color">
 
-    <div class="container px-4 py-5 min-vh-100">
-        <div class="row align-items-center py-5">
-            <div class="p-4 p-md-5 border text-center rounded-3 bg-light">
-                <div class="row row-cols-2">
-                    <div class="col border rounded-3">
-                        <div class="row">
-                            <div class="col">
+    <div class="container-fluid py-5 min-vh-100">
+        <div class="row py-2 py-md-0"></div>
+        <div class="row justify-content-center py-5">
+            <div class="col-11 py-5 border rounded-3 bg-light">
+
+                <div class="container">
+
+                <div class="row gy-3">
+                    <div class="col-12 col-md-6 border rounded-3">
+                        <div class="row gy-2 mb-2">
+                            <div class="col-4">
                                 Username:
                             </div>
-                            <div class="col">
+                            <div class="col-8">
                                 <span th:text="${user.username}"></span>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
+                            <div class="col-4">
                                 Email:
                             </div>
-                            <div class="col">
+                            <div class="col-8">
                                 <span th:text="${user.email}"></span>
                             </div>
-                        </div>
-                        <div class="row">
+
 
                             <hr>
 
-                        </div>
-                        <div class="row">
-                            <div class="col" th:unless="${#authorization.expression('hasAuthority(''ROLE_GUEST'')')}">
+
+                            <div class="col-12" th:unless="${#authorization.expression('hasAuthority(''ROLE_GUEST'')')}">
                                 <a th:href="@{/dashboard/changePassword(userId=${user.username})}" class="btn btn-outline-secondary">Change password</a>
-                            </div>
-                            <div class="col">
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-12 col-md-6">
                         <div class="row">
                             <span>Your projects:</span>
                             <div th:each="tempProject : ${user.collaborationProjects}">
@@ -70,6 +68,7 @@
                             </div>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
