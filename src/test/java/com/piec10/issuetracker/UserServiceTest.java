@@ -1,16 +1,19 @@
 package com.piec10.issuetracker;
 
+import com.piec10.issuetracker.dao.RoleRepository;
 import com.piec10.issuetracker.dao.UserRepository;
 import com.piec10.issuetracker.entity.Role;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.UserService;
 import com.piec10.issuetracker.form.FormUser;
+import com.piec10.issuetracker.service.UserServiceImpl;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
@@ -20,14 +23,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-    @MockBean
+    @Mock
     private UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
+    @Mock
+    private RoleRepository roleRepository;
+
+    @InjectMocks
+    private UserService userService = new UserServiceImpl();
 
     @Captor
     private ArgumentCaptor<User> capturedUser;
@@ -45,6 +51,7 @@ public class UserServiceTest {
         formUser.setEmail("email@email.com");
         formUser.setPassword("password");
 
+        when(roleRepository.findByName("ROLE_USER")).thenReturn(new Role("ROLE_USER"));
         userService.save(formUser);
 
         verify(userRepository).save(capturedUser.capture());

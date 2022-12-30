@@ -5,13 +5,15 @@ import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormProject;
 import com.piec10.issuetracker.service.ProjectService;
+import com.piec10.issuetracker.service.ProjectServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -20,14 +22,14 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class ProjectServiceTest {
 
-    @MockBean
+    @Mock
     ProjectRepository projectRepository;
 
-    @Autowired
-    ProjectService projectService;
+    @InjectMocks
+    ProjectService projectService = new ProjectServiceImpl();
 
     @Captor
     private ArgumentCaptor<Project> capturedProject;
