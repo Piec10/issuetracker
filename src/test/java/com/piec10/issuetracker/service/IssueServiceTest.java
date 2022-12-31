@@ -1,4 +1,4 @@
-package com.piec10.issuetracker;
+package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
 import com.piec10.issuetracker.entity.Issue;

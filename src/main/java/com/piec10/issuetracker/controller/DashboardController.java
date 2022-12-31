@@ -100,5 +100,4 @@ public class DashboardController {
 
         return "redirect:/access-denied";
     }
-
 }

@@ -1,4 +1,4 @@
-package com.piec10.issuetracker;
+package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
 import com.piec10.issuetracker.controller.MainController;
