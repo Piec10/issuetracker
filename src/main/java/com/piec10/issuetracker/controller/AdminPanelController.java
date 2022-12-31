@@ -26,24 +26,8 @@ public class AdminPanelController {
         return "dashboard/admin-panel";
     }
 
-    @GetMapping("/deleteUser")
-    public String deleteUser(@RequestParam("userId") String userId){
-
-        userService.deleteById(userId);
-
-        return "redirect:/dashboard/adminPanel/";
-    }
-
     @DeleteMapping("/deleteUser/{userId}")
     public String deleteUserDeleteMapping(@PathVariable String userId) {
-
-        userService.deleteById(userId);
-
-        return "redirect:/dashboard/adminPanel/";
-    }
-
-    @DeleteMapping("/deleteUser")
-    public String deleteUserDeleteMappingDifferentUrl(@RequestParam("userId") String userId) {
 
         userService.deleteById(userId);
 

@@ -67,17 +67,4 @@ public class AdminPanelControllerTest {
 
         verify(userService, times(1)).deleteById("user");
     }
-
-    @Test
-    public void deleteUserValidUserIdDifferentUrl() throws Exception {
-
-        mockMvc.perform(delete("/dashboard/adminPanel/deleteUser")
-                        .param("userId","user")
-                        .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/dashboard/adminPanel/"));
-
-        verify(userService, times(1)).deleteById("user");
-    }
 }
