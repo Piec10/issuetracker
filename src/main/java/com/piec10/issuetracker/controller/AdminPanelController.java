@@ -36,4 +36,5 @@ public class AdminPanelController {
         return "redirect:/dashboard/adminPanel/";
     }
 
+    
 }
