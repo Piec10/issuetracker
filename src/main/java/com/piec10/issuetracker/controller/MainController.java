@@ -37,6 +37,13 @@ public class MainController {
 //        return "test";
 //    }
 
+    @GetMapping("/login")
+    public String showMyLoginPage() {
+
+        return "login";
+
+    }
+
     @GetMapping("/access-denied")
     public String showAccessDenied() {
         return "access-denied";

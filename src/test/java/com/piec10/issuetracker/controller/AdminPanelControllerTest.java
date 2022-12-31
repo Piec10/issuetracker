@@ -1,7 +1,6 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
-import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,7 @@ public class AdminPanelControllerTest {
     }
 
     @Test
-    public void deleteUserValidUserId() throws Exception {
+    public void deleteUser() throws Exception {
 
         mockMvc.perform(delete("/dashboard/adminPanel/deleteUser/{userId}", "user")
                         .with(csrf())

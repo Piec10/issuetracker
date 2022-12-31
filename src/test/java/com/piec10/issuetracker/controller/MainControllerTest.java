@@ -1,7 +1,6 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
-import com.piec10.issuetracker.controller.MainController;
 import com.piec10.issuetracker.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +45,13 @@ public class MainControllerTest {
         this.mockMvc.perform(get("/about"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("about"));
+    }
+
+    @Test
+    public void getLoginAnonymousUser() throws Exception {
+
+        this.mockMvc.perform(get("/login"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("login"));
     }
 }
