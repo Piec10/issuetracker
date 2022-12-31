@@ -5,9 +5,7 @@ import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,12 +27,26 @@ public class AdminPanelController {
     }
 
     @GetMapping("/deleteUser")
-    public String deleteUser(@RequestParam("userId") String theId){
+    public String deleteUser(@RequestParam("userId") String userId){
 
-        userService.deleteById(theId);
+        userService.deleteById(userId);
 
         return "redirect:/dashboard/adminPanel/";
     }
 
-    
+    @DeleteMapping("/deleteUser/{userId}")
+    public String deleteUserDeleteMapping(@PathVariable String userId) {
+
+        userService.deleteById(userId);
+
+        return "redirect:/dashboard/adminPanel/";
+    }
+
+    @DeleteMapping("/deleteUser")
+    public String deleteUserDeleteMappingDifferentUrl(@RequestParam("userId") String userId) {
+
+        userService.deleteById(userId);
+
+        return "redirect:/dashboard/adminPanel/";
+    }
 }

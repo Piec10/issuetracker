@@ -15,8 +15,7 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Import(SecurityConfig.class)
@@ -57,5 +56,28 @@ public class AdminPanelControllerTest {
                 .andExpect(model().attributeExists("users"));
     }
 
+    @Test
+    public void deleteUserValidUserId() throws Exception {
 
+        mockMvc.perform(delete("/dashboard/adminPanel/deleteUser/{userId}", "user")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/adminPanel/"));
+
+        verify(userService, times(1)).deleteById("user");
+    }
+
+    @Test
+    public void deleteUserValidUserIdDifferentUrl() throws Exception {
+
+        mockMvc.perform(delete("/dashboard/adminPanel/deleteUser")
+                        .param("userId","user")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/adminPanel/"));
+
+        verify(userService, times(1)).deleteById("user");
+    }
 }
