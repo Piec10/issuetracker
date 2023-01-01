@@ -98,8 +98,8 @@ public class ProjectController {
         return "redirect:/dashboard/projects";
     }
 
-    @GetMapping("/deleteProject")
-    public String deleteProject(@RequestParam("projectId") int projectId, HttpServletRequest request) {
+    @DeleteMapping("/deleteProject/{projectId}")
+    public String deleteProject(@PathVariable int projectId, HttpServletRequest request) {
 
         Project project = projectService.findById(projectId);
 
@@ -109,6 +109,7 @@ public class ProjectController {
 
             projectService.deleteById(projectId);
             return "redirect:/dashboard/projects";
-        } else return "redirect:/access-denied";
+        }
+        else return "redirect:/access-denied";
     }
 }

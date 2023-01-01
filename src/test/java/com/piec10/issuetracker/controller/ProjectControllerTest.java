@@ -6,6 +6,8 @@ import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormProject;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,7 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Import(SecurityConfig.class)
@@ -35,6 +36,13 @@ public class ProjectControllerTest {
 
     @MockBean
     private ProjectService projectService;
+
+    private User user;
+
+    private Project project;
+
+    private FormProject formProject;
+
 
     @Test
     public void getProjectsIsAdmin() throws Exception {
@@ -54,7 +62,7 @@ public class ProjectControllerTest {
     @Test
     public void getProjectsIsUser() throws Exception {
 
-        User user = mock(User.class);
+        user = mock(User.class);
         user.setGuestProjects(new ArrayList<>());
 
         when(userService.findByUsername("user")).thenReturn(user);
@@ -103,9 +111,9 @@ public class ProjectControllerTest {
     @Test
     public void getEditProjectFormIsOwner() throws Exception {
 
-        Project project = mock(Project.class);
-        User user = new User();
+        user = new User();
         user.setUsername("user");
+        project = mock(Project.class);
         project.setCreatedBy(user);
 
         when(projectService.findById(1)).thenReturn(project);
@@ -127,9 +135,9 @@ public class ProjectControllerTest {
     @Test
     public void getEditProjectFormIsAdmin() throws Exception {
 
-        Project project = mock(Project.class);
-        User user = new User();
+        user = new User();
         user.setUsername("user");
+        project = mock(Project.class);
         project.setCreatedBy(user);
 
         when(projectService.findById(1)).thenReturn(project);
@@ -151,9 +159,9 @@ public class ProjectControllerTest {
     @Test
     public void getEditProjectFormIsNotOwner() throws Exception {
 
-        Project project = mock(Project.class);
-        User user = new User();
+        user = new User();
         user.setUsername("user");
+        project = mock(Project.class);
         project.setCreatedBy(user);
 
         when(projectService.findById(1)).thenReturn(project);
@@ -193,8 +201,9 @@ public class ProjectControllerTest {
     @Test
     public void processProjectFormCreateNewProject() throws Exception {
 
-        User user = new User();
-        FormProject formProject = new FormProject();
+        formProject = new FormProject();
+        user = mock(User.class);
+        user.setUsername("user");
 
         when(userService.findByUsername("user")).thenReturn(user);
 
@@ -212,7 +221,7 @@ public class ProjectControllerTest {
     @Test
     public void processProjectFormUpdateProject() throws Exception {
 
-        FormProject formProject = new FormProject();
+        formProject = new FormProject();
 
         mockMvc.perform(post("/dashboard/processProject")
                         .param("id", "1")
@@ -224,5 +233,72 @@ public class ProjectControllerTest {
                 .andExpect(header().string("Location", "/dashboard/projects"));
 
         verify(projectService).updateProject(formProject);
+    }
+
+    @Test
+    public void deleteProjectInvalidProjectId() throws Exception {
+
+        when(projectService.findById(0)).thenReturn(null);
+
+        mockMvc.perform(delete("/dashboard/deleteProject/{projectId}", "0")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
+    public void deleteProjectIsOwner() throws Exception {
+
+        user = new User();
+        user.setUsername("user");
+        project = new Project();
+        project.setCreatedBy(user);
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        mockMvc.perform(delete("/dashboard/deleteProject/{projectId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+
+        verify(projectService).deleteById(1);
+    }
+
+    @Test
+    public void deleteProjectIsAdmin() throws Exception {
+
+        user = new User();
+        user.setUsername("user");
+        project = new Project();
+        project.setCreatedBy(user);
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        mockMvc.perform(delete("/dashboard/deleteProject/{projectId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+
+        verify(projectService).deleteById(1);
+    }
+
+    @Test
+    public void deleteProjectIsNotOwner() throws Exception {
+
+        user = new User();
+        user.setUsername("user");
+        project = new Project();
+        project.setCreatedBy(user);
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        mockMvc.perform(delete("/dashboard/deleteProject/{projectId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("anotherUser").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
     }
 }

@@ -27,7 +27,7 @@ public class AdminPanelController {
     }
 
     @DeleteMapping("/deleteUser/{userId}")
-    public String deleteUserDeleteMapping(@PathVariable String userId) {
+    public String deleteUser(@PathVariable String userId) {
 
         userService.deleteById(userId);
 
