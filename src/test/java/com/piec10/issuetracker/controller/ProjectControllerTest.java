@@ -37,12 +37,21 @@ public class ProjectControllerTest {
     @MockBean
     private ProjectService projectService;
 
-    private User user;
+    private static User user;
 
-    private Project project;
+    private static Project project;
 
-    private FormProject formProject;
+    private static FormProject formProject;
 
+    @BeforeAll
+    public static void beforeAll() {
+
+        formProject = new FormProject();
+        user = new User();
+        user.setUsername("user");
+        project = new Project();
+        project.setCreatedBy(user);
+    }
 
     @Test
     public void getProjectsIsAdmin() throws Exception {
@@ -111,8 +120,6 @@ public class ProjectControllerTest {
     @Test
     public void getEditProjectFormIsOwner() throws Exception {
 
-        user = new User();
-        user.setUsername("user");
         project = mock(Project.class);
         project.setCreatedBy(user);
 
@@ -135,8 +142,6 @@ public class ProjectControllerTest {
     @Test
     public void getEditProjectFormIsAdmin() throws Exception {
 
-        user = new User();
-        user.setUsername("user");
         project = mock(Project.class);
         project.setCreatedBy(user);
 
@@ -158,11 +163,6 @@ public class ProjectControllerTest {
 
     @Test
     public void getEditProjectFormIsNotOwner() throws Exception {
-
-        user = new User();
-        user.setUsername("user");
-        project = mock(Project.class);
-        project.setCreatedBy(user);
 
         when(projectService.findById(1)).thenReturn(project);
         when(project.getCreatedBy()).thenReturn(user);
@@ -202,8 +202,6 @@ public class ProjectControllerTest {
     public void processProjectFormCreateNewProject() throws Exception {
 
         formProject = new FormProject();
-        user = mock(User.class);
-        user.setUsername("user");
 
         when(userService.findByUsername("user")).thenReturn(user);
 
@@ -219,9 +217,9 @@ public class ProjectControllerTest {
     }
 
     @Test
-    public void processProjectFormUpdateProject() throws Exception {
+    public void processProjectFormUpdateProjectIsOwner() throws Exception {
 
-        formProject = new FormProject();
+        when(projectService.findById(1)).thenReturn(project);
 
         mockMvc.perform(post("/dashboard/processProject")
                         .param("id", "1")
@@ -233,6 +231,38 @@ public class ProjectControllerTest {
                 .andExpect(header().string("Location", "/dashboard/projects"));
 
         verify(projectService).updateProject(formProject);
+    }
+
+    @Test
+    public void processProjectFormUpdateProjectIsAdmin() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("id", "1")
+                        .param("title", "title")
+                        .flashAttr("formProject", formProject)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+
+        verify(projectService).updateProject(formProject);
+    }
+
+    @Test
+    public void processProjectFormUpdateProjectIsNotOwner() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("id", "1")
+                        .param("title", "title")
+                        .flashAttr("formProject", formProject)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("anotherUser").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
     }
 
     @Test
@@ -250,11 +280,6 @@ public class ProjectControllerTest {
     @Test
     public void deleteProjectIsOwner() throws Exception {
 
-        user = new User();
-        user.setUsername("user");
-        project = new Project();
-        project.setCreatedBy(user);
-
         when(projectService.findById(1)).thenReturn(project);
 
         mockMvc.perform(delete("/dashboard/deleteProject/{projectId}", "1")
@@ -269,11 +294,6 @@ public class ProjectControllerTest {
     @Test
     public void deleteProjectIsAdmin() throws Exception {
 
-        user = new User();
-        user.setUsername("user");
-        project = new Project();
-        project.setCreatedBy(user);
-
         when(projectService.findById(1)).thenReturn(project);
 
         mockMvc.perform(delete("/dashboard/deleteProject/{projectId}", "1")
@@ -287,11 +307,6 @@ public class ProjectControllerTest {
 
     @Test
     public void deleteProjectIsNotOwner() throws Exception {
-
-        user = new User();
-        user.setUsername("user");
-        project = new Project();
-        project.setCreatedBy(user);
 
         when(projectService.findById(1)).thenReturn(project);
 

@@ -90,12 +90,19 @@ public class ProjectController {
 
             User createdBy = userService.findByUsername(request.getUserPrincipal().getName());
             projectService.createProject(formProject, createdBy);
-        }
-        else {
-            projectService.updateProject(formProject);
+            return "redirect:/dashboard/projects";
         }
 
-        return "redirect:/dashboard/projects";
+        Project project = projectService.findById(formProject.getId());
+
+        if (project == null) return "redirect:/dashboard/projects";
+
+        if (isAdminOrOwner(project.getCreatedBy(), request)) {
+
+            projectService.updateProject(formProject);
+            return "redirect:/dashboard/projects";
+        }
+        else return "redirect:/access-denied";
     }
 
     @DeleteMapping("/deleteProject/{projectId}")
@@ -109,7 +116,6 @@ public class ProjectController {
 
             projectService.deleteById(projectId);
             return "redirect:/dashboard/projects";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 }
