@@ -67,6 +67,13 @@
 
                                 <div th:each="tempProject : ${projects}">
 
+                                    <!-- hidden form for performing delete project request -->
+                                    <form th:name="'deleteForm_'+${tempProject.id}"
+                                          th:action="@{'/dashboard/deleteProject/'+${tempProject.id}}"
+                                          th:method="delete" th:hidden="true">
+                                        <input hidden type="submit" value="Delete"/>
+                                    </form>
+
                                     <div class="d-md-none">
                                         <div class="card border-dark mb-3">
                                             <div class="card-header">
@@ -88,7 +95,7 @@
                                                                            th:href="@{/dashboard/editProject(projectId=${tempProject.id})}">Edit</a>
                                                                     </li>
                                                                     <li><a class="dropdown-item"
-                                                                           th:href="@{/dashboard/deleteProject(projectId=${tempProject.id})}"
+                                                                           th:href="'javascript: document.deleteForm_'+${tempProject.id}+'.submit()'"
                                                                            onclick="if (!(confirm('Are you sure you want to delete this Project? This will also delete all its issues. Confirm?'))) return false">Delete</a>
                                                                     </li>
                                                                 </ul>
@@ -186,7 +193,7 @@
                                                                    th:href="@{/dashboard/editProject(projectId=${tempProject.id})}">Edit</a>
                                                             </li>
                                                             <li><a class="dropdown-item"
-                                                                   th:href="@{/dashboard/deleteProject(projectId=${tempProject.id})}"
+                                                                   th:href="'javascript: document.deleteForm_'+${tempProject.id}+'.submit()'"
                                                                    onclick="if (!(confirm('Are you sure you want to delete this Project? This will also delete all its issues. Confirm?'))) return false">Delete</a>
                                                             </li>
                                                         </ul>

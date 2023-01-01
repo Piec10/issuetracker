@@ -116,6 +116,7 @@ public class ProjectController {
 
             projectService.deleteById(projectId);
             return "redirect:/dashboard/projects";
-        } else return "redirect:/access-denied";
+        }
+        else return "redirect:/access-denied";
     }
 }
