@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
+import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.IssueService;
@@ -42,6 +43,8 @@ public class IssueControllerTest {
 
     private static User user;
 
+    private static Issue issue;
+
     @BeforeAll
     public static void beforeAll() {
 
@@ -49,9 +52,14 @@ public class IssueControllerTest {
         user = new User();
         user.setUsername("user");
 
+        project.setId(1);
         project.setCreatedBy(user);
         project.setCollaborators(Arrays.asList(user));
         project.setGuestUsers(Arrays.asList(user));
+
+        issue = new Issue();
+        issue.setCreatedBy(user);
+        issue.setProject(project);
     }
 
     @Test
@@ -193,6 +201,71 @@ public class IssueControllerTest {
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
+                        .with(SecurityMockMvcRequestPostProcessors.user("user2").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void getIssueDetailsInvalidIssueId() throws Exception {
+
+        when(issueService.findById(0)).thenReturn(null);
+
+        mockMvc.perform(get("/dashboard/issue")
+                        .param("issueId","0")
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
+    public void getIssueDetailsValidIssueIdIsAdmin() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("user")).thenReturn(user);
+
+        mockMvc.perform(get("/dashboard/issue")
+                        .param("issueId","1")
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issue-details"))
+                .andExpect(model().attributeExists("issue"));
+    }
+
+    @Test
+    public void getIssueDetailsValidIssueIdIsProjectGuestUser() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("user")).thenReturn(user);
+
+        mockMvc.perform(get("/dashboard/issue")
+                        .param("issueId","1")
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issue-details"))
+                .andExpect(model().attributeExists("issue"));
+    }
+
+    @Test
+    public void getIssueDetailsValidIssueIdIsNotProjectGuestUser() throws Exception {
+
+        User user2 = new User();
+        user2.setUsername("user2");
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("user2")).thenReturn(user2);
+
+        mockMvc.perform(get("/dashboard/issue")
+                        .param("issueId","1")
                         .with(SecurityMockMvcRequestPostProcessors.user("user2").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
