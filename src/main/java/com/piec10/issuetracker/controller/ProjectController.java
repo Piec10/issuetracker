@@ -103,7 +103,7 @@ public class ProjectController {
     }
 
     @GetMapping("/deleteProject")
-    public String deleteProject(@RequestParam("projectId") int projectId, Model model, HttpServletRequest request) {
+    public String deleteProject(@RequestParam("projectId") int projectId, HttpServletRequest request) {
 
         Project project = projectService.findById(projectId);
 
