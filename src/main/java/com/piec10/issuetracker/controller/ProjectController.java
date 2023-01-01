@@ -34,9 +34,9 @@ public class ProjectController {
 
         Collection<Project> projects;
 
-        User currentUser =  userService.findByUsername(request.getUserPrincipal().getName());
+        User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
 
-        if(isAdmin(request)) projects = projectService.findAll();
+        if (isAdmin(request)) projects = projectService.findAll();
         else projects = currentUser.getGuestProjects();
 
         model.addAttribute("projects", projects);
@@ -48,12 +48,10 @@ public class ProjectController {
     @GetMapping("/newProject")
     public String showNewProjectForm(Model model, HttpServletRequest request) {
 
-        if(isNotGuest(request))
-        {
+        if (isNotGuest(request)) {
             model.addAttribute("formProject", new FormProject());
             return "dashboard/project-form";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 
     @GetMapping("/editProject")
@@ -61,9 +59,9 @@ public class ProjectController {
 
         Project project = projectService.findById(projectId);
 
-        if(project == null) return "redirect:/dashboard/projects";
+        if (project == null) return "redirect:/dashboard/projects";
 
-        if(isAdminOrOwner(project.getCreatedBy(),request)){
+        if (isAdminOrOwner(project.getCreatedBy(), request)) {
 
             FormProject formProject = new FormProject();
 
@@ -76,8 +74,7 @@ public class ProjectController {
             model.addAttribute("formProject", formProject);
 
             return "dashboard/project-form";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 
     @PostMapping("/processProject")
@@ -87,19 +84,18 @@ public class ProjectController {
         // form validation
         if (theBindingResult.hasErrors()) return "dashboard/project-form";
 
-        if(isNotGuest(request)) {
+        if (isGuest(request)) return "redirect:/access-denied";
 
-            if(formProject.getId() == 0){
+        if (formProject.getId() == 0) {
 
-                User createdBy = userService.findByUsername(request.getUserPrincipal().getName());
-                projectService.createProject(formProject, createdBy);
-            }
-            else{
-                projectService.updateProject(formProject);
-            }
-            return "redirect:/dashboard/projects";
+            User createdBy = userService.findByUsername(request.getUserPrincipal().getName());
+            projectService.createProject(formProject, createdBy);
         }
-        else return "redirect:/access-denied";
+        else {
+            projectService.updateProject(formProject);
+        }
+
+        return "redirect:/dashboard/projects";
     }
 
     @GetMapping("/deleteProject")
@@ -107,13 +103,12 @@ public class ProjectController {
 
         Project project = projectService.findById(projectId);
 
-        if(project == null) return "redirect:/dashboard/projects";
+        if (project == null) return "redirect:/dashboard/projects";
 
-        if(isAdminOrOwner(project.getCreatedBy(),request)){
+        if (isAdminOrOwner(project.getCreatedBy(), request)) {
 
             projectService.deleteById(projectId);
             return "redirect:/dashboard/projects";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 }

@@ -3,9 +3,11 @@ package com.piec10.issuetracker.controller;
 import com.piec10.issuetracker.config.SecurityConfig;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.form.FormProject;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -164,5 +166,63 @@ public class ProjectControllerTest {
                 .andExpect(header().string("Location", "/access-denied"));
     }
 
-    
+    @Test
+    public void processProjectFormHasErrors() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("title", "")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("formProject"));
+    }
+
+    @Test
+    public void processProjectFormIsGuestUser() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("title", "title")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER", "GUEST")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void processProjectFormCreateNewProject() throws Exception {
+
+        User user = new User();
+        FormProject formProject = new FormProject();
+
+        when(userService.findByUsername("user")).thenReturn(user);
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("title", "title")
+                        .flashAttr("formProject", formProject)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+
+        verify(projectService).createProject(formProject, user);
+    }
+
+    @Test
+    public void processProjectFormUpdateProject() throws Exception {
+
+        FormProject formProject = new FormProject();
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("id", "1")
+                        .param("title", "title")
+                        .flashAttr("formProject", formProject)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+
+        verify(projectService).updateProject(formProject);
+    }
 }
