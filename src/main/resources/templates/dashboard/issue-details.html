@@ -26,6 +26,27 @@
         <div class="row justify-content-center py-5">
             <div class="col-11 py-5 border rounded-3 bg-light">
 
+                <!-- hidden form for performing delete issue request -->
+                <form th:name="'deleteIssueForm_'+${issue.id}"
+                      th:action="@{'/dashboard/deleteIssue/'+${issue.id}}"
+                      th:method="delete" th:hidden="true">
+                    <input hidden type="submit" value="Delete"/>
+                </form>
+
+                <!-- hidden form for performing close issue request -->
+                <form th:name="'closeIssueForm_'+${issue.id}"
+                      th:action="@{'/dashboard/closeIssue/'+${issue.id}}"
+                      th:method="patch" th:hidden="true">
+                    <input hidden type="submit" value="Patch"/>
+                </form>
+
+                <!-- hidden form for performing reopen issue request -->
+                <form th:name="'reopenIssueForm_'+${issue.id}"
+                      th:action="@{'/dashboard/reopenIssue/'+${issue.id}}"
+                      th:method="patch" th:hidden="true">
+                    <input hidden type="submit" value="Patch"/>
+                </form>
+
                 <div class="container">
                     <div class="row gy-3">
                         <div class="col-12 col-md-auto flex-grow-1 order-2 order-md-0 fs-3">
@@ -63,14 +84,14 @@
                             <div class="col">
                                 <div th:switch="${issue.closedAt == null}">
                                     <div th:case="true">
-                                        <a th:href="@{/dashboard/closeIssue(issueId=${issue.id})}"
+                                        <a th:href="'javascript: document.closeIssueForm_'+${issue.id}+'.submit()'"
                                            class="btn btn-outline-secondary"
                                            onclick="if (!(confirm('Are you sure you want to close this issue?'))) return false">
                                             Close Issue
                                         </a>
                                     </div>
                                     <div th:case="false">
-                                        <a th:href="@{/dashboard/reopenIssue(issueId=${issue.id})}"
+                                        <a th:href="'javascript: document.reopenIssueForm_'+${issue.id}+'.submit()'"
                                            class="btn btn-outline-secondary"
                                            onclick="if (!(confirm('Are you sure you want to reopen this issue?'))) return false">
                                             Reopen Issue
@@ -79,7 +100,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <a th:href="@{/dashboard/deleteIssue(issueId=${issue.id})}"
+                                <a th:href="'javascript: document.deleteIssueForm_'+${issue.id}+'.submit()'"
                                    class="btn btn-outline-secondary"
                                    onclick="if (!(confirm('Are you sure you want to delete this issue?'))) return false">
                                     Delete Issue
