@@ -63,14 +63,14 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public void deleteById(int id) {
-        issueRepository.deleteById(id);
+    public void deleteById(int issueId) {
+        issueRepository.deleteById(issueId);
     }
 
     @Override
-    public void closeIssue(int theId, User closedBy) {
+    public void closeIssue(int issueId, User closedBy) {
 
-        Issue issue = findById(theId);
+        Issue issue = findById(issueId);
 
         if(issue != null) {
             issue.setClosedBy(closedBy);
@@ -81,9 +81,9 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public void reopenIssue(int theId) {
+    public void reopenIssue(int issueId) {
 
-        Issue issue = findById(theId);
+        Issue issue = findById(issueId);
 
         if(issue != null) {
             issue.setClosedBy(null);

@@ -227,8 +227,8 @@ public class IssueController {
         } else return "redirect:/access-denied";
     }
 
-    @GetMapping("/reopenIssue")
-    public String reopenIssue(@RequestParam("issueId") int issueId, HttpServletRequest request) {
+    @PatchMapping("/reopenIssue/{issueId}")
+    public String reopenIssue(@PathVariable int issueId, HttpServletRequest request) {
 
         Issue issue = issueService.findById(issueId);
 

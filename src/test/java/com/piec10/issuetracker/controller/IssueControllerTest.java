@@ -18,6 +18,7 @@ import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequ
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -54,6 +55,8 @@ public class IssueControllerTest {
 
     private static Issue issue;
 
+    private static Issue closedIssue;
+
     private static FormIssue formIssue;
 
     @BeforeAll
@@ -75,6 +78,12 @@ public class IssueControllerTest {
         issue = new Issue();
         issue.setCreatedBy(owner);
         issue.setProject(project);
+
+        closedIssue = new Issue();
+        closedIssue.setCreatedBy(owner);
+        closedIssue.setProject(project);
+        closedIssue.setClosedAt(new Date());
+
 
         project.setId(1);
         project.setCreatedBy(owner);
@@ -646,5 +655,75 @@ public class IssueControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.user("notOwner").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void closeIssueInvalidIssueId() throws Exception {
+
+        when(issueService.findById(0)).thenReturn(null);
+
+        mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "0")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
+    public void closeIssueIsOwner() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        when(userService.findByUsername("owner")).thenReturn(owner);
+
+        mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).closeIssue(1,owner);
+    }
+
+    @Test
+    public void closeIssueIsAdmin() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        when(userService.findByUsername("admin")).thenReturn(admin);
+
+        mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).closeIssue(1,admin);
+    }
+
+    @Test
+    public void closeIssueIsNotOwner() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        when(userService.findByUsername("notGuest")).thenReturn(notGuest);
+
+        mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("notGuest").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void closeIssueAlreadyClosed() throws Exception {
+
+        when(issueService.findById(2)).thenReturn(closedIssue);
+
+        mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "2")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
     }
 }

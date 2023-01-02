@@ -17,11 +17,11 @@ public interface IssueService {
 
     void updateIssue(FormIssue formIssue);
 
-    void deleteById(int id);
+    void deleteById(int issueId);
 
-    void closeIssue(int theId, User closedBy);
+    void closeIssue(int issueId, User closedBy);
 
-    void reopenIssue(int theId);
+    void reopenIssue(int issueId);
 
     int getOpenIssuesCount(int projectId);
 
