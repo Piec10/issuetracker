@@ -160,10 +160,8 @@ public class IssueController {
                                   BindingResult theBindingResult, HttpServletRequest request) {
 
         // form validation
-        if (theBindingResult.hasErrors()) {
+        if (theBindingResult.hasErrors()) return "dashboard/issue-form";
 
-            return "dashboard/issue-form";
-        }
 
         Project project = projectService.findById(formIssue.getProjectId());
 
@@ -171,22 +169,28 @@ public class IssueController {
 
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, request.getUserPrincipal());
 
-        if(isAdmin(request) || userProjectRoles.isCollaborator()){
+        if(formIssue.getId() == 0){
 
-            if(formIssue.getId() == 0){
+            if(userProjectRoles.isCollaborator()) {
 
                 User createdBy = userService.findByUsername(request.getUserPrincipal().getName());
 
                 issueService.createIssue(formIssue, createdBy, project);
+                return "redirect:/dashboard/issues?projectId=" + project.getId();
             }
-            else{
-                issueService.updateIssue(formIssue);
-            }
+            else return "redirect:/access-denied";
+        }
 
+        Issue issue = issueService.findById(formIssue.getId());
+
+        if(issue == null) return "redirect:/dashboard/issues?projectId=" + project.getId();
+
+        if(isAdminOrOwner(issue.getCreatedBy(),request)){
+
+            issueService.updateIssue(formIssue);
             return "redirect:/dashboard/issues?projectId=" + project.getId();
         }
         else return "redirect:/access-denied";
-
     }
 
     @GetMapping("/deleteIssue")

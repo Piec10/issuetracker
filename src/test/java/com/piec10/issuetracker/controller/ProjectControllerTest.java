@@ -215,6 +215,21 @@ public class ProjectControllerTest {
     }
 
     @Test
+    public void processProjectFormUpdateProjectInvalidProjectId() throws Exception {
+
+        when(projectService.findById(2)).thenReturn(null);
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("id", "2")
+                        .param("title", "title")
+                        .flashAttr("formProject", formProject)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
     public void processProjectFormUpdateProjectIsOwner() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);

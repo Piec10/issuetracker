@@ -4,6 +4,7 @@ import com.piec10.issuetracker.config.SecurityConfig;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -52,6 +54,8 @@ public class IssueControllerTest {
 
     private static Issue issue;
 
+    private static FormIssue formIssue;
+
     @BeforeAll
     public static void beforeAll() {
 
@@ -77,7 +81,7 @@ public class IssueControllerTest {
         project.setCollaborators(Arrays.asList(owner, collaborator));
         project.setGuestUsers(Arrays.asList(owner, collaborator, guest));
 
-
+        formIssue = new FormIssue();
     }
 
     @Test
@@ -427,5 +431,168 @@ public class IssueControllerTest {
         verify(mockIssue).getProject();
     }
 
+    @Test
+    public void processIssueFormHasErrors() throws Exception {
 
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("summary", "")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issue-form"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("formIssue"));
+    }
+
+    @Test
+    public void processIssueFormInvalidProjectId() throws Exception {
+
+        when(projectService.findById(0)).thenReturn(null);
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("summary", "summary")
+                        .param("projectId", "0")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
+    public void processIssueFormNewIssueIsProjectCollaborator() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("collaborator")).thenReturn(collaborator);
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("id","0")
+                        .param("summary", "summary")
+                        .param("projectId", "1")
+                        .flashAttr("formIssue", formIssue)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("collaborator").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).createIssue(formIssue, collaborator, project);
+    }
+
+    @Test
+    public void processIssueFormNewIssueIsAdmin() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("admin")).thenReturn(admin);
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("id","0")
+                        .param("summary", "summary")
+                        .param("projectId", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void processIssueFormNewIssueIsProjectGuest() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("guest")).thenReturn(guest);
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("id","0")
+                        .param("summary", "summary")
+                        .param("projectId", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("guest").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void processIssueFormUpdateIssueInvalidIssueId() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("owner")).thenReturn(owner);
+
+        when(issueService.findById(2)).thenReturn(null);
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("id","2")
+                        .param("summary", "summary")
+                        .param("projectId", "1")
+                        .flashAttr("formIssue", formIssue)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+    }
+
+    @Test
+    public void processIssueFormUpdateIssueIsIssueOwner() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("owner")).thenReturn(owner);
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("id","1")
+                        .param("summary", "summary")
+                        .param("projectId", "1")
+                        .flashAttr("formIssue", formIssue)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).updateIssue(formIssue);
+    }
+
+    @Test
+    public void processIssueFormUpdateIssueIsProjectCollaborator() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("collaborator")).thenReturn(collaborator);
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("id","1")
+                        .param("summary", "summary")
+                        .param("projectId", "1")
+                        .flashAttr("formIssue", formIssue)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("collaborator").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void processIssueFormUpdateIssueIsAdmin() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("admin")).thenReturn(admin);
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("id","1")
+                        .param("summary", "summary")
+                        .param("projectId", "1")
+                        .flashAttr("formIssue", formIssue)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER","ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).updateIssue(formIssue);
+    }
 }
