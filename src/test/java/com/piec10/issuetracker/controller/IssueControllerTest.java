@@ -726,4 +726,76 @@ public class IssueControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
     }
+
+    @Test
+    public void reopenIssueInvalidIssueId() throws Exception {
+
+        when(issueService.findById(0)).thenReturn(null);
+
+        mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "0")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
+    public void reopenIssueIsOwner() throws Exception {
+
+        when(issueService.findById(2)).thenReturn(closedIssue);
+
+        when(userService.findByUsername("owner")).thenReturn(owner);
+
+        mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "2")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).reopenIssue(2);
+    }
+
+    @Test
+    public void reopenIssueIsAdmin() throws Exception {
+
+        when(issueService.findById(2)).thenReturn(closedIssue);
+
+        when(userService.findByUsername("admin")).thenReturn(admin);
+
+        mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "2")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER","ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).reopenIssue(2);
+    }
+
+    @Test
+    public void reopenIssueIsNotOwner() throws Exception {
+
+        when(issueService.findById(2)).thenReturn(closedIssue);
+
+        when(userService.findByUsername("notGuest")).thenReturn(notGuest);
+
+        mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "2")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("notGuest").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void reopenIssueAlreadyOpen() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+    }
+
+
 }
