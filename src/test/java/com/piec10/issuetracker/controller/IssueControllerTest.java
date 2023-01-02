@@ -595,4 +595,56 @@ public class IssueControllerTest {
 
         verify(issueService).updateIssue(formIssue);
     }
+
+    @Test
+    public void deleteIssueInvalidIssueId() throws Exception {
+
+        when(issueService.findById(0)).thenReturn(null);
+
+        mockMvc.perform(delete("/dashboard/deleteIssue/{issueId}", "0")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
+    public void deleteIssueIsOwner() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        mockMvc.perform(delete("/dashboard/deleteIssue/{issueId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).deleteById(1);
+    }
+
+    @Test
+    public void deleteIssueIsAdmin() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        mockMvc.perform(delete("/dashboard/deleteIssue/{issueId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
+
+        verify(issueService).deleteById(1);
+    }
+
+    @Test
+    public void deleteIssueIsNotOwner() throws Exception {
+
+        when(issueService.findById(1)).thenReturn(issue);
+
+        mockMvc.perform(delete("/dashboard/deleteIssue/{issueId}", "1")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("notOwner").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
 }

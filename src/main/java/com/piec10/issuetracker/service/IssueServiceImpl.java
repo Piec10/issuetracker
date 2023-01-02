@@ -24,8 +24,8 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
-    public Issue findById(int id) {
-        Optional<Issue> issue =  issueRepository.findById(id);
+    public Issue findById(int issueId) {
+        Optional<Issue> issue =  issueRepository.findById(issueId);
 
         if(issue.isPresent()){
             return issue.get();

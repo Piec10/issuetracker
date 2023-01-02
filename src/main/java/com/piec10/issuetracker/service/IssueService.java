@@ -11,7 +11,7 @@ public interface IssueService {
 
     List<Issue> findAll(int projectId);
 
-    Issue findById(int id);
+    Issue findById(int issueId);
 
     void createIssue(FormIssue formIssue, User createdBy, Project project);
 

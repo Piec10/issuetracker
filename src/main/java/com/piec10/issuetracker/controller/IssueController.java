@@ -193,8 +193,8 @@ public class IssueController {
         else return "redirect:/access-denied";
     }
 
-    @GetMapping("/deleteIssue")
-    public String deleteIssue(@RequestParam("issueId") int issueId, HttpServletRequest request) {
+    @DeleteMapping("/deleteIssue/{issueId}")
+    public String deleteIssue(@PathVariable int issueId, HttpServletRequest request) {
 
         Issue issue = issueService.findById(issueId);
 
@@ -208,8 +208,8 @@ public class IssueController {
         } else return "redirect:/access-denied";
     }
 
-    @GetMapping("/closeIssue")
-    public String closeIssue(@RequestParam("issueId") int issueId, HttpServletRequest request) {
+    @PatchMapping("/closeIssue/{issueId}")
+    public String closeIssue(@PathVariable int issueId, HttpServletRequest request) {
 
         Issue issue = issueService.findById(issueId);
 
