@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 
-import static com.piec10.issuetracker.config.GlobalRolesAndOwnerCheckMethods.*;
+import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
 @Controller
 @RequestMapping("/dashboard")

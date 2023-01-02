@@ -1,6 +1,8 @@
-package com.piec10.issuetracker.config;
+package com.piec10.issuetracker.util;
 
+import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.util.UserProjectRoles;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -25,5 +27,16 @@ public class GlobalRolesAndOwnerCheckMethods {
 
     public static boolean isAdminOrOwner(User user, HttpServletRequest request) {
         return request.isUserInRole("ROLE_ADMIN") || isOwner(user, request.getUserPrincipal());
+    }
+
+    public static UserProjectRoles getUserProjectRoles(Project project, User user) {
+
+        UserProjectRoles userProjectRoles = new UserProjectRoles();
+
+        userProjectRoles.setGuest(project.getGuestUsers().contains(user));
+        userProjectRoles.setCollaborator(project.getCollaborators().contains(user));
+        userProjectRoles.setOwner(project.getCreatedBy().equals(user));
+
+        return userProjectRoles;
     }
 }

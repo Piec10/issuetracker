@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
-import static com.piec10.issuetracker.config.GlobalRolesAndOwnerCheckMethods.*;
+import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -34,7 +34,6 @@ public class IssueController {
     @Autowired
     private ProjectService projectService;
 
-    //private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/issues")
     public String getIssues(@RequestParam(value = "projectId") int projectId,
@@ -46,7 +45,8 @@ public class IssueController {
 
         if(project == null) return "redirect:/dashboard/projects";
 
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, request.getUserPrincipal());
+        User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
         if(isAdmin(request) || userProjectRoles.isGuest()){
 
@@ -86,7 +86,6 @@ public class IssueController {
         else return "redirect:/access-denied";
     }
 
-
     @GetMapping("/issue")
     public String issueDetails(@RequestParam("issueId") int issueId, Model model, HttpServletRequest request) {
 
@@ -94,9 +93,12 @@ public class IssueController {
 
         if(issue == null) return "redirect:/dashboard/projects";
 
-        Project project = projectService.findById(issue.getProject().getId());
+        Project project = issue.getProject();
 
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, request.getUserPrincipal());
+        if(project == null) return "redirect:/dashboard/projects";
+
+        User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
         if(isAdmin(request) || userProjectRoles.isGuest()){
 
@@ -116,7 +118,8 @@ public class IssueController {
 
         if(project == null) return "redirect:/dashboard/projects";
 
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, principal);
+        User currentUser = userService.findByUsername(principal.getName());
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
         if(userProjectRoles.isCollaborator()){
 
@@ -167,7 +170,8 @@ public class IssueController {
 
         if(project == null) return "redirect:/dashboard/projects";
 
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, request.getUserPrincipal());
+        User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
         if(formIssue.getId() == 0){
 
@@ -243,18 +247,5 @@ public class IssueController {
             return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 
         } else return "redirect:/access-denied";
-    }
-
-    private UserProjectRoles getUserProjectRoles(Project project, Principal principal) {
-
-        User currentUser = userService.findByUsername(principal.getName());
-
-        UserProjectRoles userProjectRoles = new UserProjectRoles();
-
-        userProjectRoles.setGuest(project.getGuestUsers().contains(currentUser));
-        userProjectRoles.setCollaborator(project.getCollaborators().contains(currentUser));
-        userProjectRoles.setOwner(project.getCreatedBy().equals(currentUser));
-
-        return userProjectRoles;
     }
 }

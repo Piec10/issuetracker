@@ -2,7 +2,6 @@ package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
-import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.form.FormProject;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
@@ -14,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Collection;
 
-import static com.piec10.issuetracker.config.GlobalRolesAndOwnerCheckMethods.*;
+import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
 @Controller
 @RequestMapping("/dashboard")

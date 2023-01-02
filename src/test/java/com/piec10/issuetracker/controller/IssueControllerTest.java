@@ -247,6 +247,23 @@ public class IssueControllerTest {
     }
 
     @Test
+    public void getIssueDetailsInvalidProjectId() throws Exception {
+
+        Issue mockIssue = mock(Issue.class);
+        when(mockIssue.getProject()).thenReturn(null);
+
+        when(issueService.findById(1)).thenReturn(mockIssue);
+
+        when(projectService.findById(0)).thenReturn(null);
+
+        mockMvc.perform(get("/dashboard/issue")
+                        .param("issueId","1")
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
     public void getIssueDetailsValidIssueIdIsAdmin() throws Exception {
 
         when(issueService.findById(1)).thenReturn(issue);
@@ -796,6 +813,4 @@ public class IssueControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
     }
-
-
 }
