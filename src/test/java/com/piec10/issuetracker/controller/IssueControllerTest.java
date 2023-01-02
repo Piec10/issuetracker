@@ -43,6 +43,8 @@ public class IssueControllerTest {
 
     private static User user;
 
+    private static User user2;
+
     private static Issue issue;
 
     @BeforeAll
@@ -60,6 +62,9 @@ public class IssueControllerTest {
         issue = new Issue();
         issue.setCreatedBy(user);
         issue.setProject(project);
+
+        user2 = new User();
+        user2.setUsername("user2");
     }
 
     @Test
@@ -255,9 +260,6 @@ public class IssueControllerTest {
     @Test
     public void getIssueDetailsValidIssueIdIsNotProjectGuestUser() throws Exception {
 
-        User user2 = new User();
-        user2.setUsername("user2");
-
         when(issueService.findById(1)).thenReturn(issue);
 
         when(projectService.findById(1)).thenReturn(project);
@@ -267,6 +269,61 @@ public class IssueControllerTest {
         mockMvc.perform(get("/dashboard/issue")
                         .param("issueId","1")
                         .with(SecurityMockMvcRequestPostProcessors.user("user2").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void getNewIssueFormInvalidProjectId() throws Exception {
+
+        when(projectService.findById(0)).thenReturn(null);
+
+        mockMvc.perform(get("/dashboard/newIssue")
+                        .param("projectId","0")
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/dashboard/projects"));
+    }
+
+    @Test
+    public void getNewIssueFormValidProjectIdIsProjectCollaborator() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("user")).thenReturn(user);
+
+        mockMvc.perform(get("/dashboard/newIssue")
+                        .param("projectId","1")
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issue-form"))
+                .andExpect(model().attributeExists("formIssue"));
+    }
+
+    @Test
+    public void getNewIssueFormValidProjectIdIsNotProjectCollaborator() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("user2")).thenReturn(user2);
+
+        mockMvc.perform(get("/dashboard/newIssue")
+                        .param("projectId","1")
+                        .with(SecurityMockMvcRequestPostProcessors.user("user2").roles("USER")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("Location", "/access-denied"));
+    }
+
+    @Test
+    public void getNewIssueFormValidProjectIdIsAdmin() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("user")).thenReturn(user);
+
+        mockMvc.perform(get("/dashboard/newIssue")
+                        .param("projectId","1")
+                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
