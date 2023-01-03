@@ -43,9 +43,9 @@ public class ProjectServiceImpl implements ProjectService{
         newProject.setCreatedAt(new Date());
 
         formProject.getCollaborators().add(createdBy);
-        formProject.getGuestUsers().add(createdBy);
+        formProject.getFollowers().add(createdBy);
 
-        newProject.setGuestUsers(formProject.getGuestUsers());
+        newProject.setFollowers(formProject.getFollowers());
         newProject.setCollaborators(formProject.getCollaborators());
 
         projectRepository.save(newProject);
@@ -65,11 +65,11 @@ public class ProjectServiceImpl implements ProjectService{
             if(!formProject.getCollaborators().contains(project.getCreatedBy())){
                 formProject.getCollaborators().add(project.getCreatedBy());
             }
-            if(!formProject.getGuestUsers().contains(project.getCreatedBy())){
-                formProject.getGuestUsers().add(project.getCreatedBy());
+            if(!formProject.getFollowers().contains(project.getCreatedBy())){
+                formProject.getFollowers().add(project.getCreatedBy());
             }
 
-            project.setGuestUsers(formProject.getGuestUsers());
+            project.setFollowers(formProject.getFollowers());
             project.setCollaborators(formProject.getCollaborators());
 
             projectRepository.save(project);

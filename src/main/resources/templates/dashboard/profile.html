@@ -62,8 +62,8 @@
                             </div>
                         </div>
                         <div class="row">
-                            <span>Guest projects:</span>
-                            <div th:each="tempProject : ${user.guestProjects}">
+                            <span>Followed projects:</span>
+                            <div th:each="tempProject : ${user.followedProjects}">
                                 <span th:text="${tempProject.title}"></span>
                             </div>
                         </div>

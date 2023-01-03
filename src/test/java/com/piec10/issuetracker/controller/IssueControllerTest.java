@@ -47,9 +47,9 @@ public class IssueControllerTest {
 
     private static User collaborator;
 
-    private static User guest;
+    private static User follower;
 
-    private static User notGuest;
+    private static User notFollower;
 
     private static User admin;
 
@@ -68,10 +68,10 @@ public class IssueControllerTest {
         owner.setUsername("owner");
         collaborator = new User();
         collaborator.setUsername("collaborator");
-        guest = new User();
-        guest.setUsername("guest");
-        notGuest = new User();
-        notGuest.setUsername("notGuest");
+        follower = new User();
+        follower.setUsername("follower");
+        notFollower = new User();
+        notFollower.setUsername("notFollower");
         admin = new User();
         admin.setUsername("admin");
 
@@ -88,7 +88,7 @@ public class IssueControllerTest {
         project.setId(1);
         project.setCreatedBy(owner);
         project.setCollaborators(Arrays.asList(owner, collaborator));
-        project.setGuestUsers(Arrays.asList(owner, collaborator, guest));
+        project.setFollowers(Arrays.asList(owner, collaborator, follower));
 
         formIssue = new FormIssue();
     }
@@ -197,15 +197,15 @@ public class IssueControllerTest {
     }
 
     @Test
-    public void getIssuesValidProjectIdDefaultShowParamIsProjectGuestUser() throws Exception {
+    public void getIssuesValidProjectIdDefaultShowParamIsProjectFollower() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("guest")).thenReturn(guest);
+        when(userService.findByUsername("follower")).thenReturn(follower);
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
-                        .with(SecurityMockMvcRequestPostProcessors.user("guest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issues"))
                 .andExpect(model().attributeExists("issues"))
@@ -221,15 +221,15 @@ public class IssueControllerTest {
     }
 
     @Test
-    public void getIssuesValidProjectIdDefaultShowParamIsNotProjectGuestUser() throws Exception {
+    public void getIssuesValidProjectIdDefaultShowParamIsNotProjectFollower() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("notGuest")).thenReturn(notGuest);
+        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
-                        .with(SecurityMockMvcRequestPostProcessors.user("notGuest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("notFollower").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
@@ -281,34 +281,34 @@ public class IssueControllerTest {
     }
 
     @Test
-    public void getIssueDetailsValidIssueIdIsProjectGuestUser() throws Exception {
+    public void getIssueDetailsValidIssueIdIsProjectFollower() throws Exception {
 
         when(issueService.findById(1)).thenReturn(issue);
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("guest")).thenReturn(guest);
+        when(userService.findByUsername("follower")).thenReturn(follower);
 
         mockMvc.perform(get("/dashboard/issue")
                         .param("issueId","1")
-                        .with(SecurityMockMvcRequestPostProcessors.user("guest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-details"))
                 .andExpect(model().attributeExists("issue"));
     }
 
     @Test
-    public void getIssueDetailsValidIssueIdIsNotProjectGuestUser() throws Exception {
+    public void getIssueDetailsValidIssueIdIsNotProjectFollower() throws Exception {
 
         when(issueService.findById(1)).thenReturn(issue);
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("notGuest")).thenReturn(notGuest);
+        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(get("/dashboard/issue")
                         .param("issueId","1")
-                        .with(SecurityMockMvcRequestPostProcessors.user("notGuest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("notFollower").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
@@ -341,29 +341,29 @@ public class IssueControllerTest {
     }
 
     @Test
-    public void getNewIssueFormValidProjectIdIsProjectGuestUser() throws Exception {
+    public void getNewIssueFormValidProjectIdIsProjectFollower() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("guest")).thenReturn(guest);
+        when(userService.findByUsername("follower")).thenReturn(follower);
 
         mockMvc.perform(get("/dashboard/newIssue")
                         .param("projectId","1")
-                        .with(SecurityMockMvcRequestPostProcessors.user("guest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
 
     @Test
-    public void getNewIssueFormValidProjectIdIsNotProjectGuestUser() throws Exception {
+    public void getNewIssueFormValidProjectIdIsNotProjectFollower() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("notGuest")).thenReturn(notGuest);
+        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(get("/dashboard/newIssue")
                         .param("projectId","1")
-                        .with(SecurityMockMvcRequestPostProcessors.user("notGuest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("notFollower").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
@@ -423,11 +423,11 @@ public class IssueControllerTest {
 
         when(issueService.findById(1)).thenReturn(issue);
 
-        when(userService.findByUsername("notGuest")).thenReturn(notGuest);
+        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(get("/dashboard/editIssue")
                         .param("issueId","1")
-                        .with(SecurityMockMvcRequestPostProcessors.user("notGuest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("notFollower").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
@@ -522,18 +522,18 @@ public class IssueControllerTest {
     }
 
     @Test
-    public void processIssueFormNewIssueIsProjectGuest() throws Exception {
+    public void processIssueFormNewIssueIsProjectFollower() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("guest")).thenReturn(guest);
+        when(userService.findByUsername("follower")).thenReturn(follower);
 
         mockMvc.perform(post("/dashboard/processIssue")
                         .param("id","0")
                         .param("summary", "summary")
                         .param("projectId", "1")
                         .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("guest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
@@ -723,11 +723,11 @@ public class IssueControllerTest {
 
         when(issueService.findById(1)).thenReturn(issue);
 
-        when(userService.findByUsername("notGuest")).thenReturn(notGuest);
+        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "1")
                         .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("notGuest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("notFollower").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
@@ -793,11 +793,11 @@ public class IssueControllerTest {
 
         when(issueService.findById(2)).thenReturn(closedIssue);
 
-        when(userService.findByUsername("notGuest")).thenReturn(notGuest);
+        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "2")
                         .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("notGuest").roles("USER")))
+                        .with(SecurityMockMvcRequestPostProcessors.user("notFollower").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }

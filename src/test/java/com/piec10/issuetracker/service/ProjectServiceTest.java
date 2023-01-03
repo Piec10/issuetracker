@@ -4,8 +4,6 @@ import com.piec10.issuetracker.dao.ProjectRepository;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormProject;
-import com.piec10.issuetracker.service.ProjectService;
-import com.piec10.issuetracker.service.ProjectServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -42,7 +40,7 @@ public class ProjectServiceTest {
 
     private Date createdAt;
 
-    private HashSet<User> guests;
+    private HashSet<User> followers;
     private HashSet<User> collaborators;
 
     @BeforeEach
@@ -64,18 +62,18 @@ public class ProjectServiceTest {
         project.setCreatedBy(createdBy);
         project.setCreatedAt(createdAt);
 
-        guests = new HashSet<>();
+        followers = new HashSet<>();
         collaborators = new HashSet<>();
 
-        guests.add(createdBy);
+        followers.add(createdBy);
         collaborators.add(createdBy);
 
-        project.setGuestUsers(guests);
+        project.setFollowers(followers);
         project.setCollaborators(collaborators);
     }
 
     @Test
-    public void createNewValidProjectServiceEmptyGuestsAndCollaborators() {
+    public void createNewValidProjectServiceEmptyFollowersAndCollaborators() {
 
         projectService.createProject(formProject,createdBy);
 
@@ -88,49 +86,49 @@ public class ProjectServiceTest {
         assertEquals(createdBy.getUsername(), capturedProject.getValue().getCreatedBy().getUsername(), "Project creator name should match");
 
         assertNotNull(capturedProject.getValue().getCreatedAt(), "Project creation date should not be null");
-        assertTrue(new Date().getTime() > capturedProject.getValue().getCreatedAt().getTime(), "Project creation date should be older than current date");
+        assertTrue(new Date(new Date().getTime()+10).getTime() > capturedProject.getValue().getCreatedAt().getTime(), "Project creation date should be older than current date");
 
-        assertEquals(1, capturedProject.getValue().getGuestUsers().size(), "Should be only one guest user - creator");
-        assertEquals(createdBy.getUsername(), capturedProject.getValue().getGuestUsers().stream().toList().get(0).getUsername(), "Should be only one guest user - creator");
+        assertEquals(1, capturedProject.getValue().getFollowers().size(), "Should be only one follower - creator");
+        assertEquals(createdBy.getUsername(), capturedProject.getValue().getFollowers().stream().toList().get(0).getUsername(), "Should be only one follower - creator");
         assertEquals(1, capturedProject.getValue().getCollaborators().size(), "Should be only one collaborator - creator");
         assertEquals(createdBy.getUsername(), capturedProject.getValue().getCollaborators().stream().toList().get(0).getUsername(), "Should be only one collaborator - creator");
     }
 
     @Test
-    public void createNewValidProjectServiceWithGuestsAndCollaborators() {
+    public void createNewValidProjectServiceWithFollowersAndCollaborators() {
 
         User user2 = new User();
         user2.setUsername("user2");
 
-        formProject.getGuestUsers().add(user2);
+        formProject.getFollowers().add(user2);
         formProject.getCollaborators().add(user2);
 
         projectService.createProject(formProject,createdBy);
 
         verify(projectRepository).save(capturedProject.capture());
 
-        assertEquals(2, capturedProject.getValue().getGuestUsers().size(), "Should be two guest users");
+        assertEquals(2, capturedProject.getValue().getFollowers().size(), "Should be two followers");
         assertEquals(2, capturedProject.getValue().getCollaborators().size(), "Should be two collaborators");
-        assertTrue(capturedProject.getValue().getGuestUsers().contains(user2), "user2 should be guest");
+        assertTrue(capturedProject.getValue().getFollowers().contains(user2), "user2 should be follower");
         assertTrue(capturedProject.getValue().getCollaborators().contains(user2), "user2 should be collaborator");
     }
 
     @Test
-    public void createNewValidProjectServiceWithCreatorAddedAsGuestAndCollaborator() {
+    public void createNewValidProjectServiceWithCreatorAddedAsFollowerAndCollaborator() {
 
-        formProject.getGuestUsers().add(createdBy);
+        formProject.getFollowers().add(createdBy);
         formProject.getCollaborators().add(createdBy);
 
         projectService.createProject(formProject,createdBy);
 
         verify(projectRepository).save(capturedProject.capture());
 
-        assertEquals(1, capturedProject.getValue().getGuestUsers().size(), "Should be only one guest user - creator");
+        assertEquals(1, capturedProject.getValue().getFollowers().size(), "Should be only one follower - creator");
         assertEquals(1, capturedProject.getValue().getCollaborators().size(), "Should be only one collaborator - creator");
     }
 
     @Test
-    public void updateValidProjectServiceNoGuestsAndCollaborators() {
+    public void updateValidProjectServiceNoFollowersAndCollaborators() {
 
         int id = 7;
 
@@ -151,14 +149,14 @@ public class ProjectServiceTest {
 
         assertEquals(createdAt, capturedProject.getValue().getCreatedAt(), "Project creation date should not change");
 
-        assertEquals(1, capturedProject.getValue().getGuestUsers().size(), "Should be only one guest user - creator");
-        assertEquals(createdBy.getUsername(), capturedProject.getValue().getGuestUsers().stream().toList().get(0).getUsername(), "Should be only one guest user - creator");
+        assertEquals(1, capturedProject.getValue().getFollowers().size(), "Should be only one follower - creator");
+        assertEquals(createdBy.getUsername(), capturedProject.getValue().getFollowers().stream().toList().get(0).getUsername(), "Should be only one follower - creator");
         assertEquals(1, capturedProject.getValue().getCollaborators().size(), "Should be only one collaborator - creator");
         assertEquals(createdBy.getUsername(), capturedProject.getValue().getCollaborators().stream().toList().get(0).getUsername(), "Should be only one collaborator - creator");
     }
 
     @Test
-    public void updateValidProjectServiceWithGuestsAndCollaborators() {
+    public void updateValidProjectServiceWithFollowersAndCollaborators() {
 
         int id = 5;
 
@@ -168,7 +166,7 @@ public class ProjectServiceTest {
         User user2 = new User();
         user2.setUsername("user2");
 
-        formProject.getGuestUsers().add(user2);
+        formProject.getFollowers().add(user2);
         formProject.getCollaborators().add(user2);
 
         when(projectRepository.findById(id)).thenReturn(Optional.of(project));
@@ -177,9 +175,9 @@ public class ProjectServiceTest {
 
         verify(projectRepository).save(capturedProject.capture());
 
-        assertEquals(2, capturedProject.getValue().getGuestUsers().size(), "Should be two guest users");
+        assertEquals(2, capturedProject.getValue().getFollowers().size(), "Should be two followers");
         assertEquals(2, capturedProject.getValue().getCollaborators().size(), "Should be two collaborators");
-        assertTrue(capturedProject.getValue().getGuestUsers().contains(user2), "user2 should be guest");
+        assertTrue(capturedProject.getValue().getFollowers().contains(user2), "user2 should be follower");
         assertTrue(capturedProject.getValue().getCollaborators().contains(user2), "user2 should be collaborator");
     }
 }

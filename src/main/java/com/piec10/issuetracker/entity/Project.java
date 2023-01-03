@@ -33,7 +33,7 @@ public class Project {
     @JoinTable(name = "projects_guests",
             joinColumns = @JoinColumn(name = "project_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Collection<User> guestUsers;
+    private Collection<User> followers;
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "projects_collaborators",
@@ -89,12 +89,12 @@ public class Project {
         this.issues = issues;
     }
 
-    public Collection<User> getGuestUsers() {
-        return guestUsers;
+    public Collection<User> getFollowers() {
+        return followers;
     }
 
-    public void setGuestUsers(Collection<User> guestUsers) {
-        this.guestUsers = guestUsers;
+    public void setFollowers(Collection<User> followers) {
+        this.followers = followers;
     }
 
     public Collection<User> getCollaborators() {

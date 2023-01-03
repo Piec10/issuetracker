@@ -2,7 +2,6 @@ package com.piec10.issuetracker.util;
 
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
-import com.piec10.issuetracker.util.UserProjectRoles;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
@@ -33,7 +32,7 @@ public class GlobalRolesAndOwnerCheckMethods {
 
         UserProjectRoles userProjectRoles = new UserProjectRoles();
 
-        userProjectRoles.setGuest(project.getGuestUsers().contains(user));
+        userProjectRoles.setFollower(project.getFollowers().contains(user));
         userProjectRoles.setCollaborator(project.getCollaborators().contains(user));
         userProjectRoles.setOwner(project.getCreatedBy().equals(user));
 

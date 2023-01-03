@@ -35,7 +35,7 @@ public class ProjectController {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
 
         if (isAdmin(request)) projects = projectService.findAll();
-        else projects = currentUser.getGuestProjects();
+        else projects = currentUser.getFollowedProjects();
 
         model.addAttribute("projects", projects);
         model.addAttribute("user", currentUser);
@@ -66,7 +66,7 @@ public class ProjectController {
             formProject.setId(projectId);
             formProject.setTitle(project.getTitle());
             formProject.setDescription(project.getDescription());
-            formProject.setGuestUsers(project.getGuestUsers());
+            formProject.setFollowers(project.getFollowers());
             formProject.setCollaborators(project.getCollaborators());
 
             model.addAttribute("formProject", formProject);

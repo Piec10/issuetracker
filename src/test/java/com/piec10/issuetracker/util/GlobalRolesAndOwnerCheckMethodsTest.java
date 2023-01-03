@@ -19,9 +19,9 @@ public class GlobalRolesAndOwnerCheckMethodsTest {
 
     private static User collaborator;
 
-    private static User guest;
+    private static User follower;
 
-    private static User notGuest;
+    private static User notFollower;
 
     @BeforeAll
     public static void beforeAll() {
@@ -29,12 +29,12 @@ public class GlobalRolesAndOwnerCheckMethodsTest {
         project = new Project();
         owner = new User();
         collaborator = new User();
-        guest = new User();
-        notGuest = new User();
+        follower = new User();
+        notFollower = new User();
 
         project.setCreatedBy(owner);
         project.setCollaborators(Arrays.asList(owner, collaborator));
-        project.setGuestUsers(Arrays.asList(owner, collaborator, guest));
+        project.setFollowers(Arrays.asList(owner, collaborator, follower));
     }
 
     @Test
@@ -44,7 +44,7 @@ public class GlobalRolesAndOwnerCheckMethodsTest {
 
         assertTrue(userProjectRoles.isOwner(), "Should be project owner");
         assertTrue(userProjectRoles.isCollaborator(), "Should be project collaborator");
-        assertTrue(userProjectRoles.isGuest(), "Should be project guest user");
+        assertTrue(userProjectRoles.isFollower(), "Should be project follower");
     }
 
     @Test
@@ -54,26 +54,26 @@ public class GlobalRolesAndOwnerCheckMethodsTest {
 
         assertFalse(userProjectRoles.isOwner(), "Should not be project owner");
         assertTrue(userProjectRoles.isCollaborator(), "Should be project collaborator");
-        assertTrue(userProjectRoles.isGuest(), "Should be project guest user");
+        assertTrue(userProjectRoles.isFollower(), "Should be project follower");
     }
 
     @Test
-    public void getUserProjectRolesForGuest() {
+    public void getUserProjectRolesForFollower() {
 
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project,guest);
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, follower);
 
         assertFalse(userProjectRoles.isOwner(), "Should not be project owner");
         assertFalse(userProjectRoles.isCollaborator(), "Should not be project collaborator");
-        assertTrue(userProjectRoles.isGuest(), "Should be project guest user");
+        assertTrue(userProjectRoles.isFollower(), "Should be project follower");
     }
 
     @Test
-    public void getUserProjectRolesForNotGuest() {
+    public void getUserProjectRolesForNotFollower() {
 
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project,notGuest);
+        UserProjectRoles userProjectRoles = getUserProjectRoles(project, notFollower);
 
         assertFalse(userProjectRoles.isOwner(), "Should be project owner");
         assertFalse(userProjectRoles.isCollaborator(), "Should not be project collaborator");
-        assertFalse(userProjectRoles.isGuest(), "Should not be project guest user");
+        assertFalse(userProjectRoles.isFollower(), "Should not be project follower");
     }
 }

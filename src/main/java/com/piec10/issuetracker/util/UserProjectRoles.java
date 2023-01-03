@@ -2,7 +2,7 @@ package com.piec10.issuetracker.util;
 
 public class UserProjectRoles {
 
-    private boolean isGuest;
+    private boolean isFollower;
 
     private boolean isCollaborator;
 
@@ -11,18 +11,18 @@ public class UserProjectRoles {
     public UserProjectRoles() {
     }
 
-    public UserProjectRoles(boolean isGuest, boolean isCollaborator, boolean isOwner) {
-        this.isGuest = isGuest;
+    public UserProjectRoles(boolean isFollower, boolean isCollaborator, boolean isOwner) {
+        this.isFollower = isFollower;
         this.isCollaborator = isCollaborator;
         this.isOwner = isOwner;
     }
 
-    public boolean isGuest() {
-        return isGuest;
+    public boolean isFollower() {
+        return isFollower;
     }
 
-    public void setGuest(boolean guest) {
-        isGuest = guest;
+    public void setFollower(boolean follower) {
+        isFollower = follower;
     }
 
     public boolean isCollaborator() {

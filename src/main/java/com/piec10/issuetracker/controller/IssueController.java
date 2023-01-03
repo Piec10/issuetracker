@@ -48,7 +48,7 @@ public class IssueController {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
-        if(isAdmin(request) || userProjectRoles.isGuest()){
+        if(isAdmin(request) || userProjectRoles.isFollower()){
 
             List<Issue> issues;
 
@@ -100,7 +100,7 @@ public class IssueController {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
-        if(isAdmin(request) || userProjectRoles.isGuest()){
+        if(isAdmin(request) || userProjectRoles.isFollower()){
 
             model.addAttribute("issue", issue);
 

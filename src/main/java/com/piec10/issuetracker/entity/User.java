@@ -37,7 +37,7 @@ public class User {
     @JoinTable(name = "projects_guests",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "project_id"))
-    private Collection<Project> guestProjects;
+    private Collection<Project> followedProjects;
 
     @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "projects_collaborators",
@@ -113,12 +113,12 @@ public class User {
         this.issues = issues;
     }
 
-    public Collection<Project> getGuestProjects() {
-        return guestProjects;
+    public Collection<Project> getFollowedProjects() {
+        return followedProjects;
     }
 
-    public void setGuestProjects(Collection<Project> guestProjects) {
-        this.guestProjects = guestProjects;
+    public void setFollowedProjects(Collection<Project> followedProjects) {
+        this.followedProjects = followedProjects;
     }
 
     public Collection<Project> getCollaborationProjects() {

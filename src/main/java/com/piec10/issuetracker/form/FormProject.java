@@ -4,7 +4,6 @@ import com.piec10.issuetracker.entity.User;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -18,7 +17,7 @@ public class FormProject {
 
     private String description;
 
-    private Collection<User> guestUsers = new HashSet<>();
+    private Collection<User> followers = new HashSet<>();
 
     private Collection<User> collaborators = new HashSet<>();
 
@@ -49,12 +48,12 @@ public class FormProject {
         this.description = description;
     }
 
-    public Collection<User> getGuestUsers() {
-        return guestUsers;
+    public Collection<User> getFollowers() {
+        return followers;
     }
 
-    public void setGuestUsers(Collection<User> guestUsers) {
-        this.guestUsers = guestUsers;
+    public void setFollowers(Collection<User> followers) {
+        this.followers = followers;
     }
 
     public Collection<User> getCollaborators() {

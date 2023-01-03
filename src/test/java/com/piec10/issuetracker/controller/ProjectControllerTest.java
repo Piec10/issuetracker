@@ -70,7 +70,7 @@ public class ProjectControllerTest {
     public void getProjectsIsUser() throws Exception {
 
         user = mock(User.class);
-        user.setGuestProjects(new ArrayList<>());
+        user.setFollowedProjects(new ArrayList<>());
 
         when(userService.findByUsername("user")).thenReturn(user);
 
@@ -81,7 +81,7 @@ public class ProjectControllerTest {
                 .andExpect(model().attributeExists("user"))
                 .andExpect(model().attributeExists("projects"));
 
-        verify(user).getGuestProjects();
+        verify(user).getFollowedProjects();
     }
 
     @Test
@@ -133,7 +133,7 @@ public class ProjectControllerTest {
 
         verify(project).getTitle();
         verify(project).getDescription();
-        verify(project).getGuestUsers();
+        verify(project).getFollowers();
         verify(project).getCollaborators();
     }
 
@@ -155,7 +155,7 @@ public class ProjectControllerTest {
 
         verify(project).getTitle();
         verify(project).getDescription();
-        verify(project).getGuestUsers();
+        verify(project).getFollowers();
         verify(project).getCollaborators();
     }
 
