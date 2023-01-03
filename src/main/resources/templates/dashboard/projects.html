@@ -141,7 +141,7 @@
                                                     </div>
                                                     <div class="col-12 col-md-3">
                                                         Your Role:
-                                                        <span th:text="${(tempProject.createdBy != null ? (tempProject.createdBy.username == #authentication.getPrincipal().getUsername()) : false) ? 'Owner' : (#lists.contains(tempProject.collaborators, user) ? 'Collaborator' : 'Guest')}"/>
+                                                        <span th:text="${(tempProject.createdBy != null ? (tempProject.createdBy.username == #authentication.getPrincipal().getUsername()) : false) ? 'Owner' : (#lists.contains(tempProject.collaborators, user) ? 'Collaborator' : 'Follower')}"/>
                                                     </div>
                                                 </div>
                                                 <a th:href="@{/dashboard/issues(projectId=${tempProject.id})}"
@@ -174,7 +174,7 @@
                                                             th:text="${#lists.size(tempProject.issues)}"/></div>
                                                     <div class="col-2">
                                     <span th:text="${(tempProject.createdBy != null ? (tempProject.createdBy.username == #authentication.getPrincipal().getUsername()) : false)
-                                    ? 'Owner' : (#lists.contains(tempProject.collaborators, user) ? 'Collaborator' : 'Guest')}"/>
+                                    ? 'Owner' : (#lists.contains(tempProject.collaborators, user) ? 'Collaborator' : 'Follower')}"/>
                                                     </div>
                                                     <a th:href="@{/dashboard/issues(projectId=${tempProject.id})}"
                                                        class="stretched-link"></a>
