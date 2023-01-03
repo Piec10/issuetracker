@@ -25,9 +25,16 @@
         <div class="row py-2 py-md-0"></div>
         <div class="row justify-content-center py-5">
             <div class="col-11 py-5 border rounded-3 bg-light">
-                <p class="fs-3">
-                    Create New Project
-                </p>
+
+                    <div th:switch="${formProject.id == 0}">
+                        <div th:case="true">
+                            <p class="fs-3">Create New Project</p>
+                        </div>
+                        <div th:case="false">
+                            <p class="fs-3">Edit Project</p>
+                        </div>
+                    </div>
+
                 <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/dashboard/processProject}"
                       th:object="${formProject}" method="POST">
                     <div class="row">
