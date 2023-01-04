@@ -113,17 +113,48 @@
                                     </div>
                                 </div>
                                 <div class="col-12 border rounded-3 p-3">
-                                    Collaborators:
-                                    <div th:each="collaborator, stat : *{collaboratorsNames}">
-                                        <span th:text="${collaborator}"/>
-                                        <input type="hidden" th:field="*{collaboratorsNames[__${stat.index}__]}"/>
+                                    <span class="fw-bold">Collaborators:</span>
+                                    <div class="row row-cols-auto g-3 mt-0">
+                                        <div th:each="collaborator, stat : *{collaboratorsNames}">
+                                            <div class="col border rounded-3 p-2">
+                                                <input type="hidden"
+                                                       th:field="*{collaboratorsNames[__${stat.index}__]}"/>
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        <span class="fw-bold align-middle" th:text="${collaborator}"/>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <button class="btn btn-sm btn-outline-secondary" name="action"
+                                                                value="removeCollaborator"
+                                                                th:formaction="@{/dashboard/processProject(username=${collaborator})}">
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-12 border rounded-3 p-3">
-                                    Followers:
-                                    <div th:each="follower, stat : *{followersNames}">
-                                        <span th:text="${follower}"/>
-                                        <input type="hidden" th:field="*{followersNames[__${stat.index}__]}"/>
+                                    <span class="fw-bold">Followers:</span>
+                                    <div class="row row-cols-auto g-3 mt-0">
+                                        <div th:each="follower, stat : *{followersNames}">
+                                            <div class="col border rounded-3 p-2">
+                                                <input type="hidden" th:field="*{followersNames[__${stat.index}__]}"/>
+                                                <div class="row">
+                                                    <div class="col text-center">
+                                                        <span class="fw-bold align-middle" th:text="${follower}"/>
+                                                    </div>
+                                                    <div class="col text-end">
+                                                        <button class="btn btn-sm btn-outline-secondary" name="action"
+                                                                value="removeFollower"
+                                                                th:formaction="@{/dashboard/processProject(username=${follower})}">
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
