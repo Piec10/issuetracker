@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.logging.Logger;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
@@ -26,6 +27,8 @@ public class ProjectController {
 
     @Autowired
     ProjectService projectService;
+
+    private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/projects")
     public String getProjects(Model model, HttpServletRequest request) {
@@ -75,6 +78,18 @@ public class ProjectController {
         } else return "redirect:/access-denied";
     }
 
+    @PostMapping(value="/processProject", params="action=provisional")
+    public String processProject(@Valid @ModelAttribute("formProject") FormProject formProject,
+                                 BindingResult theBindingResult) {
+
+        // form validation
+        if (theBindingResult.hasErrors()) return "dashboard/project-form";
+
+
+
+        return "dashboard/project-form";
+    }
+
     @PostMapping("/processProject")
     public String processProject(@Valid @ModelAttribute("formProject") FormProject formProject,
                                  BindingResult theBindingResult, HttpServletRequest request) {
@@ -96,6 +111,9 @@ public class ProjectController {
         if (project == null) return "redirect:/dashboard/projects";
 
         if (isAdminOrOwner(project.getCreatedBy(), request)) {
+
+            logger.info(formProject.getCollaborators().toString());
+            logger.info(formProject.getFollowers().toString());
 
             projectService.updateProject(formProject);
             return "redirect:/dashboard/projects";

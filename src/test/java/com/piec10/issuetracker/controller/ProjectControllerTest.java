@@ -173,6 +173,33 @@ public class ProjectControllerTest {
     }
 
     @Test
+    public void processProjectFormHasErrorsProvisionalChanges() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "provisional")
+                        .param("title", "")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("formProject"));
+    }
+
+    @Test
+    public void processProjectFormProvisionalChanges() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "provisional")
+                        .param("title", "changed title")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().attributeExists("formProject"));
+    }
+
+    @Test
     public void processProjectFormHasErrors() throws Exception {
 
         mockMvc.perform(post("/dashboard/processProject")
@@ -329,4 +356,6 @@ public class ProjectControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
+
+
 }
