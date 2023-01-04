@@ -24,20 +24,20 @@
     <div class="container-fluid py-5 min-vh-100">
         <div class="row py-2 py-md-0"></div>
         <div class="row justify-content-center py-5">
-            <div class="col-11 py-5 border rounded-3 bg-light">
+            <div class="col-11 p-3 border rounded-3 bg-light">
 
-                    <div th:switch="${formProject.id == 0}">
-                        <div th:case="true">
-                            <p class="fs-3">Create New Project</p>
-                        </div>
-                        <div th:case="false">
-                            <p class="fs-3">Edit Project</p>
-                        </div>
+                <div th:switch="${formProject.id == 0}">
+                    <div th:case="true">
+                        <p class="fs-3">Create New Project</p>
                     </div>
+                    <div th:case="false">
+                        <p class="fs-3">Edit Project</p>
+                    </div>
+                </div>
 
-                <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/dashboard/processProject}"
+                <form class="p-3 border rounded-3 bg-light" th:action="@{/dashboard/processProject}"
                       th:object="${formProject}" method="POST" action="#">
-                    <div class="row">
+                    <div class="row g-3">
                         <div class="col-12 col-md-6">
 
                             <!-- Title -->
@@ -47,7 +47,7 @@
                                 <input type="hidden" th:field="*{id}"/>
 
                                 <input th:field="*{title}" type="text" name="title" id="floatingInput"
-                                       placeholder="Title" class="form-control">
+                                       placeholder="Title" class="form-control mt-2">
                                 <label for="floatingInput" class="text-secondary">Title</label>
                             </div>
                             <div th:if="${#fields.hasErrors('title')}" class="text-danger">
@@ -64,18 +64,36 @@
                                           placeholder="Description" style="height: 100px"></textarea>
                                 <label for="floatingTextarea" class="text-secondary">Description</label>
                             </div>
-
                         </div>
                         <div class="col12 col-md-6">
-                            <div class="row">Collaborators:</div>
-                            <div th:each="collaborator, stat : *{collaboratorsNames}">
-                                <span th:text="${collaborator}"/>
-                                <input type="hidden" th:field="*{collaboratorsNames[__${stat.index}__]}"/>
-                            </div>
-                            <div class="row">Followers:</div>
-                            <div th:each="follower, stat : *{followersNames}">
-                                <span th:text="${follower}"/>
-                                <input type="hidden" th:field="*{followersNames[__${stat.index}__]}"/>
+                            <div class="row g-3 p-2">
+                                <div class="col-12 border rounded-3 p-3">
+                                    <span class="mb-3">
+                                    Find users and add them to this project (Project owner is added automatically):
+                                    </span>
+                                    <div class="row mt-3">
+                                        <div class="col">
+                                            <input type="text" class="form-control" placeholder="Username">
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="submit" class="btn btn-outline-secondary" name="action" value="search">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 border rounded-3 p-3">
+                                    Collaborators:
+                                    <div th:each="collaborator, stat : *{collaboratorsNames}">
+                                        <span th:text="${collaborator}"/>
+                                        <input type="hidden" th:field="*{collaboratorsNames[__${stat.index}__]}"/>
+                                    </div>
+                                </div>
+                                <div class="col-12 border rounded-3 p-3">
+                                    Followers:
+                                    <div th:each="follower, stat : *{followersNames}">
+                                        <span th:text="${follower}"/>
+                                        <input type="hidden" th:field="*{followersNames[__${stat.index}__]}"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -84,7 +102,7 @@
                     <div class="row">
                         <div class="col">
 
-                            <button class="w-100 btn btn-outline-secondary" type="submit" name="action" value="provisional">Provisional Change</button>
+                            <!--                            <button class="w-100 btn btn-outline-secondary" type="submit" name="action" value="provisional">Provisional Change</button>-->
 
                             <button class="w-100 btn btn-outline-secondary" type="submit">Save</button>
 
