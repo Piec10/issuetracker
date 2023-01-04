@@ -21,6 +21,10 @@ public class FormProject {
 
     private Collection<String> collaboratorsNames = new ArrayList<>();
 
+    private String searchedUsername;
+
+    private Collection<String> searchResults = new ArrayList<>();
+
     public FormProject() {
     }
 
@@ -72,5 +76,21 @@ public class FormProject {
     public void setCollaboratorsNamesFromUsers(Collection<User> collaborators) {
 
         for(User user : collaborators) collaboratorsNames.add(user.getUsername());
+    }
+
+    public String getSearchedUsername() {
+        return searchedUsername;
+    }
+
+    public void setSearchedUsername(String searchedUsername) {
+        this.searchedUsername = searchedUsername;
+    }
+
+    public Collection<String> getSearchResults() {
+        return searchResults;
+    }
+
+    public void setSearchResults(Collection<String> searchResults) {
+        this.searchResults = searchResults;
     }
 }

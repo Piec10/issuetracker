@@ -50,9 +50,12 @@ public class ProjectController {
     public String showNewProjectForm(Model model, HttpServletRequest request) {
 
         if (isNotGuest(request)) {
+
             model.addAttribute("formProject", new FormProject());
+
             return "dashboard/project-form";
-        } else return "redirect:/access-denied";
+        }
+        else return "redirect:/access-denied";
     }
 
     @GetMapping("/editProject")
@@ -86,6 +89,25 @@ public class ProjectController {
         if (theBindingResult.hasErrors()) return "dashboard/project-form";
 
 
+
+        return "dashboard/project-form";
+    }
+
+    @PostMapping(value="/processProject", params="action=search")
+    public String processProjectSearch(@Valid @ModelAttribute("formProject") FormProject formProject,
+                                        BindingResult theBindingResult) {
+
+        // form validation
+        if (theBindingResult.hasErrors()) {
+
+            return "dashboard/project-form";
+        }
+
+        formProject.getSearchResults().clear();
+
+        User searchedUser = userService.findByUsername(formProject.getSearchedUsername());
+
+        if(searchedUser != null) formProject.getSearchResults().add(searchedUser.getUsername());
 
         return "dashboard/project-form";
     }

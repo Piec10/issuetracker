@@ -200,6 +200,36 @@ public class ProjectControllerTest {
     }
 
     @Test
+    public void processProjectFormHasErrorsSearchUsers() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "search")
+                        .param("title", "")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("formProject"));
+    }
+
+    @Test
+    public void processProjectFormSearchUsers() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "search")
+                        .param("title", "changed title")
+                        .param("searchedUsername", "username")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().attributeExists("formProject"));
+
+        verify(userService).findByUsername("username");
+    }
+
+    @Test
     public void processProjectFormHasErrors() throws Exception {
 
         mockMvc.perform(post("/dashboard/processProject")
