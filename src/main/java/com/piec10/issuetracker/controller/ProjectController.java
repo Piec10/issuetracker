@@ -132,6 +132,23 @@ public class ProjectController {
         return "dashboard/project-form";
     }
 
+    @PostMapping(value="/processProject", params="action=addFollower")
+    public String processProjectAddFollower(@Valid @ModelAttribute("formProject") FormProject formProject,
+                                                @RequestParam("username") String collaboratorUsername,
+                                                BindingResult theBindingResult) {
+
+        // form validation
+        if (theBindingResult.hasErrors()) {
+
+            return "dashboard/project-form";
+        }
+
+        if(!formProject.getFollowersNames().contains(collaboratorUsername))
+            formProject.getFollowersNames().add(collaboratorUsername);
+
+        return "dashboard/project-form";
+    }
+
     @PostMapping("/processProject")
     public String processProject(@Valid @ModelAttribute("formProject") FormProject formProject,
                                  BindingResult theBindingResult, HttpServletRequest request) {

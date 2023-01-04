@@ -94,9 +94,15 @@
                                                         <div class="col text-end">
                                                             <span class="small">Add as:</span>
                                                             <div class="btn-group btn-group-sm">
-                                                                <button class="btn btn-outline-secondary" name="action" value="addCollaborator" th:formaction="@{/dashboard/processProject(username=${result})}">Collaborator
+                                                                <button class="btn btn-outline-secondary" name="action"
+                                                                        value="addCollaborator"
+                                                                        th:formaction="@{/dashboard/processProject(username=${result})}">
+                                                                    Collaborator
                                                                 </button>
-                                                                <button class="btn btn-outline-secondary">Follower
+                                                                <button class="btn btn-outline-secondary" name="action"
+                                                                        value="addFollower"
+                                                                        th:formaction="@{/dashboard/processProject(username=${result})}">
+                                                                    Follower
                                                                 </button>
                                                             </div>
                                                         </div>

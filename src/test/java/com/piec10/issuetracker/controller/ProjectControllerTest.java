@@ -259,6 +259,34 @@ public class ProjectControllerTest {
     }
 
     @Test
+    public void processProjectFormHasErrorsAddFollower() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "addFollower")
+                        .param("title", "")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("formProject"));
+    }
+
+    @Test
+    public void processProjectFormAddFollower() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "addFollower")
+                        .param("title", "title")
+                        .param("username", "user")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().attributeExists("formProject"));
+    }
+
+    @Test
     public void processProjectFormHasErrors() throws Exception {
 
         mockMvc.perform(post("/dashboard/processProject")
