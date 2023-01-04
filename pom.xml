@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.piec10</groupId>
 	<artifactId>issuetracker</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>Issue Tracker</name>
 	<description>Issue Tracker Demo Application</description>
 	<properties>
