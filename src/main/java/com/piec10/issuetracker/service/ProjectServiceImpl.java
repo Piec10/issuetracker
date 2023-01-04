@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 
 @Service
@@ -16,6 +17,9 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Autowired
     private ProjectRepository projectRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public Project findById(int projectId) {
@@ -42,14 +46,18 @@ public class ProjectServiceImpl implements ProjectService{
         newProject.setCreatedBy(createdBy);
         newProject.setCreatedAt(new Date());
 
-        formProject.getCollaborators().add(createdBy);
-        formProject.getFollowers().add(createdBy);
+        Collection<User> followers = getFromNames(formProject.getFollowersNames());
+        Collection<User> collaborators = getFromNames(formProject.getCollaboratorsNames());
 
-        newProject.setFollowers(formProject.getFollowers());
-        newProject.setCollaborators(formProject.getCollaborators());
+        followers.add(createdBy);
+        collaborators.add(createdBy);
+
+        newProject.setFollowers(followers);
+        newProject.setCollaborators(collaborators);
 
         projectRepository.save(newProject);
     }
+
 
     @Override
     public void updateProject(FormProject formProject) {
@@ -61,16 +69,19 @@ public class ProjectServiceImpl implements ProjectService{
             project.setTitle(formProject.getTitle());
             project.setDescription(formProject.getDescription());
 
+            Collection<User> followers = getFromNames(formProject.getFollowersNames());
+            Collection<User> collaborators = getFromNames(formProject.getCollaboratorsNames());
+
             //add owner if he deleted himself
-            if(!formProject.getCollaborators().contains(project.getCreatedBy())){
-                formProject.getCollaborators().add(project.getCreatedBy());
+            if(!followers.contains(project.getCreatedBy())){
+                followers.add(project.getCreatedBy());
             }
-            if(!formProject.getFollowers().contains(project.getCreatedBy())){
-                formProject.getFollowers().add(project.getCreatedBy());
+            if(!collaborators.contains(project.getCreatedBy())){
+                collaborators.add(project.getCreatedBy());
             }
 
-            project.setFollowers(formProject.getFollowers());
-            project.setCollaborators(formProject.getCollaborators());
+            project.setFollowers(followers);
+            project.setCollaborators(collaborators);
 
             projectRepository.save(project);
         }
@@ -79,5 +90,19 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public void deleteById(int projectId) {
         projectRepository.deleteById(projectId);
+    }
+
+    private Collection<User> getFromNames(Collection<String> usersNames) {
+
+        Collection<User> users = new HashSet<>();
+
+        for(String userName : usersNames) {
+
+            User user = userService.findByUsername(userName);
+
+            if(user != null) users.add(user);
+        }
+
+        return users;
     }
 }

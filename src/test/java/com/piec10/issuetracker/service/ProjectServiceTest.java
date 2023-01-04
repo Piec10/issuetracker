@@ -12,6 +12,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -25,6 +26,9 @@ public class ProjectServiceTest {
 
     @Mock
     ProjectRepository projectRepository;
+
+    @Mock
+    UserService userService;
 
     @InjectMocks
     ProjectService projectService = new ProjectServiceImpl();
@@ -100,8 +104,10 @@ public class ProjectServiceTest {
         User user2 = new User();
         user2.setUsername("user2");
 
-        formProject.getFollowers().add(user2);
-        formProject.getCollaborators().add(user2);
+        formProject.getFollowersNames().add(user2.getUsername());
+        formProject.getCollaboratorsNames().add(user2.getUsername());
+
+        when(userService.findByUsername("user2")).thenReturn(user2);
 
         projectService.createProject(formProject,createdBy);
 
@@ -116,8 +122,8 @@ public class ProjectServiceTest {
     @Test
     public void createNewValidProjectServiceWithCreatorAddedAsFollowerAndCollaborator() {
 
-        formProject.getFollowers().add(createdBy);
-        formProject.getCollaborators().add(createdBy);
+        formProject.getFollowersNames().add(createdBy.getUsername());
+        formProject.getCollaboratorsNames().add(createdBy.getUsername());
 
         projectService.createProject(formProject,createdBy);
 
@@ -166,8 +172,10 @@ public class ProjectServiceTest {
         User user2 = new User();
         user2.setUsername("user2");
 
-        formProject.getFollowers().add(user2);
-        formProject.getCollaborators().add(user2);
+        formProject.getFollowersNames().add(user2.getUsername());
+        formProject.getCollaboratorsNames().add(user2.getUsername());
+
+        when(userService.findByUsername("user2")).thenReturn(user2);
 
         when(projectRepository.findById(id)).thenReturn(Optional.of(project));
 

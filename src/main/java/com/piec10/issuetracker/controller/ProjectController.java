@@ -69,8 +69,8 @@ public class ProjectController {
             formProject.setId(projectId);
             formProject.setTitle(project.getTitle());
             formProject.setDescription(project.getDescription());
-            formProject.setFollowers(project.getFollowers());
-            formProject.setCollaborators(project.getCollaborators());
+            formProject.setFollowersNamesFromUsers(project.getFollowers());
+            formProject.setCollaboratorsNamesFromUsers(project.getCollaborators());
 
             model.addAttribute("formProject", formProject);
 
@@ -112,8 +112,8 @@ public class ProjectController {
 
         if (isAdminOrOwner(project.getCreatedBy(), request)) {
 
-            logger.info(formProject.getCollaborators().toString());
-            logger.info(formProject.getFollowers().toString());
+            logger.info(formProject.getCollaboratorsNames().toString());
+            logger.info(formProject.getFollowersNames().toString());
 
             projectService.updateProject(formProject);
             return "redirect:/dashboard/projects";

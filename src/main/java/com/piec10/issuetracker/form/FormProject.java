@@ -6,7 +6,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 
 public class FormProject {
 
@@ -18,9 +17,9 @@ public class FormProject {
 
     private String description;
 
-    private Collection<User> followers = new ArrayList<>();
+    private Collection<String> followersNames = new ArrayList<>();
 
-    private Collection<User> collaborators = new ArrayList<>();
+    private Collection<String> collaboratorsNames = new ArrayList<>();
 
     public FormProject() {
     }
@@ -49,19 +48,29 @@ public class FormProject {
         this.description = description;
     }
 
-    public Collection<User> getFollowers() {
-        return followers;
+    public Collection<String> getFollowersNames() {
+        return followersNames;
     }
 
-    public void setFollowers(Collection<User> followers) {
-        this.followers = followers;
+    public void setFollowersNames(Collection<String> followersNames) {
+        this.followersNames = followersNames;
     }
 
-    public Collection<User> getCollaborators() {
-        return collaborators;
+    public void setFollowersNamesFromUsers(Collection<User> followers){
+
+        for(User user : followers) followersNames.add(user.getUsername());
     }
 
-    public void setCollaborators(Collection<User> collaborators) {
-        this.collaborators = collaborators;
+    public Collection<String> getCollaboratorsNames() {
+        return collaboratorsNames;
+    }
+
+    public void setCollaboratorsNames(Collection<String> collaboratorsNames) {
+        this.collaboratorsNames = collaboratorsNames;
+    }
+
+    public void setCollaboratorsNamesFromUsers(Collection<User> collaborators) {
+
+        for(User user : collaborators) collaboratorsNames.add(user.getUsername());
     }
 }
