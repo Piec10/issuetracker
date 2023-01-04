@@ -81,27 +81,9 @@ public class ProjectController {
         } else return "redirect:/access-denied";
     }
 
-    @PostMapping(value="/processProject", params="action=provisional")
-    public String processProject(@Valid @ModelAttribute("formProject") FormProject formProject,
-                                 BindingResult theBindingResult) {
-
-        // form validation
-        if (theBindingResult.hasErrors()) return "dashboard/project-form";
-
-
-
-        return "dashboard/project-form";
-    }
-
     @PostMapping(value="/processProject", params="action=search")
-    public String processProjectSearch(@Valid @ModelAttribute("formProject") FormProject formProject,
+    public String processProjectSearch(@ModelAttribute("formProject") FormProject formProject,
                                         BindingResult theBindingResult) {
-
-        // form validation
-        if (theBindingResult.hasErrors()) {
-
-            return "dashboard/project-form";
-        }
 
         formProject.getSearchResults().clear();
 
@@ -113,15 +95,9 @@ public class ProjectController {
     }
 
     @PostMapping(value="/processProject", params="action=addCollaborator")
-    public String processProjectAddCollaborator(@Valid @ModelAttribute("formProject") FormProject formProject,
+    public String processProjectAddCollaborator(@ModelAttribute("formProject") FormProject formProject,
                                        @RequestParam("username") String collaboratorUsername,
                                        BindingResult theBindingResult) {
-
-        // form validation
-        if (theBindingResult.hasErrors()) {
-
-            return "dashboard/project-form";
-        }
 
         if(!formProject.getCollaboratorsNames().contains(collaboratorUsername))
             formProject.getCollaboratorsNames().add(collaboratorUsername);
@@ -133,18 +109,37 @@ public class ProjectController {
     }
 
     @PostMapping(value="/processProject", params="action=addFollower")
-    public String processProjectAddFollower(@Valid @ModelAttribute("formProject") FormProject formProject,
-                                                @RequestParam("username") String collaboratorUsername,
+    public String processProjectAddFollower(@ModelAttribute("formProject") FormProject formProject,
+                                                @RequestParam("username") String followerUsername,
                                                 BindingResult theBindingResult) {
 
-        // form validation
-        if (theBindingResult.hasErrors()) {
+        if(!formProject.getFollowersNames().contains(followerUsername))
+            formProject.getFollowersNames().add(followerUsername);
 
-            return "dashboard/project-form";
-        }
+        return "dashboard/project-form";
+    }
 
-        if(!formProject.getFollowersNames().contains(collaboratorUsername))
-            formProject.getFollowersNames().add(collaboratorUsername);
+    @PostMapping(value="/processProject", params="action=removeFollower")
+    public String processProjectRemoveFollower(@ModelAttribute("formProject") FormProject formProject,
+                                            @RequestParam("username") String followerUsername,
+                                            BindingResult theBindingResult) {
+
+        if(formProject.getCollaboratorsNames().contains(followerUsername))
+            formProject.getCollaboratorsNames().remove(followerUsername);
+
+        if(formProject.getFollowersNames().contains(followerUsername))
+            formProject.getFollowersNames().remove(followerUsername);
+
+        return "dashboard/project-form";
+    }
+
+    @PostMapping(value="/processProject", params="action=removeCollaborator")
+    public String processProjectRemoveCollaborator(@ModelAttribute("formProject") FormProject formProject,
+                                               @RequestParam("username") String collaboratorUsername,
+                                               BindingResult theBindingResult) {
+
+        if(formProject.getCollaboratorsNames().contains(collaboratorUsername))
+            formProject.getCollaboratorsNames().remove(collaboratorUsername);
 
         return "dashboard/project-form";
     }

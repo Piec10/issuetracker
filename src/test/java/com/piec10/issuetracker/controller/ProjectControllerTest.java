@@ -174,47 +174,6 @@ public class ProjectControllerTest {
     }
 
     @Test
-    public void processProjectFormHasErrorsProvisionalChanges() throws Exception {
-
-        mockMvc.perform(post("/dashboard/processProject")
-                        .param("action", "provisional")
-                        .param("title", "")
-                        .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/project-form"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasErrors("formProject"));
-    }
-
-    @Test
-    public void processProjectFormProvisionalChanges() throws Exception {
-
-        mockMvc.perform(post("/dashboard/processProject")
-                        .param("action", "provisional")
-                        .param("title", "changed title")
-                        .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/project-form"))
-                .andExpect(model().attributeExists("formProject"));
-    }
-
-    @Test
-    public void processProjectFormHasErrorsSearchUsers() throws Exception {
-
-        mockMvc.perform(post("/dashboard/processProject")
-                        .param("action", "search")
-                        .param("title", "")
-                        .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/project-form"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasErrors("formProject"));
-    }
-
-    @Test
     public void processProjectFormSearchUsers() throws Exception {
 
         mockMvc.perform(post("/dashboard/processProject")
@@ -228,20 +187,6 @@ public class ProjectControllerTest {
                 .andExpect(model().attributeExists("formProject"));
 
         verify(userService).findByUsername("username");
-    }
-
-    @Test
-    public void processProjectFormHasErrorsAddCollaborator() throws Exception {
-
-        mockMvc.perform(post("/dashboard/processProject")
-                        .param("action", "addCollaborator")
-                        .param("title", "")
-                        .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/project-form"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasErrors("formProject"));
     }
 
     @Test
@@ -259,24 +204,38 @@ public class ProjectControllerTest {
     }
 
     @Test
-    public void processProjectFormHasErrorsAddFollower() throws Exception {
-
-        mockMvc.perform(post("/dashboard/processProject")
-                        .param("action", "addFollower")
-                        .param("title", "")
-                        .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/project-form"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasErrors("formProject"));
-    }
-
-    @Test
     public void processProjectFormAddFollower() throws Exception {
 
         mockMvc.perform(post("/dashboard/processProject")
                         .param("action", "addFollower")
+                        .param("title", "title")
+                        .param("username", "user")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().attributeExists("formProject"));
+    }
+
+    @Test
+    public void processProjectFormRemoveFollower() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "removeFollower")
+                        .param("title", "title")
+                        .param("username", "user")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().attributeExists("formProject"));
+    }
+
+    @Test
+    public void processProjectFormRemoveCollaborator() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "removeCollaborator")
                         .param("title", "title")
                         .param("username", "user")
                         .with(csrf())
