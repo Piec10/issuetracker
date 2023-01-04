@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -227,6 +228,34 @@ public class ProjectControllerTest {
                 .andExpect(model().attributeExists("formProject"));
 
         verify(userService).findByUsername("username");
+    }
+
+    @Test
+    public void processProjectFormHasErrorsAddCollaborator() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "addCollaborator")
+                        .param("title", "")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasErrors("formProject"));
+    }
+
+    @Test
+    public void processProjectFormAddCollaborator() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processProject")
+                        .param("action", "addCollaborator")
+                        .param("title", "title")
+                        .param("username", "user")
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().attributeExists("formProject"));
     }
 
     @Test

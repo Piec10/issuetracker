@@ -73,15 +73,36 @@
                                     </span>
                                     <div class="row mt-3">
                                         <div class="col">
-                                            <input type="text" th:field="*{searchedUsername}" class="form-control" placeholder="Username">
+                                            <input type="text" th:field="*{searchedUsername}" class="form-control"
+                                                   placeholder="Username">
                                         </div>
                                         <div class="col-auto">
-                                            <button type="submit" class="btn btn-outline-secondary" name="action" value="search">Search</button>
+                                            <button type="submit" class="btn btn-outline-secondary" name="action"
+                                                    value="search">Search
+                                            </button>
                                         </div>
                                     </div>
                                     <div th:unless="*{#lists.isEmpty(searchResults)}">
-                                        <div th:each="result : *{searchResults}">
-                                            <span th:text="${result}"/>
+                                        <div class="row mt-2 g-2">
+                                            <div th:each="result, stat : *{searchResults}">
+                                                <input type="hidden" th:field="*{searchResults[__${stat.index}__]}"/>
+                                                <div class="col border rounded-3 p-2">
+                                                    <div class="row">
+                                                        <div class="col text-center">
+                                                            <span class="fw-bold align-middle" th:text="${result}"/>
+                                                        </div>
+                                                        <div class="col text-end">
+                                                            <span class="small">Add as:</span>
+                                                            <div class="btn-group btn-group-sm">
+                                                                <button class="btn btn-outline-secondary" name="action" value="addCollaborator" th:formaction="@{/dashboard/processProject(username=${result})}">Collaborator
+                                                                </button>
+                                                                <button class="btn btn-outline-secondary">Follower
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
