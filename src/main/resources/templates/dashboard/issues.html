@@ -98,6 +98,30 @@
                         <div class="container-fluid">
                             <div class="col">
 
+                                <div class="d-md-none">
+                                    <div class="row mb-3">
+                                        <div class="col fw-bold">
+                                            Sort by priority:
+                                            <div class="btn-group ms-3">
+                                                <a th:href="@{/dashboard/issues(projectId=${project.id},show=${show})}"
+                                                   th:classappend="${(sort != 'priorityAsc' and sort != 'priorityDesc') ? 'active' : ''}"
+                                                   class="btn btn-outline-secondary">
+                                                    -
+                                                </a>
+                                                <a th:href="@{/dashboard/issues(projectId=${project.id},show=${show},sort=priorityAsc)}"
+                                                   th:classappend="${sort} == 'priorityAsc' ? 'active' : ''"
+                                                   class="btn btn-outline-secondary">
+                                                    ↓
+                                                </a>
+                                                <a th:href="@{/dashboard/issues(projectId=${project.id},show=${show},sort=priorityDesc)}"
+                                                   th:classappend="${sort} == 'priorityDesc' ? 'active' : ''"
+                                                   class="btn btn-outline-secondary">
+                                                    ↑
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="d-none d-md-block">
                                     <div class="row p-2 mx-0 fw-bold">
@@ -159,13 +183,15 @@
                                     <div class="accordion" th:id="'accordion'+${tempIssue.id}">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" th:id="'heading'+${tempIssue.id}">
-                                                <div class="btn-group w-100 border-bottom rounded-0" role="group" aria-label="Basic example">
+                                                <div class="btn-group w-100 border-bottom rounded-0" role="group"
+                                                     aria-label="Basic example">
                                                     <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"
                                                        class="btn btn-light text-start " style="">
                                                         <span th:text="${tempIssue.summary}"/>
                                                     </a>
 
-                                                    <button class="accordion-button bg-light collapsed" style="width: 60px;"
+                                                    <button class="accordion-button bg-light collapsed"
+                                                            style="width: 60px;"
                                                             type="button" data-bs-toggle="collapse"
                                                             th:data-bs-target="'#collapse'+${tempIssue.id}"
                                                             aria-expanded="false"
