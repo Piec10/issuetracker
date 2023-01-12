@@ -248,6 +248,8 @@ public class IssueController {
             if(sort.equals("noop")) return issueService.findOpen(projectId);
 
             if(sort.equals("priorityAsc")) return issueService.findOpenPriorityAsc(projectId);
+
+            if(sort.equals("priorityDesc")) return issueService.findOpenPriorityDesc(projectId);
         }
 
         if(show.equals("closed")) {

@@ -118,4 +118,9 @@ public class IssueServiceImpl implements IssueService{
     public List<Issue> findOpenPriorityAsc(int projectId) {
         return issueRepository.findOpenSortedByPriorityAsc(projectId);
     }
+
+    @Override
+    public List<Issue> findOpenPriorityDesc(int projectId) {
+        return issueRepository.findOpenSortedByPriorityDesc(projectId);
+    }
 }

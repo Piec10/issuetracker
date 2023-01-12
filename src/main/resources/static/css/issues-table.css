@@ -12,3 +12,7 @@
             color: #dee2e6;
             opacity: 1;
         }
+a, a:hover {
+    text-decoration: none;
+    color: black;
+}

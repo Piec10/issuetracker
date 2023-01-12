@@ -33,4 +33,8 @@ public interface IssueRepository extends JpaRepository<Issue, Integer> {
     @Query(value = "SELECT * FROM issues WHERE closed_at IS NULL AND project_id = :projectId ORDER BY priority ASC, id DESC",
             nativeQuery = true)
     List<Issue> findOpenSortedByPriorityAsc(@Param("projectId") int projectId);
+
+    @Query(value = "SELECT * FROM issues WHERE closed_at IS NULL AND project_id = :projectId ORDER BY priority DESC, id DESC",
+            nativeQuery = true)
+    List<Issue> findOpenSortedByPriorityDesc(@Param("projectId") int projectId);
 }

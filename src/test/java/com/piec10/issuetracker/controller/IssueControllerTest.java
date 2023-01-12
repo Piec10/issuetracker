@@ -261,6 +261,32 @@ public class IssueControllerTest {
     }
 
     @Test
+    public void getIssuesSortByPriorityDescDefaultShowParam() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("follower")).thenReturn(follower);
+
+        mockMvc.perform(get("/dashboard/issues")
+                        .param("projectId","1")
+                        .param("sort","priorityDesc")
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issues"))
+                .andExpect(model().attributeExists("issues"))
+                .andExpect(model().attributeExists("show"))
+                .andExpect(model().attributeExists("sort"))
+                .andExpect(model().attributeExists("openIssuesCount"))
+                .andExpect(model().attributeExists("closedIssuesCount"))
+                .andExpect(model().attributeExists("project"))
+                .andExpect(model().attributeExists("projectRoles"));
+
+        verify(issueService).getOpenIssuesCount(1);
+        verify(issueService).getClosedIssuesCount(1);
+        verify(issueService).findOpenPriorityDesc(1);
+    }
+
+    @Test
     public void getIssueDetailsInvalidIssueId() throws Exception {
 
         when(issueService.findById(0)).thenReturn(null);

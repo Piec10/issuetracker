@@ -106,13 +106,18 @@
                                                 <div class="col-1">Id</div>
                                                 <div class="col">Summary</div>
                                                 <div class="col-1">
-                                                    <span><a th:href="@{/dashboard/issues(projectId=${project.id},show=${show},sort=priorityAsc)}">
-                                                    Priority
-                                                    </a>
-                                                    <div th:if="${sort == 'priorityAsc'}">
-                                                        ↓
+                                                    <div th:switch="${sort == 'noop' or sort == 'priorityDesc'}">
+                                                        <div th:case="true">
+                                                            <a th:href="@{/dashboard/issues(projectId=${project.id},show=${show},sort=priorityAsc)}">
+                                                                <span th:text="${sort == 'priorityDesc' ? 'Priority ↑' : 'Priority'}"/>
+                                                            </a>
+                                                        </div>
+                                                        <div th:case="false">
+                                                            <a th:href="@{/dashboard/issues(projectId=${project.id},show=${show},sort=priorityDesc)}">
+                                                                Priority ↓
+                                                            </a>
+                                                        </div>
                                                     </div>
-                                                        </span>
                                                 </div>
                                                 <div class="col-2">Reporter</div>
                                                 <div th:if="${show == 'closed' or show == 'all'}" class="col-2">Closed
