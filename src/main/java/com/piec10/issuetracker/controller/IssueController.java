@@ -59,17 +59,19 @@ public class IssueController {
             if (show == null) {
                 show = "open";
             }
+            if (sort == null) {
+                sort = "noop";
+            }
 
             switch (show) {
                 case "open":
-                    if(sort == "priorityDesc"){
-                        issues = issueService.findOpenPriorityDesc(projectId);
-                        break;
+                    if(sort.equals("priorityAsc")){
+                        issues = issueService.findOpenPriorityAsc(projectId);
                     }
-
-                    issues = issueService.findOpen(projectId);
+                    else {
+                        issues = issueService.findOpen(projectId);
+                    }
                     break;
-
                 case "closed":
                     issues = issueService.findClosed(projectId);
                     break;
@@ -79,11 +81,12 @@ public class IssueController {
                 default:
                     show = "open";
 
-                    if(sort == "priorityDesc"){
-                        issues = issueService.findOpenPriorityDesc(projectId);
-                        break;
+                    if(sort.equals("priorityDesc")){
+                        issues = issueService.findOpenPriorityAsc(projectId);
                     }
-                    issues = issueService.findOpen(projectId);
+                    else {
+                        issues = issueService.findOpen(projectId);
+                    }
             }
 
             model.addAttribute("issues", issues);

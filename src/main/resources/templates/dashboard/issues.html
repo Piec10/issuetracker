@@ -106,7 +106,9 @@
                                                 <div class="col-1">Id</div>
                                                 <div class="col">Summary</div>
                                                 <div class="col-1">
+                                                    <a th:href="@{/dashboard/issues(projectId=${project.id},show=${show},sort=priorityAsc)}">
                                                     Priority
+                                                    </a>
                                                 </div>
                                                 <div class="col-2">Reporter</div>
                                                 <div th:if="${show == 'closed' or show == 'all'}" class="col-2">Closed

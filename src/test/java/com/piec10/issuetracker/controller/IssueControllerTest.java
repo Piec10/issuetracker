@@ -243,7 +243,7 @@ public class IssueControllerTest {
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
-                        .param("sort","priorityDesc")
+                        .param("sort","priorityAsc")
                         .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issues"))
@@ -256,7 +256,7 @@ public class IssueControllerTest {
 
         verify(issueService).getOpenIssuesCount(1);
         verify(issueService).getClosedIssuesCount(1);
-        verify(issueService).findOpenPriorityDesc(1);
+        verify(issueService).findOpenPriorityAsc(1);
     }
 
     @Test
