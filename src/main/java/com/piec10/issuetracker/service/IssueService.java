@@ -34,4 +34,12 @@ public interface IssueService {
     List<Issue> findOpenPriorityAsc(int projectId);
 
     List<Issue> findOpenPriorityDesc(int projectId);
+
+    List<Issue> findClosedPriorityAsc(int projectId);
+
+    List<Issue> findClosedPriorityDesc(int projectId);
+
+    List<Issue> findAllPriorityAsc(int projectId);
+
+    List<Issue> findAllPriorityDesc(int projectId);
 }

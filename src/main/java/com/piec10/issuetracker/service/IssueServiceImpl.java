@@ -123,4 +123,24 @@ public class IssueServiceImpl implements IssueService{
     public List<Issue> findOpenPriorityDesc(int projectId) {
         return issueRepository.findOpenSortedByPriorityDesc(projectId);
     }
+
+    @Override
+    public List<Issue> findClosedPriorityAsc(int projectId) {
+        return issueRepository.findClosedSortedByPriorityAsc(projectId);
+    }
+
+    @Override
+    public List<Issue> findClosedPriorityDesc(int projectId) {
+        return issueRepository.findClosedSortedByPriorityDesc(projectId);
+    }
+
+    @Override
+    public List<Issue> findAllPriorityAsc(int projectId) {
+        return issueRepository.findAllSortedByPriorityAsc(projectId);
+    }
+
+    @Override
+    public List<Issue> findAllPriorityDesc(int projectId) {
+        return issueRepository.findAllSortedByPriorityDesc(projectId);
+    }
 }

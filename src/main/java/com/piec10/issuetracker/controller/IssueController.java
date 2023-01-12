@@ -255,11 +255,19 @@ public class IssueController {
         if(show.equals("closed")) {
 
             if(sort.equals("noop")) return issueService.findClosed(projectId);
+
+            if(sort.equals("priorityAsc")) return issueService.findClosedPriorityAsc(projectId);
+
+            if(sort.equals("priorityDesc")) return issueService.findClosedPriorityDesc(projectId);
         }
 
         if(show.equals("all")) {
 
             if(sort.equals("noop")) return issueService.findAll(projectId);
+
+            if(sort.equals("priorityAsc")) return issueService.findAllPriorityAsc(projectId);
+
+            if(sort.equals("priorityDesc")) return issueService.findAllPriorityDesc(projectId);
         }
 
         return null;

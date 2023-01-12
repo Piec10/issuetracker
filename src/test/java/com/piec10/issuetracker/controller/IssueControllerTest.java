@@ -287,6 +287,114 @@ public class IssueControllerTest {
     }
 
     @Test
+    public void getIssuesSortByPriorityAscClosedShowParam() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("follower")).thenReturn(follower);
+
+        mockMvc.perform(get("/dashboard/issues")
+                        .param("projectId","1")
+                        .param("show", "closed")
+                        .param("sort","priorityAsc")
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issues"))
+                .andExpect(model().attributeExists("issues"))
+                .andExpect(model().attributeExists("show"))
+                .andExpect(model().attributeExists("sort"))
+                .andExpect(model().attributeExists("openIssuesCount"))
+                .andExpect(model().attributeExists("closedIssuesCount"))
+                .andExpect(model().attributeExists("project"))
+                .andExpect(model().attributeExists("projectRoles"));
+
+        verify(issueService).getOpenIssuesCount(1);
+        verify(issueService).getClosedIssuesCount(1);
+        verify(issueService).findClosedPriorityAsc(1);
+    }
+
+    @Test
+    public void getIssuesSortByPriorityDescClosedShowParam() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("follower")).thenReturn(follower);
+
+        mockMvc.perform(get("/dashboard/issues")
+                        .param("projectId","1")
+                        .param("show", "closed")
+                        .param("sort","priorityDesc")
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issues"))
+                .andExpect(model().attributeExists("issues"))
+                .andExpect(model().attributeExists("show"))
+                .andExpect(model().attributeExists("sort"))
+                .andExpect(model().attributeExists("openIssuesCount"))
+                .andExpect(model().attributeExists("closedIssuesCount"))
+                .andExpect(model().attributeExists("project"))
+                .andExpect(model().attributeExists("projectRoles"));
+
+        verify(issueService).getOpenIssuesCount(1);
+        verify(issueService).getClosedIssuesCount(1);
+        verify(issueService).findClosedPriorityDesc(1);
+    }
+
+    @Test
+    public void getIssuesSortByPriorityAscAllShowParam() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("follower")).thenReturn(follower);
+
+        mockMvc.perform(get("/dashboard/issues")
+                        .param("projectId","1")
+                        .param("show", "all")
+                        .param("sort","priorityAsc")
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issues"))
+                .andExpect(model().attributeExists("issues"))
+                .andExpect(model().attributeExists("show"))
+                .andExpect(model().attributeExists("sort"))
+                .andExpect(model().attributeExists("openIssuesCount"))
+                .andExpect(model().attributeExists("closedIssuesCount"))
+                .andExpect(model().attributeExists("project"))
+                .andExpect(model().attributeExists("projectRoles"));
+
+        verify(issueService).getOpenIssuesCount(1);
+        verify(issueService).getClosedIssuesCount(1);
+        verify(issueService).findAllPriorityAsc(1);
+    }
+
+    @Test
+    public void getIssuesSortByPriorityDescAllShowParam() throws Exception {
+
+        when(projectService.findById(1)).thenReturn(project);
+
+        when(userService.findByUsername("follower")).thenReturn(follower);
+
+        mockMvc.perform(get("/dashboard/issues")
+                        .param("projectId","1")
+                        .param("show", "all")
+                        .param("sort","priorityDesc")
+                        .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issues"))
+                .andExpect(model().attributeExists("issues"))
+                .andExpect(model().attributeExists("show"))
+                .andExpect(model().attributeExists("sort"))
+                .andExpect(model().attributeExists("openIssuesCount"))
+                .andExpect(model().attributeExists("closedIssuesCount"))
+                .andExpect(model().attributeExists("project"))
+                .andExpect(model().attributeExists("projectRoles"));
+
+        verify(issueService).getOpenIssuesCount(1);
+        verify(issueService).getClosedIssuesCount(1);
+        verify(issueService).findAllPriorityDesc(1);
+    }
+
+    @Test
     public void getIssueDetailsInvalidIssueId() throws Exception {
 
         when(issueService.findById(0)).thenReturn(null);
