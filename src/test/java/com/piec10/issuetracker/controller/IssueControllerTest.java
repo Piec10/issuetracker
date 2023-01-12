@@ -235,7 +235,7 @@ public class IssueControllerTest {
     }
 
     @Test
-    public void getIssuesSortByPriorityDescDefaultShowParam() throws Exception {
+    public void getIssuesSortByPriorityAscDefaultShowParam() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
 
@@ -249,6 +249,7 @@ public class IssueControllerTest {
                 .andExpect(view().name("dashboard/issues"))
                 .andExpect(model().attributeExists("issues"))
                 .andExpect(model().attributeExists("show"))
+                .andExpect(model().attributeExists("sort"))
                 .andExpect(model().attributeExists("openIssuesCount"))
                 .andExpect(model().attributeExists("closedIssuesCount"))
                 .andExpect(model().attributeExists("project"))

@@ -63,34 +63,11 @@ public class IssueController {
                 sort = "noop";
             }
 
-            switch (show) {
-                case "open":
-                    if(sort.equals("priorityAsc")){
-                        issues = issueService.findOpenPriorityAsc(projectId);
-                    }
-                    else {
-                        issues = issueService.findOpen(projectId);
-                    }
-                    break;
-                case "closed":
-                    issues = issueService.findClosed(projectId);
-                    break;
-                case "all":
-                    issues = issueService.findAll(projectId);
-                    break;
-                default:
-                    show = "open";
-
-                    if(sort.equals("priorityDesc")){
-                        issues = issueService.findOpenPriorityAsc(projectId);
-                    }
-                    else {
-                        issues = issueService.findOpen(projectId);
-                    }
-            }
+            issues = getIssues(projectId, show, sort);
 
             model.addAttribute("issues", issues);
             model.addAttribute("show", show);
+            model.addAttribute("sort", sort);
             model.addAttribute("openIssuesCount", openIssuesCount);
             model.addAttribute("closedIssuesCount", closedIssuesCount);
             model.addAttribute("project", project);
@@ -262,5 +239,27 @@ public class IssueController {
             return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
 
         } else return "redirect:/access-denied";
+    }
+
+    private List<Issue> getIssues(int projectId, String show, String sort) {
+
+        if(show.equals("open")) {
+
+            if(sort.equals("noop")) return issueService.findOpen(projectId);
+
+            if(sort.equals("priorityAsc")) return issueService.findOpenPriorityAsc(projectId);
+        }
+
+        if(show.equals("closed")) {
+
+            if(sort.equals("noop")) return issueService.findClosed(projectId);
+        }
+
+        if(show.equals("all")) {
+
+            if(sort.equals("noop")) return issueService.findAll(projectId);
+        }
+
+        return null;
     }
 }
