@@ -11,12 +11,12 @@ CREATE TABLE `issues` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO issues(id, closed_at, closed_by, project_id) VALUES
-(1, NULL, NULL, 1),
-(2, NULL, NULL, 1),
-(3, NULL, NULL, 1),
-(4, NOW(), 'user', 1),
-(5, NOW(), 'user', 1);
+INSERT INTO issues(id, priority, closed_at, closed_by, project_id) VALUES
+(1, 2, NULL, NULL, 1),
+(2, 1, NULL, NULL, 1),
+(3, 0, NULL, NULL, 1),
+(4, 1, NOW(), 'user', 1),
+(5, 0, NOW(), 'user', 1);
 
 CREATE TABLE `projects` (
   `id` int(11),

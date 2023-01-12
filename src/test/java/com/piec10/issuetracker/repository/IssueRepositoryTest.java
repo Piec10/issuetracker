@@ -73,4 +73,16 @@ public class IssueRepositoryTest {
 
         assertEquals(5, issues.size());
     }
+
+    @Test
+    public void findOpenIssuesSortedByPriorityDesc() {
+
+        List<Issue> issues = issueRepository.findOpenSortedByPriority(1,"DESC");
+
+        assertEquals(0, issues.get(0).getPriority());
+        assertEquals(3, issues.get(0).getId());
+
+        assertEquals(2, issues.get(2).getPriority());
+        assertEquals(1, issues.get(2).getId());
+    }
 }

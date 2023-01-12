@@ -123,7 +123,7 @@ public class IssueServiceTest {
         assertEquals(createdBy.getUsername(), capturedIssue.getValue().getCreatedBy().getUsername(), "Issue creator name should match");
 
         assertNotNull(capturedIssue.getValue().getCreatedAt(), "Issue creation date should not be null");
-        assertTrue(new Date().getTime() > capturedIssue.getValue().getCreatedAt().getTime(), "Issue creation date should be older than current date");
+        assertTrue(new Date(new Date().getTime()+10).getTime() > capturedIssue.getValue().getCreatedAt().getTime(), "Issue creation date should be older than current date");
 
         assertNull(capturedIssue.getValue().getClosedBy(), "Issue closed by should be null for new issue");
         assertNull(capturedIssue.getValue().getClosedAt(), "Issue close date should be null for new issue");

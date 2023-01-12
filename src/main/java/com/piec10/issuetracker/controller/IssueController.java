@@ -38,6 +38,7 @@ public class IssueController {
     @GetMapping("/issues")
     public String getIssues(@RequestParam(value = "projectId") int projectId,
                             @RequestParam(value = "show", required = false) String show,
+                            @RequestParam(value = "sort", required = false) String sort,
                             Model model,
                             HttpServletRequest request) {
 
@@ -61,8 +62,14 @@ public class IssueController {
 
             switch (show) {
                 case "open":
+                    if(sort == "priorityDesc"){
+                        issues = issueService.findOpenPriorityDesc(projectId);
+                        break;
+                    }
+
                     issues = issueService.findOpen(projectId);
                     break;
+
                 case "closed":
                     issues = issueService.findClosed(projectId);
                     break;
@@ -71,6 +78,11 @@ public class IssueController {
                     break;
                 default:
                     show = "open";
+
+                    if(sort == "priorityDesc"){
+                        issues = issueService.findOpenPriorityDesc(projectId);
+                        break;
+                    }
                     issues = issueService.findOpen(projectId);
             }
 

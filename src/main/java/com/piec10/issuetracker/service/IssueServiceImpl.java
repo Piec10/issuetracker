@@ -113,4 +113,9 @@ public class IssueServiceImpl implements IssueService{
     public List<Issue> findClosed(int projectId) {
         return issueRepository.findClosed(projectId);
     }
+
+    @Override
+    public List<Issue> findOpenPriorityDesc(int projectId) {
+        return issueRepository.findOpenSortedByPriority(projectId, "DESC");
+    }
 }
