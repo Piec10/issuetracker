@@ -32,9 +32,9 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col">
-                            <div th:unless="${#authorization.expression('hasAuthority(''ROLE_GUEST'')')}">
+<!--                            <div th:unless="${#authorization.expression('hasAuthority(''ROLE_GUEST'')')}">-->
                                 <a class="btn btn-outline-secondary" th:href="@{/dashboard/newProject}">New Project</a>
-                            </div>
+<!--                            </div>-->
                             <hr>
                             <div class="text-secondary py-2">Your Projects</div>
                         </div>
