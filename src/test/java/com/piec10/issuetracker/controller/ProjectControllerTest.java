@@ -256,8 +256,9 @@ public class ProjectControllerTest {
                         .param("title", "title")
                         .with(csrf())
                         .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER", "GUEST")))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/access-denied"));
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/project-form"))
+                .andExpect(model().attributeExists("guestUserError"));
     }
 
     @Test

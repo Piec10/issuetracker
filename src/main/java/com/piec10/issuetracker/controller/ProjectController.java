@@ -141,12 +141,16 @@ public class ProjectController {
 
     @PostMapping("/processProject")
     public String processProject(@Valid @ModelAttribute("formProject") FormProject formProject,
-                                 BindingResult theBindingResult, HttpServletRequest request) {
+                                 BindingResult theBindingResult, HttpServletRequest request, Model model) {
 
         // form validation
         if (theBindingResult.hasErrors()) return "dashboard/project-form";
 
-        if (isGuest(request)) return "redirect:/access-denied";
+        if (isGuest(request)) {
+
+            model.addAttribute("guestUserError", "Sorry, Guest user cannot create new projects.");
+            return "dashboard/project-form";
+        }
 
         if (formProject.getId() == 0) {
 
