@@ -699,6 +699,21 @@ public class IssueControllerTest {
     }
 
     @Test
+    public void processIssueFormNewIssueIsGuestUser() throws Exception {
+
+        mockMvc.perform(post("/dashboard/processIssue")
+                        .param("id","0")
+                        .param("summary", "summary")
+                        .param("projectId", "1")
+                        .flashAttr("formIssue", formIssue)
+                        .with(csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.user("collaborator").roles("USER", "GUEST")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/issue-form"))
+                .andExpect(model().attributeExists("guestUserError"));
+    }
+
+    @Test
     public void processIssueFormUpdateIssueInvalidIssueId() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);

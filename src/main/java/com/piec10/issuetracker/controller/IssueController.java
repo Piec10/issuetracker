@@ -152,10 +152,16 @@ public class IssueController {
 
     @PostMapping("/processIssue")
     public String processIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
-                                  BindingResult theBindingResult, HttpServletRequest request) {
+                                  BindingResult theBindingResult, HttpServletRequest request, Model model) {
 
         // form validation
         if (theBindingResult.hasErrors()) return "dashboard/issue-form";
+
+        if (isGuest(request)) {
+
+            model.addAttribute("guestUserError", "Sorry, Guest user cannot create new issues.");
+            return "dashboard/issue-form";
+        }
 
 
         Project project = projectService.findById(formIssue.getProjectId());

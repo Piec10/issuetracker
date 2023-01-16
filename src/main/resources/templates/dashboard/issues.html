@@ -32,11 +32,9 @@
                 <div class="container-fluid">
                     <div class="row gy-2">
                         <div class="col-12 col-md-2 order-2 order-md-1 text-center text-md-start">
-                            <div th:unless="${#authorization.expression('hasAuthority(''ROLE_GUEST'')')}">
-                                <div th:if="${projectRoles.isCollaborator}">
-                                    <a class="btn btn-outline-secondary"
-                                       th:href="@{/dashboard/newIssue(projectId=${project.id})}">New Issue</a>
-                                </div>
+                            <div th:if="${projectRoles.isCollaborator}">
+                                <a class="btn btn-outline-secondary"
+                                   th:href="@{/dashboard/newIssue(projectId=${project.id})}">New Issue</a>
                             </div>
                         </div>
                         <div class="col-12 col-md-auto flex-grow-1 order-1 order-md-2 text-center">
