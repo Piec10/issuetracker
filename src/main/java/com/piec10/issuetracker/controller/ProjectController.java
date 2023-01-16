@@ -49,13 +49,8 @@ public class ProjectController {
     @GetMapping("/newProject")
     public String showNewProjectForm(Model model, HttpServletRequest request) {
 
-        if (isNotGuest(request)) {
-
-            model.addAttribute("formProject", new FormProject());
-
-            return "dashboard/project-form";
-        }
-        else return "redirect:/access-denied";
+        model.addAttribute("formProject", new FormProject());
+        return "dashboard/project-form";
     }
 
     @GetMapping("/editProject")
@@ -81,64 +76,64 @@ public class ProjectController {
         } else return "redirect:/access-denied";
     }
 
-    @PostMapping(value="/processProject", params="action=search")
+    @PostMapping(value = "/processProject", params = "action=search")
     public String processProjectSearch(@ModelAttribute("formProject") FormProject formProject,
-                                        BindingResult theBindingResult) {
+                                       BindingResult theBindingResult) {
 
         formProject.getSearchResults().clear();
 
         User searchedUser = userService.findByUsername(formProject.getSearchedUsername());
 
-        if(searchedUser != null) formProject.getSearchResults().add(searchedUser.getUsername());
+        if (searchedUser != null) formProject.getSearchResults().add(searchedUser.getUsername());
 
         return "dashboard/project-form";
     }
 
-    @PostMapping(value="/processProject", params="action=addCollaborator")
+    @PostMapping(value = "/processProject", params = "action=addCollaborator")
     public String processProjectAddCollaborator(@ModelAttribute("formProject") FormProject formProject,
-                                       @RequestParam("username") String collaboratorUsername,
-                                       BindingResult theBindingResult) {
+                                                @RequestParam("username") String collaboratorUsername,
+                                                BindingResult theBindingResult) {
 
-        if(!formProject.getCollaboratorsNames().contains(collaboratorUsername))
+        if (!formProject.getCollaboratorsNames().contains(collaboratorUsername))
             formProject.getCollaboratorsNames().add(collaboratorUsername);
 
-        if(!formProject.getFollowersNames().contains(collaboratorUsername))
+        if (!formProject.getFollowersNames().contains(collaboratorUsername))
             formProject.getFollowersNames().add(collaboratorUsername);
 
         return "dashboard/project-form";
     }
 
-    @PostMapping(value="/processProject", params="action=addFollower")
+    @PostMapping(value = "/processProject", params = "action=addFollower")
     public String processProjectAddFollower(@ModelAttribute("formProject") FormProject formProject,
-                                                @RequestParam("username") String followerUsername,
-                                                BindingResult theBindingResult) {
+                                            @RequestParam("username") String followerUsername,
+                                            BindingResult theBindingResult) {
 
-        if(!formProject.getFollowersNames().contains(followerUsername))
+        if (!formProject.getFollowersNames().contains(followerUsername))
             formProject.getFollowersNames().add(followerUsername);
 
         return "dashboard/project-form";
     }
 
-    @PostMapping(value="/processProject", params="action=removeFollower")
+    @PostMapping(value = "/processProject", params = "action=removeFollower")
     public String processProjectRemoveFollower(@ModelAttribute("formProject") FormProject formProject,
-                                            @RequestParam("username") String followerUsername,
-                                            BindingResult theBindingResult) {
+                                               @RequestParam("username") String followerUsername,
+                                               BindingResult theBindingResult) {
 
-        if(formProject.getCollaboratorsNames().contains(followerUsername))
+        if (formProject.getCollaboratorsNames().contains(followerUsername))
             formProject.getCollaboratorsNames().remove(followerUsername);
 
-        if(formProject.getFollowersNames().contains(followerUsername))
+        if (formProject.getFollowersNames().contains(followerUsername))
             formProject.getFollowersNames().remove(followerUsername);
 
         return "dashboard/project-form";
     }
 
-    @PostMapping(value="/processProject", params="action=removeCollaborator")
+    @PostMapping(value = "/processProject", params = "action=removeCollaborator")
     public String processProjectRemoveCollaborator(@ModelAttribute("formProject") FormProject formProject,
-                                               @RequestParam("username") String collaboratorUsername,
-                                               BindingResult theBindingResult) {
+                                                   @RequestParam("username") String collaboratorUsername,
+                                                   BindingResult theBindingResult) {
 
-        if(formProject.getCollaboratorsNames().contains(collaboratorUsername))
+        if (formProject.getCollaboratorsNames().contains(collaboratorUsername))
             formProject.getCollaboratorsNames().remove(collaboratorUsername);
 
         return "dashboard/project-form";
@@ -171,8 +166,7 @@ public class ProjectController {
 
             projectService.updateProject(formProject);
             return "redirect:/dashboard/projects";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 
     @DeleteMapping("/deleteProject/{projectId}")
@@ -186,7 +180,6 @@ public class ProjectController {
 
             projectService.deleteById(projectId);
             return "redirect:/dashboard/projects";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 }

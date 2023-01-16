@@ -96,15 +96,6 @@ public class ProjectControllerTest {
     }
 
     @Test
-    public void getNewProjectFormIsGuest() throws Exception {
-
-        mockMvc.perform(get("/dashboard/newProject")
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER", "GUEST")))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/access-denied"));
-    }
-
-    @Test
     public void getEditProjectFormInvalidProjectId() throws Exception {
 
         when(projectService.findById(0)).thenReturn(null);
