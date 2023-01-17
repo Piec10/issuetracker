@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -27,17 +28,23 @@ public class Issue {
     @Column(name = "closed_at")
     private Date closedAt;
 
-    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "created_by")
     private User createdBy;
 
-    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "closed_by")
     private User closedBy;
 
-    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "project_id")
     private Project project;
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(name = "issues_issue_types",
+            joinColumns = @JoinColumn(name = "issue_id"),
+            inverseJoinColumns = @JoinColumn(name = "issue_type_id"))
+    private Collection<IssueType> issueTypes;
 
     public Issue() {
 
@@ -113,6 +120,14 @@ public class Issue {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public Collection<IssueType> getIssueTypes() {
+        return issueTypes;
+    }
+
+    public void setIssueTypes(Collection<IssueType> issueTypes) {
+        this.issueTypes = issueTypes;
     }
 
     @Override
