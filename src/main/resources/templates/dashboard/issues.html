@@ -33,6 +33,7 @@
                     <div class="row gy-2">
                         <div class="col-12 col-md-2 order-2 order-md-1 text-center text-md-start">
                             <div th:if="${projectRoles.isCollaborator}">
+                                <a class="btn btn-outline-secondary" th:href="@{/dashboard/projects}">Back</a>
                                 <a class="btn btn-outline-secondary"
                                    th:href="@{/dashboard/newIssue(projectId=${project.id})}">New Issue</a>
                             </div>
