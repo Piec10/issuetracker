@@ -47,8 +47,6 @@ public class DashboardController {
     @GetMapping("/changePassword")
     public String showChangePassword(@RequestParam("userId") String userId, HttpServletRequest request, Model model) {
 
-        if(isGuest(request)) return "redirect:/access-denied";
-
         User user = userService.findByUsername(userId);
 
         if(user == null) return "redirect:/dashboard/projects";

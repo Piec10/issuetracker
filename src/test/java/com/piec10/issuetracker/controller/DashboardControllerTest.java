@@ -29,13 +29,13 @@ public class DashboardControllerTest {
     @MockBean
     private UserService userService;
 
-    private static User user;
+    private static User owner;
 
     @BeforeAll
     public static void beforeAll() {
-        user = new User();
-        user.setUsername("owner");
-        user.setPassword(new BCryptPasswordEncoder().encode("oldPass"));
+        owner = new User();
+        owner.setUsername("owner");
+        owner.setPassword(new BCryptPasswordEncoder().encode("oldPass"));
     }
 
     @Test
@@ -70,11 +70,14 @@ public class DashboardControllerTest {
     @Test
     public void getPasswordChangePageIsGuestUser() throws Exception {
 
+        when(userService.findByUsername("owner")).thenReturn(owner);
+
         mockMvc.perform(get("/dashboard/changePassword")
-                        .param("userId","user")
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER", "GUEST")))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/access-denied"));
+                        .param("userId","owner")
+                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER", "GUEST")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("dashboard/password-change"))
+                .andExpect(model().attributeExists("formPassword"));
     }
 
     @Test
@@ -92,7 +95,7 @@ public class DashboardControllerTest {
     @Test
     public void getPasswordChangePageIsOwnerValidUserId() throws Exception {
 
-        when(userService.findByUsername("owner")).thenReturn(user);
+        when(userService.findByUsername("owner")).thenReturn(owner);
 
         mockMvc.perform(get("/dashboard/changePassword")
                         .param("userId","owner")
@@ -105,7 +108,7 @@ public class DashboardControllerTest {
     @Test
     public void getPasswordChangePageIsNotOwnerValidUserId() throws Exception {
 
-        when(userService.findByUsername("owner")).thenReturn(user);
+        when(userService.findByUsername("owner")).thenReturn(owner);
 
         mockMvc.perform(get("/dashboard/changePassword")
                         .param("userId","owner")
@@ -117,7 +120,7 @@ public class DashboardControllerTest {
     @Test
     public void getPasswordChangePageIsAdminValidUserId() throws Exception {
 
-        when(userService.findByUsername("owner")).thenReturn(user);
+        when(userService.findByUsername("owner")).thenReturn(owner);
 
         mockMvc.perform(get("/dashboard/changePassword")
                         .param("userId","owner")
@@ -176,7 +179,7 @@ public class DashboardControllerTest {
     @Test
     public void processPasswordChangeIsOwnerValidOldPassword() throws Exception {
 
-        when(userService.findByUsername("owner")).thenReturn(user);
+        when(userService.findByUsername("owner")).thenReturn(owner);
 
         mockMvc.perform(post("/dashboard/processPasswordChange")
                 .param("username", "owner")
@@ -194,7 +197,7 @@ public class DashboardControllerTest {
     @Test
     public void processPasswordChangeIsOwnerInvalidOldPassword() throws Exception {
 
-        when(userService.findByUsername("owner")).thenReturn(user);
+        when(userService.findByUsername("owner")).thenReturn(owner);
 
         mockMvc.perform(post("/dashboard/processPasswordChange")
                 .param("username", "owner")
@@ -211,7 +214,7 @@ public class DashboardControllerTest {
     @Test
     public void processPasswordChangeIsNotOwner() throws Exception {
 
-        when(userService.findByUsername("owner")).thenReturn(user);
+        when(userService.findByUsername("owner")).thenReturn(owner);
 
         mockMvc.perform(post("/dashboard/processPasswordChange")
                 .param("username", "owner")
@@ -227,7 +230,7 @@ public class DashboardControllerTest {
     @Test
     public void processPasswordChangeIsAdmin() throws Exception {
 
-        when(userService.findByUsername("owner")).thenReturn(user);
+        when(userService.findByUsername("owner")).thenReturn(owner);
 
         mockMvc.perform(post("/dashboard/processPasswordChange")
                 .param("username", "owner")
