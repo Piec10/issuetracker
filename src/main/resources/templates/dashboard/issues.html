@@ -32,17 +32,17 @@
 
                 <div class="container-fluid">
                     <div class="row gy-2">
-                        <div class="col-12 col-md-2 order-2 order-md-1 text-center text-md-start">
+                        <div class="col-12 col-lg-4 order-2 order-md-1 text-center text-md-start">
                             <div th:if="${projectRoles.isCollaborator}">
                                 <a class="btn btn-outline-secondary" th:href="@{/dashboard/projects}"><i class="bi bi-arrow-left"></i></a>
                                 <a class="btn btn-outline-secondary"
                                    th:href="@{/dashboard/newIssue(projectId=${project.id})}">New Issue</a>
                             </div>
                         </div>
-                        <div class="col-12 col-md-auto flex-grow-1 order-1 order-md-2 text-center">
+                        <div class="col-12 col-lg-auto flex-grow-1 order-1 order-md-2 text-center">
                             <span class="fw-bold fs-4" th:text="${project.title}"/>
                         </div>
-                        <div class="col-12 col-md-auto order-3 text-center text-md-end">
+                        <div class="col-12 col-lg-auto order-3 text-center text-md-end">
 
                             <div class="btn-group">
 
@@ -127,9 +127,9 @@
                                     <div class="row p-2 mx-0 fw-bold">
                                         <div class="col">
                                             <div class="row">
-                                                <div class="col-1">Id</div>
+                                                <div class="col-2 col-lg-1">Type</div>
                                                 <div class="col">Summary</div>
-                                                <div class="col-1">
+                                                <div class="col-2 col-xl-1">
                                                     <div th:switch="${sort == 'noop' or sort == 'priorityDesc'}">
                                                         <div th:case="true">
                                                             <a th:href="@{/dashboard/issues(projectId=${project.id},show=${show},sort=priorityAsc)}">
@@ -149,7 +149,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-1"></div>
+                                        <div class="col-2 col-lg-1"></div>
                                     </div>
                                 </div>
 
@@ -309,10 +309,14 @@
                                     <div class="row clickable-row p-2 mx-0">
                                         <div class="col">
                                             <div class="row position-relative">
-                                                <div class="col-1">#<span th:text="${tempIssue.id}"/></div>
+                                                <div class="col-2 col-lg-1">
+                                                    <div th:each="issueType : ${tempIssue.issueTypes}">
+                                                        <span th:text="${issueType.name}"/>
+                                                    </div>
+                                                </div>
                                                 <div class="col"><span th:text="${tempIssue.summary}"/></div>
 
-                                                <div class="col-1"><span
+                                                <div class="col-2 col-xl-1"><span
                                                         th:text="${priorities.getName(tempIssue.priority)}"/></div>
 
                                                 <div class="col-2">
@@ -347,7 +351,7 @@
                                                    class="stretched-link"></a>
                                             </div>
                                         </div>
-                                        <div class="col-1">
+                                        <div class="col-2 col-lg-1">
                                             <div th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
 
                                                 <div class="dropdown">
