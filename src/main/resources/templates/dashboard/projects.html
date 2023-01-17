@@ -30,13 +30,20 @@
             <div class="col-11 py-5 border rounded-3 bg-light">
 
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col">
+                    <div class="row row-cols-1 row-cols-md-3 gy-2">
+                        <div class="col order-2 order-md-1 text-center text-md-start">
                             <a class="btn btn-outline-secondary" th:href="@{/dashboard/newProject}">New Project</a>
-                            <hr>
-                            <div class="text-secondary py-2">Your Projects</div>
+
+<!--                            <div class="text-secondary py-2">Your Projects</div>-->
+                        </div>
+                        <div class="col text-center order-1 order-md-2">
+                            <span class="fw-bold fs-4">Your projects</span>
+                        </div>
+                        <div class="col order-3">
+
                         </div>
                     </div>
+                    <hr>
                 </div>
 
                 <div th:switch="${#lists.isEmpty(projects)}">
