@@ -82,19 +82,20 @@
                                 <div class="col-12 border rounded-3 p-2">
                                     <span class="mb-3">Issue type:</span>
                                     <div class="row row-cols-auto g-3 mt-0">
-                                        <input type="checkbox" name="issueTypes"
-                                               th:each="issueType : ${allIssueTypes}"
-                                               th:text="${issueType.name}"
+
+<!--                                        <input type="checkbox" class="btn-check" id="btn-check" autocomplete="off">-->
+<!--                                        <label class="btn btn-outline-secondary" for="btn-check">Single toggle</label>-->
+
+                                        <div th:each="issueType : ${allIssueTypes}">
+                                            <div class="col border rounded-3 p-2">
+                                            <label th:for="'issueTypes'+${issueType.id}">
+                                                <span  th:text="${issueType.name}"/>
+                                                <input type="checkbox" name="issueTypes"
                                                th:value="${issueType.id}"
                                                th:field="*{issueTypes}"/>
-
-
-<!--                                    <div th:each="issueType : ${allIssueTypes}">-->
-<!--                                        <div class="col">-->
-<!--                                            <input type="checkbox" class="btn-check" th:value="${issueType.id}" th:field="*{issueTypes}" th:id="'btn-check'+${issueType.id}" autocomplete="off">-->
-<!--                                            <label class="btn btn-outline-secondary" th:for="'btn-check'+${issueType.id}"><span th:text="${issueType.name}"/></label>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                            </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
