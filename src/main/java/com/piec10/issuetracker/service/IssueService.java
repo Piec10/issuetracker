@@ -44,5 +44,7 @@ public interface IssueService {
 
     List<Issue> findAllPriorityDesc(int projectId);
 
+    IssueType findIssueTypeById(int issueTypeId);
+
     List<IssueType> findAllIssueTypes();
 }

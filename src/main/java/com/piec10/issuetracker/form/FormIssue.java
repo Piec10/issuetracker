@@ -3,6 +3,7 @@ package com.piec10.issuetracker.form;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FormIssue {
@@ -19,7 +20,7 @@ public class FormIssue {
 
     private int projectId;
 
-    private List<Integer> issueTypes;
+    private List<Integer> issueTypes = new ArrayList<>();
 
     public FormIssue(){}
 

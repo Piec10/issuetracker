@@ -1,7 +1,9 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
+import com.piec10.issuetracker.dao.IssueTypeRepository;
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.IssueType;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
@@ -24,6 +26,9 @@ public class IssueServiceTest {
 
     @Mock
     private IssueRepository issueRepository;
+
+    @Mock
+    private IssueTypeRepository issueTypeRepository;
 
     @InjectMocks
     private IssueService issueService = new IssueServiceImpl();
@@ -132,6 +137,22 @@ public class IssueServiceTest {
     }
 
     @Test
+    public void createNewValidIssueWithTypes() {
+
+        List<Integer> issueTypes = List.of(1, 2);
+        formIssue.setIssueTypes(issueTypes);
+
+        when(issueTypeRepository.findById(1)).thenReturn(Optional.of(new IssueType()));
+        when(issueTypeRepository.findById(2)).thenReturn(Optional.of(new IssueType()));
+
+        issueService.createIssue(formIssue, createdBy, project);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(2,capturedIssue.getValue().getIssueTypes().size(), "Issue types count should be 2");
+    }
+
+    @Test
     public void updateValidIssueService() {
 
         int id = 2;
@@ -158,6 +179,35 @@ public class IssueServiceTest {
 
         assertEquals(closedBy.getUsername(), capturedIssue.getValue().getClosedBy().getUsername(), "Issue closedBy user should not change");
         assertEquals(closedAt, capturedIssue.getValue().getClosedAt(), "Issue close date should not change");
+    }
+
+    @Test
+    public void updateValidIssueWithTypes() {
+
+        IssueType issueType1 = new IssueType();
+        issueType1.setId(1);
+
+        IssueType issueType2 = new IssueType();
+        issueType2.setId(2);
+
+        List<Integer> issueTypes = List.of(1, 2);
+        formIssue.setIssueTypes(issueTypes);
+
+        int id = 2;
+        formIssue.setId(id);
+
+        issue.setId(id);
+
+        when(issueTypeRepository.findById(1)).thenReturn(Optional.of(issueType1));
+        when(issueTypeRepository.findById(2)).thenReturn(Optional.of(issueType2));
+
+        when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
+
+        issueService.updateIssue(formIssue);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(2,capturedIssue.getValue().getIssueTypes().size(), "Issue types count should be 2");
     }
 
     @Test

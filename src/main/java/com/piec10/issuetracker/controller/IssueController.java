@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
@@ -144,6 +145,12 @@ public class IssueController {
             formIssue.setPriority(issue.getPriority());
             formIssue.setProjectId(issue.getProject().getId());
 
+            List<Integer> issueTypes = issue.getIssueTypes().stream()
+                    .map(issueType -> issueType.getId()).collect(Collectors.toList());
+
+            formIssue.setIssueTypes(issueTypes);
+
+            model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
             model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";
@@ -156,7 +163,11 @@ public class IssueController {
                                   BindingResult theBindingResult, HttpServletRequest request, Model model) {
 
         // form validation
-        if (theBindingResult.hasErrors()) return "dashboard/issue-form";
+        if (theBindingResult.hasErrors()) {
+
+            model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
+            return "dashboard/issue-form";
+        }
 
         if (isGuest(request)) {
 

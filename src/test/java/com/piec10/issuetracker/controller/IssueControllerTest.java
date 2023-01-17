@@ -573,12 +573,16 @@ public class IssueControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-form"))
-                .andExpect(model().attributeExists("formIssue"));
+                .andExpect(model().attributeExists("formIssue"))
+                .andExpect(model().attributeExists("allIssueTypes"));
+
+        verify(issueService).findAllIssueTypes();
 
         verify(mockIssue).getSummary();
         verify(mockIssue).getDescription();
         verify(mockIssue).getPriority();
         verify(mockIssue).getProject();
+        verify(mockIssue).getIssueTypes();
     }
 
     @Test
@@ -611,13 +615,17 @@ public class IssueControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-form"))
-                .andExpect(model().attributeExists("formIssue"));
+                .andExpect(model().attributeExists("formIssue"))
+                .andExpect(model().attributeExists("allIssueTypes"));
+
+        verify(issueService).findAllIssueTypes();
 
         verify(mockIssue).getId();
         verify(mockIssue).getSummary();
         verify(mockIssue).getDescription();
         verify(mockIssue).getPriority();
         verify(mockIssue).getProject();
+        verify(mockIssue).getIssueTypes();
     }
 
     @Test
@@ -630,7 +638,10 @@ public class IssueControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-form"))
                 .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasErrors("formIssue"));
+                .andExpect(model().attributeHasErrors("formIssue"))
+                .andExpect(model().attributeExists("allIssueTypes"));
+
+        verify(issueService).findAllIssueTypes();
     }
 
     @Test

@@ -10,9 +10,11 @@ import com.piec10.issuetracker.form.FormIssue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class IssueServiceImpl implements IssueService{
@@ -50,6 +52,11 @@ public class IssueServiceImpl implements IssueService{
         newIssue.setCreatedAt(new Date());
         newIssue.setProject(project);
 
+        Collection<IssueType> issueTypes = formIssue.getIssueTypes().stream()
+                .map(issueTypeId -> findIssueTypeById(issueTypeId)).collect(Collectors.toList());
+
+        newIssue.setIssueTypes(issueTypes);
+
         issueRepository.save(newIssue);
     }
 
@@ -62,6 +69,11 @@ public class IssueServiceImpl implements IssueService{
             issue.setSummary(formIssue.getSummary());
             issue.setDescription(formIssue.getDescription());
             issue.setPriority(formIssue.getPriority());
+
+            Collection<IssueType> issueTypes = formIssue.getIssueTypes().stream()
+                    .map(issueTypeId -> findIssueTypeById(issueTypeId)).collect(Collectors.toList());
+
+            issue.setIssueTypes(issueTypes);
 
             issueRepository.save(issue);
         }
@@ -147,6 +159,15 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public List<Issue> findAllPriorityDesc(int projectId) {
         return issueRepository.findAllSortedByPriorityDesc(projectId);
+    }
+
+    @Override
+    public IssueType findIssueTypeById(int issueTypeId) {
+
+        Optional<IssueType> issueType = issueTypeRepository.findById(issueTypeId);
+
+        if(issueType.isPresent()) return issueType.get();
+        else return null;
     }
 
     @Override
