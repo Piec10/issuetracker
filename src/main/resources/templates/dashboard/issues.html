@@ -258,6 +258,10 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
+                                                            Type:
+                                                            <span th:each="issueType : ${tempIssue.issueTypes}" th:text="${issueType.name}+' '"/>
+                                                        </div>
+                                                        <div class="col-12">
                                                             Priority:
                                                             <span th:text="${priorities.getName(tempIssue.priority)}"/>
                                                         </div>
