@@ -118,7 +118,7 @@ public class IssueController {
             FormIssue formIssue = new FormIssue();
             formIssue.setProjectId(projectId);
 
-            model.addAttribute("issueTypes", issueService.findAllIssueTypes());
+            model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
             model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";

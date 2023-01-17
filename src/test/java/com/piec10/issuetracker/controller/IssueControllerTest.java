@@ -498,7 +498,7 @@ public class IssueControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-form"))
                 .andExpect(model().attributeExists("formIssue"))
-                .andExpect(model().attributeExists("issueTypes"));
+                .andExpect(model().attributeExists("allIssueTypes"));
 
         verify(issueService).findAllIssueTypes();
     }

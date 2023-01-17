@@ -3,6 +3,7 @@ package com.piec10.issuetracker.form;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 public class FormIssue {
 
@@ -17,6 +18,8 @@ public class FormIssue {
     private int priority = 1;
 
     private int projectId;
+
+    private List<Integer> issueTypes;
 
     public FormIssue(){}
 
@@ -58,5 +61,13 @@ public class FormIssue {
 
     public void setProjectId(int projectId) {
         this.projectId = projectId;
+    }
+
+    public List<Integer> getIssueTypes() {
+        return issueTypes;
+    }
+
+    public void setIssueTypes(List<Integer> issueTypes) {
+        this.issueTypes = issueTypes;
     }
 }
