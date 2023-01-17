@@ -37,7 +37,7 @@
 
                 <form class="p-4 p-md-5 border rounded-3 bg-light" th:action="@{/dashboard/processIssue}"
                       th:object="${formIssue}" method="POST">
-                    <div class="row">
+                    <div class="row g-4">
                         <div class="col-12 col-md-6">
 
                             <!-- Summary -->
@@ -70,7 +70,7 @@
 
                         </div>
                         <div class="col-12 col-md-6">
-                            <div class="form-floating mt-4 mt-md-0">
+                            <div class="form-floating">
                                 <select th:field="*{priority}" class="form-select" id="floatingSelect">
                                     <option th:each="tempPriority, iteration : ${priorities.getPriorities()}"
                                             th:value="${iteration.index}" th:text="${tempPriority}">
@@ -79,6 +79,15 @@
                                 <label for="floatingSelect">Priority</label>
                             </div>
 
+                            <div class="dropdown mt-4">
+                                <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                                    Add issue types
+                                </button>
+                                <div class="dropdown-menu">
+
+                                    <a href="#" class="btn btn-sm btn-outline-secondary">Add</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr class="my-4">
