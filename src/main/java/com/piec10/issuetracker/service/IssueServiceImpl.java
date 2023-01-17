@@ -1,7 +1,9 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
+import com.piec10.issuetracker.dao.IssueTypeRepository;
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.IssueType;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
@@ -17,6 +19,9 @@ public class IssueServiceImpl implements IssueService{
 
     @Autowired
     private IssueRepository issueRepository;
+
+    @Autowired
+    private IssueTypeRepository issueTypeRepository;
 
     @Override
     public List<Issue> findAll(int projectId) {
@@ -142,5 +147,10 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public List<Issue> findAllPriorityDesc(int projectId) {
         return issueRepository.findAllSortedByPriorityDesc(projectId);
+    }
+
+    @Override
+    public List<IssueType> findAllIssueTypes() {
+        return issueTypeRepository.findAll();
     }
 }

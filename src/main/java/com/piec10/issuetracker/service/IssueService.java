@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.entity.Issue;
+import com.piec10.issuetracker.entity.IssueType;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
@@ -42,4 +43,6 @@ public interface IssueService {
     List<Issue> findAllPriorityAsc(int projectId);
 
     List<Issue> findAllPriorityDesc(int projectId);
+
+    List<IssueType> findAllIssueTypes();
 }

@@ -497,7 +497,10 @@ public class IssueControllerTest {
                         .with(SecurityMockMvcRequestPostProcessors.user("collaborator").roles("USER")))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-form"))
-                .andExpect(model().attributeExists("formIssue"));
+                .andExpect(model().attributeExists("formIssue"))
+                .andExpect(model().attributeExists("issueTypes"));
+
+        verify(issueService).findAllIssueTypes();
     }
 
     @Test
