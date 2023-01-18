@@ -259,7 +259,7 @@
                                                         </div>
                                                         <div class="col-12">
                                                             Type:
-                                                            <span th:each="issueType : ${tempIssue.issueTypes}" th:text="${issueType.name}+' '"/>
+                                                            <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
                                                         </div>
                                                         <div class="col-12">
                                                             Priority:
@@ -314,9 +314,7 @@
                                         <div class="col">
                                             <div class="row position-relative">
                                                 <div class="col-2 col-lg-1">
-                                                    <div th:each="issueType : ${tempIssue.issueTypes}">
-                                                        <span th:text="${issueType.name}"/>
-                                                    </div>
+                                                    <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
                                                 </div>
                                                 <div class="col"><span th:text="${tempIssue.summary}"/></div>
 

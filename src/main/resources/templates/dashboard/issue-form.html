@@ -85,9 +85,9 @@
                                         <div th:each="issueType : ${allIssueTypes}">
                                             <input type="radio" name="issueTypes" class="btn-check"
                                                    th:value="${issueType.id}"
-                                                   th:field="*{issueTypes}"/>
+                                                   th:field="*{issueTypeId}"/>
                                             <label class="btn btn-outline-secondary"
-                                                   th:for="'issueTypes'+${issueType.id}" th:text="${issueType.name}"/>
+                                                   th:for="'issueTypeId'+${issueType.id}" th:text="${issueType.name}"/>
                                         </div>
                                     </div>
                                 </div>
