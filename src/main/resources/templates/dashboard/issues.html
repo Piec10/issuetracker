@@ -127,8 +127,9 @@
                                     <div class="row p-2 mx-0 fw-bold">
                                         <div class="col">
                                             <div class="row">
-                                                <div class="col-2 col-lg-1">Type</div>
+                                                <div class="col-2 col-xxl-1">Type</div>
                                                 <div class="col">Summary</div>
+                                                <div class="col-2 col-lg-1" th:if="${show == 'open'}">Status</div>
                                                 <div class="col-2 col-xl-1">
                                                     <div th:switch="${sort == 'noop' or sort == 'priorityDesc'}">
                                                         <div th:case="true">
@@ -257,13 +258,17 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-12">
+                                                        <div class="col-6">
                                                             Type:
                                                             <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
                                                         </div>
-                                                        <div class="col-12">
+                                                        <div class="col-6">
                                                             Priority:
                                                             <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                        </div>
+                                                        <div class="col-12" th:if="${show == 'open'}">
+                                                            Status:
+<!--                                                            <span th:text="${priorities.getName(tempIssue.priority)}"/>-->
                                                         </div>
                                                         <div class="col-12">
                                                             <div th:switch="${tempIssue.createdBy == null}">
@@ -313,10 +318,12 @@
                                     <div class="row clickable-row p-2 mx-0">
                                         <div class="col">
                                             <div class="row position-relative">
-                                                <div class="col-2 col-lg-1">
+                                                <div class="col-2 col-xxl-1">
                                                     <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
                                                 </div>
                                                 <div class="col"><span th:text="${tempIssue.summary}"/></div>
+
+                                                <div class="col-2 col-lg-1" th:if="${show == 'open'}">Status</div>
 
                                                 <div class="col-2 col-xl-1"><span
                                                         th:text="${priorities.getName(tempIssue.priority)}"/></div>
