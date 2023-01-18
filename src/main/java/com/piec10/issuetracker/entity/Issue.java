@@ -41,10 +41,18 @@ public class Issue {
     private Project project;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "issues_issue_types",
+    @JoinTable(name = "issues_issue_tags",
             joinColumns = @JoinColumn(name = "issue_id"),
-            inverseJoinColumns = @JoinColumn(name = "issue_type_id"))
-    private Collection<IssueType> issueTypes;
+            inverseJoinColumns = @JoinColumn(name = "issue_tag_id"))
+    private Collection<IssueTag> issueTags;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "issue_type_id")
+    private IssueType issueType;
+
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name = "issue_status_id")
+    private IssueStatus issueStatus;
 
     public Issue() {
 
@@ -122,12 +130,28 @@ public class Issue {
         this.project = project;
     }
 
-    public Collection<IssueType> getIssueTypes() {
-        return issueTypes;
+    public Collection<IssueTag> getIssueTags() {
+        return issueTags;
     }
 
-    public void setIssueTypes(Collection<IssueType> issueTypes) {
-        this.issueTypes = issueTypes;
+    public void setIssueTags(Collection<IssueTag> issueTags) {
+        this.issueTags = issueTags;
+    }
+
+    public IssueType getIssueType() {
+        return issueType;
+    }
+
+    public void setIssueType(IssueType issueType) {
+        this.issueType = issueType;
+    }
+
+    public IssueStatus getIssueStatus() {
+        return issueStatus;
+    }
+
+    public void setIssueStatus(IssueStatus issueStatus) {
+        this.issueStatus = issueStatus;
     }
 
     @Override
@@ -139,8 +163,12 @@ public class Issue {
                 ", priority=" + priority +
                 ", createdAt=" + createdAt +
                 ", closedAt=" + closedAt +
-                ", createdBy=" + createdBy.getUsername() +
-                ", project=" + project.getTitle() +
+                ", createdBy=" + createdBy +
+                ", closedBy=" + closedBy +
+                ", project=" + project.getId() +
+                ", issueTags=" + issueTags +
+                ", issueType=" + issueType +
+                ", issueStatus=" + issueStatus +
                 '}';
     }
 }

@@ -145,10 +145,10 @@ public class IssueController {
             formIssue.setPriority(issue.getPriority());
             formIssue.setProjectId(issue.getProject().getId());
 
-            List<Integer> issueTypes = issue.getIssueTypes().stream()
+            List<Integer> issueTags = issue.getIssueTags().stream()
                     .map(issueType -> issueType.getId()).collect(Collectors.toList());
 
-            formIssue.setIssueTypes(issueTypes);
+            formIssue.setIssueTags(issueTags);
 
             model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
             model.addAttribute("formIssue", formIssue);

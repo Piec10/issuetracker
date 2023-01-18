@@ -20,7 +20,9 @@ public class FormIssue {
 
     private int projectId;
 
-    private List<Integer> issueTypes = new ArrayList<>();
+    private List<Integer> issueTags = new ArrayList<>();
+
+    private int issueTypeId;
 
     public FormIssue(){}
 
@@ -64,11 +66,20 @@ public class FormIssue {
         this.projectId = projectId;
     }
 
-    public List<Integer> getIssueTypes() {
-        return issueTypes;
+    public List<Integer> getIssueTags() {
+        return issueTags;
     }
 
-    public void setIssueTypes(List<Integer> issueTypes) {
-        this.issueTypes = issueTypes;
+    public void setIssueTags(List<Integer> issueTags) {
+        this.issueTags = issueTags;
+    }
+
+
+    public int getIssueTypeId() {
+        return issueTypeId;
+    }
+
+    public void setIssueTypeId(int issueTypeId) {
+        this.issueTypeId = issueTypeId;
     }
 }

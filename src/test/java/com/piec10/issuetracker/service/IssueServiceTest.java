@@ -140,7 +140,7 @@ public class IssueServiceTest {
     public void createNewValidIssueWithTypes() {
 
         List<Integer> issueTypes = List.of(1, 2);
-        formIssue.setIssueTypes(issueTypes);
+        formIssue.setIssueTags(issueTypes);
 
         when(issueTypeRepository.findById(1)).thenReturn(Optional.of(new IssueType()));
         when(issueTypeRepository.findById(2)).thenReturn(Optional.of(new IssueType()));
@@ -149,7 +149,7 @@ public class IssueServiceTest {
 
         verify(issueRepository).save(capturedIssue.capture());
 
-        assertEquals(2,capturedIssue.getValue().getIssueTypes().size(), "Issue types count should be 2");
+        assertEquals(2,capturedIssue.getValue().getIssueTags().size(), "Issue types count should be 2");
     }
 
     @Test
@@ -191,7 +191,7 @@ public class IssueServiceTest {
         issueType2.setId(2);
 
         List<Integer> issueTypes = List.of(1, 2);
-        formIssue.setIssueTypes(issueTypes);
+        formIssue.setIssueTags(issueTypes);
 
         int id = 2;
         formIssue.setId(id);
@@ -207,7 +207,7 @@ public class IssueServiceTest {
 
         verify(issueRepository).save(capturedIssue.capture());
 
-        assertEquals(2,capturedIssue.getValue().getIssueTypes().size(), "Issue types count should be 2");
+        assertEquals(2,capturedIssue.getValue().getIssueTags().size(), "Issue types count should be 2");
     }
 
     @Test

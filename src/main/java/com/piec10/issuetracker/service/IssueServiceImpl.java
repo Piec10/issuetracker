@@ -1,11 +1,9 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
+import com.piec10.issuetracker.dao.IssueTagRepository;
 import com.piec10.issuetracker.dao.IssueTypeRepository;
-import com.piec10.issuetracker.entity.Issue;
-import com.piec10.issuetracker.entity.IssueType;
-import com.piec10.issuetracker.entity.Project;
-import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.entity.*;
 import com.piec10.issuetracker.form.FormIssue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,9 @@ public class IssueServiceImpl implements IssueService{
 
     @Autowired
     private IssueTypeRepository issueTypeRepository;
+
+    @Autowired
+    private IssueTagRepository issueTagRepository;
 
     @Override
     public List<Issue> findAll(int projectId) {
@@ -52,10 +53,10 @@ public class IssueServiceImpl implements IssueService{
         newIssue.setCreatedAt(new Date());
         newIssue.setProject(project);
 
-        Collection<IssueType> issueTypes = formIssue.getIssueTypes().stream()
-                .map(issueTypeId -> findIssueTypeById(issueTypeId)).collect(Collectors.toList());
+        Collection<IssueTag> issueTags = formIssue.getIssueTags().stream()
+                .map(issueTagId -> findIssueTagById(issueTagId)).collect(Collectors.toList());
 
-        newIssue.setIssueTypes(issueTypes);
+        newIssue.setIssueTags(issueTags);
 
         issueRepository.save(newIssue);
     }
@@ -70,10 +71,10 @@ public class IssueServiceImpl implements IssueService{
             issue.setDescription(formIssue.getDescription());
             issue.setPriority(formIssue.getPriority());
 
-            Collection<IssueType> issueTypes = formIssue.getIssueTypes().stream()
-                    .map(issueTypeId -> findIssueTypeById(issueTypeId)).collect(Collectors.toList());
+            Collection<IssueTag> issueTags = formIssue.getIssueTags().stream()
+                    .map(issueTagId -> findIssueTagById(issueTagId)).collect(Collectors.toList());
 
-            issue.setIssueTypes(issueTypes);
+            issue.setIssueTags(issueTags);
 
             issueRepository.save(issue);
         }
@@ -167,6 +168,15 @@ public class IssueServiceImpl implements IssueService{
         Optional<IssueType> issueType = issueTypeRepository.findById(issueTypeId);
 
         if(issueType.isPresent()) return issueType.get();
+        else return null;
+    }
+
+    @Override
+    public IssueTag findIssueTagById(int issueTagId) {
+
+        Optional<IssueTag> issueTag = issueTagRepository.findById(issueTagId);
+
+        if(issueTag.isPresent()) return issueTag.get();
         else return null;
     }
 

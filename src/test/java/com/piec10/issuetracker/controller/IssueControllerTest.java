@@ -582,7 +582,7 @@ public class IssueControllerTest {
         verify(mockIssue).getDescription();
         verify(mockIssue).getPriority();
         verify(mockIssue).getProject();
-        verify(mockIssue).getIssueTypes();
+        verify(mockIssue).getIssueTags();
     }
 
     @Test
@@ -625,7 +625,7 @@ public class IssueControllerTest {
         verify(mockIssue).getDescription();
         verify(mockIssue).getPriority();
         verify(mockIssue).getProject();
-        verify(mockIssue).getIssueTypes();
+        verify(mockIssue).getIssueTags();
     }
 
     @Test
