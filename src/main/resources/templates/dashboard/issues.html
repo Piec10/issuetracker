@@ -268,7 +268,7 @@
                                                         </div>
                                                         <div class="col-12" th:if="${show == 'open'}">
                                                             Status:
-<!--                                                            <span th:text="${priorities.getName(tempIssue.priority)}"/>-->
+                                                            <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
                                                         </div>
                                                         <div class="col-12">
                                                             <div th:switch="${tempIssue.createdBy == null}">
@@ -323,7 +323,9 @@
                                                 </div>
                                                 <div class="col"><span th:text="${tempIssue.summary}"/></div>
 
-                                                <div class="col-2 col-lg-1" th:if="${show == 'open'}">Status</div>
+                                                <div class="col-2 col-lg-1" th:if="${show == 'open'}">
+                                                    <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
+                                                </div>
 
                                                 <div class="col-2 col-xl-1"><span
                                                         th:text="${priorities.getName(tempIssue.priority)}"/></div>
