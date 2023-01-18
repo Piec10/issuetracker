@@ -63,6 +63,7 @@ public class IssueServiceImpl implements IssueService{
         newIssue.setIssueTags(issueTags);
 
         newIssue.setIssueType(findIssueTypeById(formIssue.getIssueTypeId()));
+        newIssue.setIssueStatus(findIssueStatusById(formIssue.getIssueStatusId()));
 
         issueRepository.save(newIssue);
     }
@@ -83,6 +84,7 @@ public class IssueServiceImpl implements IssueService{
             issue.setIssueTags(issueTags);
 
             issue.setIssueType(findIssueTypeById(formIssue.getIssueTypeId()));
+            issue.setIssueStatus(findIssueStatusById(formIssue.getIssueStatusId()));
 
             issueRepository.save(issue);
         }
@@ -176,6 +178,15 @@ public class IssueServiceImpl implements IssueService{
         Optional<IssueType> issueType = issueTypeRepository.findById(issueTypeId);
 
         if(issueType.isPresent()) return issueType.get();
+        else return null;
+    }
+
+    @Override
+    public IssueStatus findIssueStatusById(int issueStatusId) {
+
+        Optional<IssueStatus> issueStatus = issueStatusRepository.findById(issueStatusId);
+
+        if(issueStatus.isPresent()) return issueStatus.get();
         else return null;
     }
 

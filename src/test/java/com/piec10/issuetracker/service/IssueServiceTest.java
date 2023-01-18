@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
+import com.piec10.issuetracker.dao.IssueStatusRepository;
 import com.piec10.issuetracker.dao.IssueTagRepository;
 import com.piec10.issuetracker.dao.IssueTypeRepository;
 import com.piec10.issuetracker.entity.*;
@@ -27,6 +28,9 @@ public class IssueServiceTest {
 
     @Mock
     private IssueTypeRepository issueTypeRepository;
+
+    @Mock
+    private IssueStatusRepository issueStatusRepository;
 
     @Mock
     private IssueTagRepository issueTagRepository;
@@ -169,6 +173,21 @@ public class IssueServiceTest {
     }
 
     @Test
+    public void createNewValidIssueWithStatus() {
+
+        formIssue.setIssueStatusId(1);
+        IssueStatus issueStatus = new IssueStatus();
+
+        when(issueStatusRepository.findById(1)).thenReturn(Optional.of(issueStatus));
+
+        issueService.createIssue(formIssue, createdBy, project);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(issueStatus, capturedIssue.getValue().getIssueStatus());
+    }
+
+    @Test
     public void updateValidIssueService() {
 
         int id = 2;
@@ -246,6 +265,28 @@ public class IssueServiceTest {
         verify(issueRepository).save(capturedIssue.capture());
 
         assertEquals(issueType, capturedIssue.getValue().getIssueType());
+    }
+
+    @Test
+    public void updateValidIssueWithStatus() {
+
+        int id = 2;
+        formIssue.setId(id);
+
+        issue.setId(id);
+
+        formIssue.setIssueStatusId(1);
+        IssueStatus issueStatus = new IssueStatus();
+
+        when(issueStatusRepository.findById(1)).thenReturn(Optional.of(issueStatus));
+
+        when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
+
+        issueService.updateIssue(formIssue);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(issueStatus, capturedIssue.getValue().getIssueStatus());
     }
 
     @Test

@@ -43,6 +43,8 @@ public interface IssueService {
 
     IssueType findIssueTypeById(int issueTypeId);
 
+    IssueStatus findIssueStatusById(int issueStatusId);
+
     IssueTag findIssueTagById(int issueTagId);
 
     List<IssueType> findAllIssueTypes();
