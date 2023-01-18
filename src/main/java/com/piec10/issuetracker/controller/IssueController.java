@@ -136,7 +136,7 @@ public class IssueController {
 
         if(issue == null) return "redirect:/dashboard/projects";
 
-        if(isAdminOrOwner(issue.getCreatedBy(), request)){
+        if(isAdminOrOwner(issue.getCreatedBy(), request) || isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())){
 
             FormIssue formIssue = new FormIssue();
 
@@ -204,7 +204,7 @@ public class IssueController {
 
         if(issue == null) return "redirect:/dashboard/issues?projectId=" + project.getId();
 
-        if(isAdminOrOwner(issue.getCreatedBy(),request)){
+        if(isAdminOrOwner(issue.getCreatedBy(),request) || isProjectOwner(project.getCreatedBy(), request.getUserPrincipal())){
 
             issueService.updateIssue(formIssue);
             return "redirect:/dashboard/issues?projectId=" + project.getId();
@@ -219,7 +219,8 @@ public class IssueController {
 
         if (issue == null) return "redirect:/dashboard/projects";
 
-        if (isAdminOrOwner(issue.getCreatedBy(), request)) {
+        if (isAdminOrOwner(issue.getCreatedBy(), request) ||
+                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())) {
 
             issueService.deleteById(issueId);
             return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
@@ -234,7 +235,8 @@ public class IssueController {
 
         if (issue == null) return "redirect:/dashboard/projects";
 
-        if (isAdminOrOwner(issue.getCreatedBy(), request)) {
+        if (isAdminOrOwner(issue.getCreatedBy(), request) ||
+                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())) {
 
             if(issue.getClosedAt() == null){
 
@@ -253,7 +255,8 @@ public class IssueController {
 
         if (issue == null) return "redirect:/dashboard/projects";
 
-        if (isAdminOrOwner(issue.getCreatedBy(), request)) {
+        if (isAdminOrOwner(issue.getCreatedBy(), request) ||
+                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())) {
 
             if(issue.getClosedAt() != null){
 

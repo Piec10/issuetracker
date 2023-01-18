@@ -28,6 +28,10 @@ public class GlobalRolesAndOwnerCheckMethods {
         return request.isUserInRole("ROLE_ADMIN") || isOwner(user, request.getUserPrincipal());
     }
 
+    public static boolean isProjectOwner(User user, Principal principal) {
+        return (user != null ? (user.getUsername().equals(principal.getName())) : false);
+    }
+
     public static UserProjectRoles getUserProjectRoles(Project project, User user) {
 
         UserProjectRoles userProjectRoles = new UserProjectRoles();
