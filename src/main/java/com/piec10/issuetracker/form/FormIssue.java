@@ -24,6 +24,8 @@ public class FormIssue {
 
     private int issueTypeId;
 
+    private int issueStatusId;
+
     public FormIssue(){}
 
     public int getId() {
@@ -81,5 +83,13 @@ public class FormIssue {
 
     public void setIssueTypeId(int issueTypeId) {
         this.issueTypeId = issueTypeId;
+    }
+
+    public int getIssueStatusId() {
+        return issueStatusId;
+    }
+
+    public void setIssueStatusId(int issueStatusId) {
+        this.issueStatusId = issueStatusId;
     }
 }

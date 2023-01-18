@@ -121,6 +121,7 @@ public class IssueController {
             formIssue.setProjectId(projectId);
 
             model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
+            model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
             model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";
@@ -155,7 +156,12 @@ public class IssueController {
                 formIssue.setIssueTypeId(issue.getIssueType().getId());
             }
 
+            if(issue.getIssueStatus() != null) {
+                formIssue.setIssueStatusId(issue.getIssueStatus().getId());
+            }
+
             model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
+            model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
             model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";
@@ -171,6 +177,7 @@ public class IssueController {
         if (theBindingResult.hasErrors()) {
 
             model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
+            model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
             return "dashboard/issue-form";
         }
 

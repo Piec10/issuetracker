@@ -502,9 +502,11 @@ public class IssueControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-form"))
                 .andExpect(model().attributeExists("formIssue"))
-                .andExpect(model().attributeExists("allIssueTypes"));
+                .andExpect(model().attributeExists("allIssueTypes"))
+                .andExpect(model().attributeExists("allIssueStatuses"));
 
         verify(issueService).findAllIssueTypes();
+        verify(issueService).findAllIssueStatuses();
     }
 
     @Test
@@ -578,9 +580,11 @@ public class IssueControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-form"))
                 .andExpect(model().attributeExists("formIssue"))
-                .andExpect(model().attributeExists("allIssueTypes"));
+                .andExpect(model().attributeExists("allIssueTypes"))
+                .andExpect(model().attributeExists("allIssueStatuses"));
 
         verify(issueService).findAllIssueTypes();
+        verify(issueService).findAllIssueStatuses();
 
         verify(mockIssue).getSummary();
         verify(mockIssue).getDescription();
@@ -588,6 +592,7 @@ public class IssueControllerTest {
         verify(mockIssue).getProject();
         verify(mockIssue).getIssueTags();
         verify(mockIssue).getIssueType();
+        verify(mockIssue).getIssueStatus();
     }
 
     @Test
@@ -652,9 +657,11 @@ public class IssueControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/issue-form"))
                 .andExpect(model().attributeExists("formIssue"))
-                .andExpect(model().attributeExists("allIssueTypes"));
+                .andExpect(model().attributeExists("allIssueTypes"))
+                .andExpect(model().attributeExists("allIssueStatuses"));
 
         verify(issueService).findAllIssueTypes();
+        verify(issueService).findAllIssueStatuses();
 
         verify(mockIssue).getId();
         verify(mockIssue).getSummary();
@@ -663,6 +670,7 @@ public class IssueControllerTest {
         verify(mockIssue, times(2)).getProject();
         verify(mockIssue).getIssueTags();
         verify(mockIssue).getIssueType();
+        verify(mockIssue).getIssueStatus();
     }
 
     @Test
@@ -676,9 +684,11 @@ public class IssueControllerTest {
                 .andExpect(view().name("dashboard/issue-form"))
                 .andExpect(model().hasErrors())
                 .andExpect(model().attributeHasErrors("formIssue"))
-                .andExpect(model().attributeExists("allIssueTypes"));
+                .andExpect(model().attributeExists("allIssueTypes"))
+                .andExpect(model().attributeExists("allIssueStatuses"));
 
         verify(issueService).findAllIssueTypes();
+        verify(issueService).findAllIssueStatuses();
     }
 
     @Test

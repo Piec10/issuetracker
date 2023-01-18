@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
+import com.piec10.issuetracker.dao.IssueStatusRepository;
 import com.piec10.issuetracker.dao.IssueTagRepository;
 import com.piec10.issuetracker.dao.IssueTypeRepository;
 import com.piec10.issuetracker.entity.*;
@@ -22,6 +23,9 @@ public class IssueServiceImpl implements IssueService{
 
     @Autowired
     private IssueTypeRepository issueTypeRepository;
+
+    @Autowired
+    private IssueStatusRepository issueStatusRepository;
 
     @Autowired
     private IssueTagRepository issueTagRepository;
@@ -187,5 +191,10 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public List<IssueType> findAllIssueTypes() {
         return issueTypeRepository.findAll();
+    }
+
+    @Override
+    public List<IssueStatus> findAllIssueStatuses() {
+        return issueStatusRepository.findAll();
     }
 }
