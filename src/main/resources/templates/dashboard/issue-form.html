@@ -82,12 +82,12 @@
                                 <div class="col-12 border rounded-3 p-2">
                                     <span class="mb-3">Issue type:</span>
                                     <div class="row row-cols-auto g-3 mt-0">
-                                        <div th:each="issueType : ${allIssueTypes}">
+                                        <div th:each="issueType, stat : ${allIssueTypes}">
                                             <input type="radio" class="btn-check"
                                                    th:value="${issueType.id}"
                                                    th:field="*{issueTypeId}"/>
                                             <label class="btn btn-outline-secondary"
-                                                   th:for="'issueTypeId'+${issueType.id}" th:text="${issueType.name}"/>
+                                                   th:for="'issueTypeId'+${stat.count}" th:text="${issueType.name}"/>
                                         </div>
                                     </div>
                                 </div>
@@ -95,12 +95,12 @@
                                 <div class="col-12 border rounded-3 p-2">
                                     <span class="mb-3">Status:</span>
                                     <div class="row row-cols-auto g-3 mt-0">
-                                        <div th:each="issueStatus : ${allIssueStatuses}">
+                                        <div th:each="issueStatus, stat : ${allIssueStatuses}">
                                             <input type="radio" class="btn-check"
                                                    th:value="${issueStatus.id}"
                                                    th:field="*{issueStatusId}"/>
                                             <label class="btn btn-outline-secondary"
-                                                   th:for="'issueStatusId'+${issueStatus.id}" th:text="${issueStatus.name}"/>
+                                                   th:for="'issueStatusId'+${stat.count}" th:text="${issueStatus.name}"/>
                                         </div>
                                     </div>
                                 </div>
