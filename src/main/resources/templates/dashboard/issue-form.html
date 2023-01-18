@@ -83,14 +83,11 @@
                                     <span class="mb-3">Issue type:</span>
                                     <div class="row row-cols-auto g-3 mt-0">
                                         <div th:each="issueType : ${allIssueTypes}">
-                                            <div class="col border rounded-3 p-2">
-                                            <label th:for="'issueTypes'+${issueType.id}">
-                                                <span  th:text="${issueType.name}"/>
-                                                <input type="checkbox" name="issueTypes"
-                                               th:value="${issueType.id}"
-                                               th:field="*{issueTypes}"/>
-                                            </label>
-                                            </div>
+                                            <input type="radio" name="issueTypes" class="btn-check"
+                                                   th:value="${issueType.id}"
+                                                   th:field="*{issueTypes}"/>
+                                            <label class="btn btn-outline-secondary"
+                                                   th:for="'issueTypes'+${issueType.id}" th:text="${issueType.name}"/>
                                         </div>
                                     </div>
                                 </div>
