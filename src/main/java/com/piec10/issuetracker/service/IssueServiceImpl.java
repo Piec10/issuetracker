@@ -58,6 +58,8 @@ public class IssueServiceImpl implements IssueService{
 
         newIssue.setIssueTags(issueTags);
 
+        newIssue.setIssueType(findIssueTypeById(formIssue.getIssueTypeId()));
+
         issueRepository.save(newIssue);
     }
 
@@ -75,6 +77,8 @@ public class IssueServiceImpl implements IssueService{
                     .map(issueTagId -> findIssueTagById(issueTagId)).collect(Collectors.toList());
 
             issue.setIssueTags(issueTags);
+
+            issue.setIssueType(findIssueTypeById(formIssue.getIssueTypeId()));
 
             issueRepository.save(issue);
         }

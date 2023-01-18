@@ -154,6 +154,21 @@ public class IssueServiceTest {
     }
 
     @Test
+    public void createNewValidIssueWithType() {
+
+        formIssue.setIssueTypeId(1);
+        IssueType issueType = new IssueType();
+
+        when(issueTypeRepository.findById(1)).thenReturn(Optional.of(issueType));
+
+        issueService.createIssue(formIssue, createdBy, project);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(issueType, capturedIssue.getValue().getIssueType());
+    }
+
+    @Test
     public void updateValidIssueService() {
 
         int id = 2;
@@ -209,6 +224,28 @@ public class IssueServiceTest {
         verify(issueRepository).save(capturedIssue.capture());
 
         assertEquals(2,capturedIssue.getValue().getIssueTags().size(), "Issue tags count should be 2");
+    }
+
+    @Test
+    public void updateValidIssueWithType() {
+
+        int id = 2;
+        formIssue.setId(id);
+
+        issue.setId(id);
+
+        formIssue.setIssueTypeId(1);
+        IssueType issueType = new IssueType();
+
+        when(issueTypeRepository.findById(1)).thenReturn(Optional.of(issueType));
+
+        when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
+
+        issueService.updateIssue(formIssue);
+
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(issueType, capturedIssue.getValue().getIssueType());
     }
 
     @Test
