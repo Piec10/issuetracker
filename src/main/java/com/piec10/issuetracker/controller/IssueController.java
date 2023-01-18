@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
@@ -149,6 +150,10 @@ public class IssueController {
                     .map(issueType -> issueType.getId()).collect(Collectors.toList());
 
             formIssue.setIssueTags(issueTags);
+
+            if(issue.getIssueType() != null) {
+                formIssue.setIssueTypeId(issue.getIssueType().getId());
+            }
 
             model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
             model.addAttribute("formIssue", formIssue);
