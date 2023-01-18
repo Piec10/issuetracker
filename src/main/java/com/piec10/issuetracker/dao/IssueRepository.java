@@ -25,7 +25,6 @@ public interface IssueRepository extends JpaRepository<Issue, Integer> {
             nativeQuery = true)
     List<Issue> findClosed(@Param("projectId") int projectId);
 
-
     @Query(value = "SELECT * FROM issues WHERE project_id = :projectId ORDER BY id DESC",
             nativeQuery = true)
     List<Issue> findAll(@Param("projectId") int projectId);

@@ -1,11 +1,9 @@
 package com.piec10.issuetracker.service;
 
 import com.piec10.issuetracker.dao.IssueRepository;
+import com.piec10.issuetracker.dao.IssueTagRepository;
 import com.piec10.issuetracker.dao.IssueTypeRepository;
-import com.piec10.issuetracker.entity.Issue;
-import com.piec10.issuetracker.entity.IssueType;
-import com.piec10.issuetracker.entity.Project;
-import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.entity.*;
 import com.piec10.issuetracker.form.FormIssue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +27,9 @@ public class IssueServiceTest {
 
     @Mock
     private IssueTypeRepository issueTypeRepository;
+
+    @Mock
+    private IssueTagRepository issueTagRepository;
 
     @InjectMocks
     private IssueService issueService = new IssueServiceImpl();
@@ -137,19 +138,19 @@ public class IssueServiceTest {
     }
 
     @Test
-    public void createNewValidIssueWithTypes() {
+    public void createNewValidIssueWithTags() {
 
-        List<Integer> issueTypes = List.of(1, 2);
-        formIssue.setIssueTags(issueTypes);
+        List<Integer> issueTags = List.of(1, 2);
+        formIssue.setIssueTags(issueTags);
 
-        when(issueTypeRepository.findById(1)).thenReturn(Optional.of(new IssueType()));
-        when(issueTypeRepository.findById(2)).thenReturn(Optional.of(new IssueType()));
+        when(issueTagRepository.findById(1)).thenReturn(Optional.of(new IssueTag()));
+        when(issueTagRepository.findById(2)).thenReturn(Optional.of(new IssueTag()));
 
         issueService.createIssue(formIssue, createdBy, project);
 
         verify(issueRepository).save(capturedIssue.capture());
 
-        assertEquals(2,capturedIssue.getValue().getIssueTags().size(), "Issue types count should be 2");
+        assertEquals(2,capturedIssue.getValue().getIssueTags().size(), "Issue tags count should be 2");
     }
 
     @Test
@@ -182,24 +183,24 @@ public class IssueServiceTest {
     }
 
     @Test
-    public void updateValidIssueWithTypes() {
+    public void updateValidIssueWithTags() {
 
-        IssueType issueType1 = new IssueType();
-        issueType1.setId(1);
+        IssueTag issueTag1 = new IssueTag();
+        issueTag1.setId(1);
 
-        IssueType issueType2 = new IssueType();
-        issueType2.setId(2);
+        IssueTag issueTag2 = new IssueTag();
+        issueTag2.setId(2);
 
-        List<Integer> issueTypes = List.of(1, 2);
-        formIssue.setIssueTags(issueTypes);
+        List<Integer> issueTags = List.of(1, 2);
+        formIssue.setIssueTags(issueTags);
 
         int id = 2;
         formIssue.setId(id);
 
         issue.setId(id);
 
-        when(issueTypeRepository.findById(1)).thenReturn(Optional.of(issueType1));
-        when(issueTypeRepository.findById(2)).thenReturn(Optional.of(issueType2));
+        when(issueTagRepository.findById(1)).thenReturn(Optional.of(issueTag1));
+        when(issueTagRepository.findById(2)).thenReturn(Optional.of(issueTag2));
 
         when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
 
@@ -207,7 +208,7 @@ public class IssueServiceTest {
 
         verify(issueRepository).save(capturedIssue.capture());
 
-        assertEquals(2,capturedIssue.getValue().getIssueTags().size(), "Issue types count should be 2");
+        assertEquals(2,capturedIssue.getValue().getIssueTags().size(), "Issue tags count should be 2");
     }
 
     @Test

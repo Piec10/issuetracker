@@ -85,4 +85,64 @@ public class IssueRepositoryTest {
         assertEquals(2, issues.get(2).getPriority());
         assertEquals(1, issues.get(2).getId());
     }
+
+    @Test
+    public void findOpenIssuesSortedByPriorityDesc() {
+
+        List<Issue> issues = issueRepository.findOpenSortedByPriorityDesc(1);
+
+        assertEquals(2, issues.get(0).getPriority());
+        assertEquals(1, issues.get(0).getId());
+
+        assertEquals(0, issues.get(2).getPriority());
+        assertEquals(3, issues.get(2).getId());
+    }
+
+    @Test
+    public void findClosedIssuesSortedByPriorityAsc() {
+
+        List<Issue> issues = issueRepository.findClosedSortedByPriorityAsc(1);
+
+        assertEquals(0, issues.get(0).getPriority());
+        assertEquals(5, issues.get(0).getId());
+
+        assertEquals(1, issues.get(1).getPriority());
+        assertEquals(4, issues.get(1).getId());
+    }
+
+    @Test
+    public void findClosedIssuesSortedByPriorityDesc() {
+
+        List<Issue> issues = issueRepository.findClosedSortedByPriorityDesc(1);
+
+        assertEquals(1, issues.get(0).getPriority());
+        assertEquals(4, issues.get(0).getId());
+
+        assertEquals(0, issues.get(1).getPriority());
+        assertEquals(5, issues.get(1).getId());
+    }
+
+    @Test
+    public void findAllIssuesSortedByPriorityAsc() {
+
+        List<Issue> issues = issueRepository.findAllSortedByPriorityAsc(1);
+
+        assertEquals(0, issues.get(0).getPriority());
+        assertEquals(5, issues.get(0).getId());
+
+        assertEquals(2, issues.get(4).getPriority());
+        assertEquals(1, issues.get(4).getId());
+    }
+
+    @Test
+    public void findAllIssuesSortedByPriorityDesc() {
+
+        List<Issue> issues = issueRepository.findAllSortedByPriorityDesc(1);
+
+        assertEquals(2, issues.get(0).getPriority());
+        assertEquals(1, issues.get(0).getId());
+
+        assertEquals(0, issues.get(4).getPriority());
+        assertEquals(3, issues.get(4).getId());
+    }
 }

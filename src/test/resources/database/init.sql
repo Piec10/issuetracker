@@ -8,6 +8,8 @@ CREATE TABLE `issues` (
   `created_by` varchar(50),
   `closed_by` varchar(50),
   `project_id` int(11),
+  `issue_type_id` int(11),
+  `issue_status_id` int(11),
   PRIMARY KEY (`id`)
 );
 
