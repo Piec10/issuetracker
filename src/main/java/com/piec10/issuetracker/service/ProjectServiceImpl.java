@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService{
@@ -49,8 +50,13 @@ public class ProjectServiceImpl implements ProjectService{
         Collection<User> followers = getFromNames(formProject.getFollowersNames());
         Collection<User> collaborators = getFromNames(formProject.getCollaboratorsNames());
 
-        followers.add(createdBy);
-        collaborators.add(createdBy);
+        //add creator if not added in form
+        if(!followers.contains(createdBy)){
+            followers.add(createdBy);
+        }
+        if(!collaborators.contains(createdBy)){
+            collaborators.add(createdBy);
+        }
 
         newProject.setFollowers(followers);
         newProject.setCollaborators(collaborators);
@@ -72,7 +78,7 @@ public class ProjectServiceImpl implements ProjectService{
             Collection<User> followers = getFromNames(formProject.getFollowersNames());
             Collection<User> collaborators = getFromNames(formProject.getCollaboratorsNames());
 
-            //add owner if he deleted himself
+            //add creator if he deleted himself
             if(!followers.contains(project.getCreatedBy())){
                 followers.add(project.getCreatedBy());
             }
@@ -94,15 +100,6 @@ public class ProjectServiceImpl implements ProjectService{
 
     private Collection<User> getFromNames(Collection<String> usersNames) {
 
-        Collection<User> users = new HashSet<>();
-
-        for(String userName : usersNames) {
-
-            User user = userService.findByUsername(userName);
-
-            if(user != null) users.add(user);
-        }
-
-        return users;
+        return usersNames.stream().map(name -> userService.findByUsername(name)).collect(Collectors.toCollection(HashSet::new));
     }
 }

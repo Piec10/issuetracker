@@ -125,6 +125,8 @@ public class ProjectServiceTest {
         formProject.getFollowersNames().add(createdBy.getUsername());
         formProject.getCollaboratorsNames().add(createdBy.getUsername());
 
+        when(userService.findByUsername("user")).thenReturn(createdBy);
+
         projectService.createProject(formProject,createdBy);
 
         verify(projectRepository).save(capturedProject.capture());
@@ -176,6 +178,37 @@ public class ProjectServiceTest {
         formProject.getCollaboratorsNames().add(user2.getUsername());
 
         when(userService.findByUsername("user2")).thenReturn(user2);
+
+        when(projectRepository.findById(id)).thenReturn(Optional.of(project));
+
+        projectService.updateProject(formProject);
+
+        verify(projectRepository).save(capturedProject.capture());
+
+        assertEquals(2, capturedProject.getValue().getFollowers().size(), "Should be two followers");
+        assertEquals(2, capturedProject.getValue().getCollaborators().size(), "Should be two collaborators");
+        assertTrue(capturedProject.getValue().getFollowers().contains(user2), "user2 should be follower");
+        assertTrue(capturedProject.getValue().getCollaborators().contains(user2), "user2 should be collaborator");
+    }
+
+    @Test
+    public void updateValidProjectServiceWithFollowersAndCollaboratorsAndCreatorAdded() {
+
+        int id = 5;
+
+        formProject.setId(id);
+        project.setId(id);
+
+        User user2 = new User();
+        user2.setUsername("user2");
+
+        formProject.getFollowersNames().add(user2.getUsername());
+        formProject.getCollaboratorsNames().add(user2.getUsername());
+        formProject.getFollowersNames().add(createdBy.getUsername());
+        formProject.getCollaboratorsNames().add(createdBy.getUsername());
+
+        when(userService.findByUsername("user2")).thenReturn(user2);
+        when(userService.findByUsername("user")).thenReturn(createdBy);
 
         when(projectRepository.findById(id)).thenReturn(Optional.of(project));
 
