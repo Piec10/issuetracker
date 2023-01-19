@@ -42,7 +42,6 @@ public class IssueServiceImpl implements IssueService{
         if(issue.isPresent()){
             return issue.get();
         }
-
         else return null;
     }
 

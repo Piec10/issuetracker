@@ -12,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
+import static com.piec10.issuetracker.controller.util.MockRequestUsers.admin;
+import static com.piec10.issuetracker.controller.util.MockRequestUsers.user;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -28,7 +30,7 @@ public class AdminPanelControllerTest {
     private UserService userService;
 
     @Test
-    public void getDashboardAnonymousUser() throws Exception {
+    public void getAdminPanelAnonymousUser() throws Exception {
 
         mockMvc.perform(get("/dashboard/adminPanel/"))
                 .andExpect(status().is3xxRedirection())
@@ -36,20 +38,20 @@ public class AdminPanelControllerTest {
     }
 
     @Test
-    public void getDashboardIsNotAdmin() throws Exception {
+    public void getAdminPanelIsNotAdmin() throws Exception {
 
         mockMvc.perform(get("/dashboard/adminPanel/")
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                        .with(user()))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
-    public void getDashboardIsAdmin() throws Exception {
+    public void getAdminPanelIsAdmin() throws Exception {
 
         when(userService.findAll()).thenReturn(new ArrayList<>());
 
         mockMvc.perform(get("/dashboard/adminPanel/")
-                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                        .with(admin()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/admin-panel"))
                 .andExpect(model().attributeExists("users"));
@@ -60,7 +62,7 @@ public class AdminPanelControllerTest {
 
         mockMvc.perform(delete("/dashboard/adminPanel/deleteUser/{userId}", "user")
                         .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                        .with(admin()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/adminPanel/"));
 
