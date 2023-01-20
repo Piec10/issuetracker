@@ -11,4 +11,12 @@ public class MockRequestUsers {
     public static SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor user() {
         return SecurityMockMvcRequestPostProcessors.user("user").roles("USER");
     }
+
+    public static SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor guest() {
+        return SecurityMockMvcRequestPostProcessors.user("guest").roles("USER", "GUEST");
+    }
+
+    public static SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor owner() {
+        return SecurityMockMvcRequestPostProcessors.user("owner").roles("USER");
+    }
 }

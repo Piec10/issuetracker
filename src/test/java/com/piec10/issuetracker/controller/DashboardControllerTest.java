@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
+import com.piec10.issuetracker.controller.util.MockRequestUsers;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.piec10.issuetracker.controller.util.MockRequestUsers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -50,7 +52,7 @@ public class DashboardControllerTest {
     public void getDashboardAuthenticatedUser() throws Exception {
 
         mockMvc.perform(get("/dashboard/")
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                        .with(user()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/projects"));
     }
@@ -61,7 +63,7 @@ public class DashboardControllerTest {
         when(userService.findByUsername("user")).thenReturn(new User());
 
         mockMvc.perform(get("/dashboard/profile")
-                    .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                    .with(user()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/profile"))
                 .andExpect(model().attributeExists("user"));
@@ -87,7 +89,7 @@ public class DashboardControllerTest {
 
         mockMvc.perform(get("/dashboard/changePassword")
                         .param("userId","invalidUser")
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                        .with(user()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/projects"));
     }
@@ -99,7 +101,7 @@ public class DashboardControllerTest {
 
         mockMvc.perform(get("/dashboard/changePassword")
                         .param("userId","owner")
-                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                        .with(owner()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/password-change"))
                 .andExpect(model().attributeExists("formPassword"));
@@ -112,7 +114,7 @@ public class DashboardControllerTest {
 
         mockMvc.perform(get("/dashboard/changePassword")
                         .param("userId","owner")
-                        .with(SecurityMockMvcRequestPostProcessors.user("notOwner").roles("USER")))
+                        .with(user()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
@@ -124,7 +126,7 @@ public class DashboardControllerTest {
 
         mockMvc.perform(get("/dashboard/changePassword")
                         .param("userId","owner")
-                        .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                        .with(admin()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/password-change"))
                 .andExpect(model().attributeExists("formPassword"));
@@ -139,7 +141,7 @@ public class DashboardControllerTest {
                         .param("newPassword", "newPass")
                         .param("matchingNewPassword", "newPass1")
                         .with(csrf())
-                        .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                        .with(user()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/password-change"))
                 .andExpect(model().hasErrors())
@@ -171,7 +173,7 @@ public class DashboardControllerTest {
                 .param("newPassword", "newPass")
                 .param("matchingNewPassword", "newPass")
                 .with(csrf())
-                .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .with(user()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/projects"));
     }
@@ -187,7 +189,7 @@ public class DashboardControllerTest {
                 .param("newPassword", "newPass")
                 .param("matchingNewPassword", "newPass")
                 .with(csrf())
-                .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .with(owner()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/profile"));
 
@@ -205,7 +207,7 @@ public class DashboardControllerTest {
                 .param("newPassword", "newPass")
                 .param("matchingNewPassword", "newPass")
                 .with(csrf())
-                .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
+                .with(owner()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard/password-change"))
                 .andExpect(model().attributeExists("passwordError"));
@@ -222,7 +224,7 @@ public class DashboardControllerTest {
                 .param("newPassword", "newPass")
                 .param("matchingNewPassword", "newPass")
                 .with(csrf())
-                .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER")))
+                .with(user()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/access-denied"));
     }
@@ -238,7 +240,7 @@ public class DashboardControllerTest {
                 .param("newPassword", "newPass")
                 .param("matchingNewPassword", "newPass")
                 .with(csrf())
-                .with(SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN")))
+                .with(admin()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/adminPanel/"));
 
