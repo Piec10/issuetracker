@@ -1,249 +1,188 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
-import com.piec10.issuetracker.controller.util.MockRequestUsers;
-import com.piec10.issuetracker.entity.User;
-import com.piec10.issuetracker.service.UserService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.web.servlet.MockMvc;
+
+import javax.annotation.PostConstruct;
 
 import static com.piec10.issuetracker.controller.util.MockRequestUsers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Import(SecurityConfig.class)
 @WebMvcTest(DashboardController.class)
-public class DashboardControllerTest {
+public class DashboardControllerTest extends BaseControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    private final String dashboardUrl = "/dashboard/";
+    private final String changePasswordUrl = "/dashboard/changePassword";
+    private final String processPasswordChangeUrl = "/dashboard/processPasswordChange";
 
-    @MockBean
-    private UserService userService;
-
-    private static User owner;
-
-    @BeforeAll
-    public static void beforeAll() {
-        owner = new User();
-        owner.setUsername("owner");
-        owner.setPassword(new BCryptPasswordEncoder().encode("oldPass"));
+    @PostConstruct
+    public void setup() {
+        getOwner().setPassword(new BCryptPasswordEncoder().encode("oldPass"));
     }
-
     @Test
     public void getDashboardAnonymousUser() throws Exception {
-
-        mockMvc.perform(get("/dashboard/"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("http://*/login"));
+        givenUrl(dashboardUrl);
+        whenPerformGet();
+        thenExpect3xxRedirectionToPattern("http://*/login");
     }
 
     @Test
     public void getDashboardAuthenticatedUser() throws Exception {
-
-        mockMvc.perform(get("/dashboard/")
-                        .with(user()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/dashboard/projects"));
+        givenUrl(dashboardUrl);
+            andUser(user());
+        whenPerformGet();
+        thenExpect3xxRedirectionTo("/dashboard/projects");
     }
 
     @Test
     public void getProfileAuthenticatedUser() throws Exception {
-
-        when(userService.findByUsername("user")).thenReturn(new User());
-
-        mockMvc.perform(get("/dashboard/profile")
-                    .with(user()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/profile"))
-                .andExpect(model().attributeExists("user"));
+        givenUrl("/dashboard/profile");
+            andUser(user());
+        whenPerformGet();
+        thenExpectIsOkAndView("dashboard/profile");
+            andExpectModelAttribute("user");
     }
 
     @Test
     public void getPasswordChangePageIsGuestUser() throws Exception {
-
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
-        mockMvc.perform(get("/dashboard/changePassword")
-                        .param("userId","owner")
-                        .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER", "GUEST")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/password-change"))
-                .andExpect(model().attributeExists("formPassword"));
+        givenUrl(changePasswordUrl);
+            andUser(guest());
+            andParam("userId", "guest");
+        whenPerformGet();
+        thenExpectIsOkAndView("dashboard/password-change");
+            andExpectModelAttribute("formPassword");
     }
 
     @Test
     public void getPasswordChangePageInvalidUserId() throws Exception {
-
-        when(userService.findByUsername("invalidUser")).thenReturn(null);
-
-        mockMvc.perform(get("/dashboard/changePassword")
-                        .param("userId","invalidUser")
-                        .with(user()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/dashboard/projects"));
+        givenUrl(changePasswordUrl);
+            andUser(user());
+            andParam("userId","invalidUser");
+        whenPerformGet();
+        thenExpect3xxRedirectionTo("/dashboard/projects");
     }
 
     @Test
     public void getPasswordChangePageIsOwnerValidUserId() throws Exception {
-
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
-        mockMvc.perform(get("/dashboard/changePassword")
-                        .param("userId","owner")
-                        .with(owner()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/password-change"))
-                .andExpect(model().attributeExists("formPassword"));
+        givenUrl(changePasswordUrl);
+            andUser(owner());
+            andParam("userId","owner");
+        whenPerformGet();
+        thenExpectIsOkAndView("dashboard/password-change");
+            andExpectModelAttribute("formPassword");
     }
 
     @Test
     public void getPasswordChangePageIsNotOwnerValidUserId() throws Exception {
-
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
-        mockMvc.perform(get("/dashboard/changePassword")
-                        .param("userId","owner")
-                        .with(user()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/access-denied"));
+        givenUrl(changePasswordUrl);
+            andUser(user());
+            andParam("userId","owner");
+        whenPerformGet();
+        thenExpect3xxAccessDenied();
     }
 
     @Test
     public void getPasswordChangePageIsAdminValidUserId() throws Exception {
-
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
-        mockMvc.perform(get("/dashboard/changePassword")
-                        .param("userId","owner")
-                        .with(admin()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/password-change"))
-                .andExpect(model().attributeExists("formPassword"));
+        givenUrl(changePasswordUrl);
+            andUser(admin());
+            andParam("userId","owner");
+        whenPerformGet();
+        thenExpectIsOkAndView("dashboard/password-change");
+            andExpectModelAttribute("formPassword");
     }
 
     @Test
     public void processPasswordChangeFormHasErrors() throws Exception {
-
-        mockMvc.perform(post("/dashboard/processPasswordChange")
-                        .param("username", "user")
-                        .param("oldPassword", "oldPass")
-                        .param("newPassword", "newPass")
-                        .param("matchingNewPassword", "newPass1")
-                        .with(csrf())
-                        .with(user()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/password-change"))
-                .andExpect(model().hasErrors())
-                .andExpect(model().attributeHasErrors("formPassword"));
+        givenUrl(processPasswordChangeUrl);
+            andUser(user());
+            andParam("username", "user");
+            andParam("oldPassword", "oldPass");
+            andParam("newPassword", "newPass");
+            andParam("matchingNewPassword", "newPass1");
+        whenPerformPost();
+        thenExpectIsOkAndView("dashboard/password-change");
+            andExpectModelErrors();
+            andExpectModelAttributeHasErrors("formPassword");
     }
 
     @Test
     public void processPasswordChangeIsGuestUser() throws Exception {
-
-        mockMvc.perform(post("/dashboard/processPasswordChange")
-                .param("username", "user")
-                .param("oldPassword", "oldPass")
-                .param("newPassword", "newPass")
-                .param("matchingNewPassword", "newPass")
-                .with(csrf())
-                .with(SecurityMockMvcRequestPostProcessors.user("user").roles("USER", "GUEST")))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/access-denied"));
+        givenUrl(processPasswordChangeUrl);
+            andUser(guest());
+            andParam("username", "guest");
+            andParam("oldPassword", "oldPass");
+            andParam("newPassword", "newPass");
+            andParam("matchingNewPassword", "newPass");
+        whenPerformPost();
+        thenExpect3xxAccessDenied();
     }
 
     @Test
     public void processPasswordChangeInvalidFormUsername() throws Exception {
-
-        when(userService.findByUsername("invalidUser")).thenReturn(null);
-
-        mockMvc.perform(post("/dashboard/processPasswordChange")
-                .param("username", "invalidUser")
-                .param("oldPassword", "oldPass")
-                .param("newPassword", "newPass")
-                .param("matchingNewPassword", "newPass")
-                .with(csrf())
-                .with(user()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/dashboard/projects"));
+        givenUrl(processPasswordChangeUrl);
+            andUser(user());
+            andParam("username", "invalidUser");
+            andParam("oldPassword", "oldPass");
+            andParam("newPassword", "newPass");
+            andParam("matchingNewPassword", "newPass");
+        whenPerformPost();
+        thenExpect3xxRedirectionTo("/dashboard/projects");
     }
 
     @Test
     public void processPasswordChangeIsOwnerValidOldPassword() throws Exception {
+        givenUrl(processPasswordChangeUrl);
+            andUser(owner());
+            andParam("username", "owner");
+            andParam("oldPassword", "oldPass");
+            andParam("newPassword", "newPass");
+            andParam("matchingNewPassword", "newPass");
+        whenPerformPost();
+        thenExpect3xxRedirectionTo("/dashboard/profile");
 
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
-        mockMvc.perform(post("/dashboard/processPasswordChange")
-                .param("username", "owner")
-                .param("oldPassword", "oldPass")
-                .param("newPassword", "newPass")
-                .param("matchingNewPassword", "newPass")
-                .with(csrf())
-                .with(owner()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/dashboard/profile"));
-
-        verify(userService, times(1)).changePassword("owner","newPass");
+        verify(userService).changePassword("owner","newPass");
     }
 
     @Test
     public void processPasswordChangeIsOwnerInvalidOldPassword() throws Exception {
-
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
-        mockMvc.perform(post("/dashboard/processPasswordChange")
-                .param("username", "owner")
-                .param("oldPassword", "wrongPass")
-                .param("newPassword", "newPass")
-                .param("matchingNewPassword", "newPass")
-                .with(csrf())
-                .with(owner()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("dashboard/password-change"))
-                .andExpect(model().attributeExists("passwordError"));
+        givenUrl(processPasswordChangeUrl);
+            andUser(owner());
+            andParam("username", "owner");
+            andParam("oldPassword", "wrongPass");
+            andParam("newPassword", "newPass");
+            andParam("matchingNewPassword", "newPass");
+        whenPerformPost();
+        thenExpectIsOkAndView("dashboard/password-change");
+            andExpectModelAttribute("passwordError");
     }
 
     @Test
     public void processPasswordChangeIsNotOwner() throws Exception {
-
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
-        mockMvc.perform(post("/dashboard/processPasswordChange")
-                .param("username", "owner")
-                .param("oldPassword", "oldPass")
-                .param("newPassword", "newPass")
-                .param("matchingNewPassword", "newPass")
-                .with(csrf())
-                .with(user()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/access-denied"));
+        givenUrl(processPasswordChangeUrl);
+            andUser(user());
+            andParam("username", "owner");
+            andParam("oldPassword", "oldPass");
+            andParam("newPassword", "newPass");
+            andParam("matchingNewPassword", "newPass");
+        whenPerformPost();
+        thenExpect3xxAccessDenied();
     }
 
     @Test
     public void processPasswordChangeIsAdmin() throws Exception {
+        givenUrl(processPasswordChangeUrl);
+            andUser(admin());
+            andParam("username", "owner");
+            andParam("oldPassword", "oldPass");
+            andParam("newPassword", "newPass");
+            andParam("matchingNewPassword", "newPass");
+        whenPerformPost();
+        thenExpect3xxRedirectionTo("/dashboard/adminPanel/");
 
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
-        mockMvc.perform(post("/dashboard/processPasswordChange")
-                .param("username", "owner")
-                .param("oldPassword", "oldPass")
-                .param("newPassword", "newPass")
-                .param("matchingNewPassword", "newPass")
-                .with(csrf())
-                .with(admin()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("Location", "/dashboard/adminPanel/"));
-
-        verify(userService, times(1)).changePassword("owner","newPass");
+        verify(userService).changePassword("owner","newPass");
     }
 }
