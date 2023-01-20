@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class BaseControllerTest {
 
+    private final String loginUrlPattern = "http://*/login";
     private final String accessDeniedUrl = "/access-denied";
 
     @Autowired
@@ -32,6 +33,8 @@ public class BaseControllerTest {
     protected UserService userService;
 
     private String url;
+
+    private Object[] uriVariables;
 
     private SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor requestUser;
 
@@ -51,10 +54,21 @@ public class BaseControllerTest {
         when(userService.findByUsername("owner")).thenReturn(owner);
     }
 
+    protected void givenUrl(String url, Object... uriVariables) {
+        givenUrl(url);
+        this.uriVariables = uriVariables;
+    }
+
     protected void givenUrl(String url) {
         andUrl(url);
         requestUser = null;
         params.clear();
+        uriVariables = new Object[]{};
+    }
+
+    protected void andUrl(String url, Object... uriVariables) {
+        andUrl(url);
+        this.uriVariables = uriVariables;
     }
 
     protected void andUrl(String url) {
@@ -64,6 +78,7 @@ public class BaseControllerTest {
     protected void givenUser(SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor requestUser) {
         andUser(requestUser);
         params.clear();
+        uriVariables = new Object[]{};
     }
 
     protected void andUser(SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor requestUser) {
@@ -73,6 +88,7 @@ public class BaseControllerTest {
     protected void givenParam(String name, String value) {
         requestUser = null;
         params.clear();
+        uriVariables = new Object[]{};
         andParam(name, value);
     }
 
@@ -82,42 +98,32 @@ public class BaseControllerTest {
 
     protected void whenPerformGet() throws Exception {
         if(requestUser == null)
-            resultActions = mockMvc.perform(get(url).params(params));
+            resultActions = mockMvc.perform(get(url, uriVariables).params(params));
         else
-            resultActions = mockMvc.perform(get(url).params(params).with(requestUser));
+            resultActions = mockMvc.perform(get(url, uriVariables).params(params).with(requestUser));
     }
 
     protected void whenPerformPost() throws Exception {
         if(requestUser == null)
-            resultActions = mockMvc.perform(post(url).params(params).with(csrf()));
+            resultActions = mockMvc.perform(post(url, uriVariables).params(params).with(csrf()));
         else
-            resultActions = mockMvc.perform(post(url).params(params).with(requestUser).with(csrf()));
+            resultActions = mockMvc.perform(post(url, uriVariables).params(params).with(requestUser).with(csrf()));
     }
 
-    protected void whenPerformGetAsAnonymous(String url) throws Exception {
-        resultActions = mockMvc.perform(get(url).params(params));
-    }
-
-    protected void whenPerformGetAs(SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor requestUser,
-                                    String url) throws Exception {
-        resultActions = mockMvc.perform(get(url)
-                        .params(params)
-                        .with(requestUser));
-    }
-    protected void whenPerformDeleteAs(SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor requestUser,
-                                       String url, Object... uriVariables) throws Exception {
-        resultActions = mockMvc.perform(delete(url, uriVariables)
-                        .with(csrf())
-                        .with(requestUser));
-    }
-
-    public void thenExpect3xxRedirectionToPattern(String urlPattern) throws Exception {
-        resultActions.andExpect(status().is3xxRedirection()).andExpect(redirectedUrlPattern(urlPattern));
+    protected void whenPerformDelete() throws Exception {
+        if(requestUser == null)
+            resultActions = mockMvc.perform(delete(url, uriVariables).params(params).with(csrf()));
+        else
+            resultActions = mockMvc.perform(delete(url, uriVariables).params(params).with(requestUser).with(csrf()));
     }
 
     protected void thenExpect3xxRedirectionTo(String location) throws Exception {
         resultActions.andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", location));
+    }
+
+    protected void thenExpect3xxLoginPage() throws Exception {
+        resultActions.andExpect(status().is3xxRedirection()).andExpect(redirectedUrlPattern(loginUrlPattern));
     }
 
     protected void thenExpect3xxAccessDenied() throws Exception {

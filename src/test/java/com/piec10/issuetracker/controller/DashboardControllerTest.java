@@ -27,7 +27,7 @@ public class DashboardControllerTest extends BaseControllerTest {
     public void getDashboardAnonymousUser() throws Exception {
         givenUrl(dashboardUrl);
         whenPerformGet();
-        thenExpect3xxRedirectionToPattern("http://*/login");
+        thenExpect3xxLoginPage();
     }
 
     @Test

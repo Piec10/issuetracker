@@ -13,35 +13,38 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(AdminPanelController.class)
 public class AdminPanelControllerTest extends BaseControllerTest {
 
+    private final String adminPanelUrl = "/dashboard/adminPanel/";
     @Test
     public void getAdminPanelAnonymousUser() throws Exception {
-
-        whenPerformGetAsAnonymous("/dashboard/adminPanel/");
-        thenExpect3xxRedirectionToPattern("http://*/login");
+        givenUrl(adminPanelUrl);
+        whenPerformGet();
+        thenExpect3xxLoginPage();
     }
 
     @Test
     public void getAdminPanelIsNotAdmin() throws Exception {
-
-        whenPerformGetAs(user(), "/dashboard/adminPanel/");
+        givenUrl(adminPanelUrl);
+            andUser(user());
+        whenPerformGet();
         thenExpect4xxClientError();
     }
 
     @Test
     public void getAdminPanelIsAdmin() throws Exception {
-
-        whenPerformGetAs(admin(), "/dashboard/adminPanel/");
+        givenUrl(adminPanelUrl);
+            andUser(admin());
+        whenPerformGet();
         thenExpectIsOkAndView("dashboard/admin-panel");
-        andExpectModelAttribute("users");
+            andExpectModelAttribute("users");
     }
 
     @Test
     public void deleteUser() throws Exception {
-
-        whenPerformDeleteAs(admin(),"/dashboard/adminPanel/deleteUser/{userId}", "user");
+        givenUrl("/dashboard/adminPanel/deleteUser/{userId}", "user");
+            andUser(admin());
+        whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/adminPanel/");
 
         verify(userService).deleteById("user");
     }
-
 }
