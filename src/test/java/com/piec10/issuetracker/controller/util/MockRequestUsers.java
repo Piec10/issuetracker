@@ -2,7 +2,7 @@ package com.piec10.issuetracker.controller.util;
 
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
-public class MockRequestUsers {
+public abstract class MockRequestUsers {
 
     public static SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor admin() {
         return SecurityMockMvcRequestPostProcessors.user("admin").roles("USER", "ADMIN");

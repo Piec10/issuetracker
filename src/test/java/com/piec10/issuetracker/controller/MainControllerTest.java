@@ -17,6 +17,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(MainController.class)
 public class MainControllerTest extends BaseControllerTest {
 
+    @MockBean
+    private UserService userService;
+
     @Test
     public void getHomeAnonymousUser() throws Exception {
         givenUrl("/home");

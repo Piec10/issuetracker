@@ -1,9 +1,6 @@
 package com.piec10.issuetracker.controller;
 
-import com.piec10.issuetracker.entity.User;
-import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,17 +9,14 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class BaseControllerTest {
+public abstract class BaseControllerTest {
 
     private final String loginUrlPattern = "http://*/login";
     private final String accessDeniedUrl = "/access-denied";
@@ -31,9 +25,6 @@ public class BaseControllerTest {
     protected MockMvc mockMvc;
 
     protected ResultActions resultActions;
-
-//    @MockBean
-//    protected UserService userService;
 
     private String url;
 
@@ -44,20 +35,6 @@ public class BaseControllerTest {
     private MockHttpServletRequestBuilder request;
 
     private MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-
-//    private User user = new User("user");
-//
-//    private User guest = new User("guest");
-//
-//    private User owner = new User("owner");
-
-//    @PostConstruct
-//    private void mockSetup() {
-//        when(userService.findAll()).thenReturn(new ArrayList<>());
-//        when(userService.findByUsername("user")).thenReturn(user);
-//        when(userService.findByUsername("guest")).thenReturn(guest);
-//        when(userService.findByUsername("owner")).thenReturn(owner);
-//    }
 
     protected void givenUrl(String url, Object... uriVariables) {
         givenUrl(url);
@@ -165,12 +142,4 @@ public class BaseControllerTest {
     protected <T extends Object> T andExpectMethodCalledOnceIn(T service) {
         return verify(service);
     }
-
-//    protected UserService andExpectUserServiceMethodCalledOnce() {
-//        return  verify(userService);
-//    }
-
-//    protected User getOwner() {
-//        return owner;
-//    }
 }
