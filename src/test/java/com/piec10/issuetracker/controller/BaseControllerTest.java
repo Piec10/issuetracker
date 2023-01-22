@@ -4,9 +4,11 @@ import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -14,6 +16,7 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -37,6 +40,8 @@ public class BaseControllerTest {
     private Object[] uriVariables;
 
     private SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor requestUser;
+
+    private MockHttpServletRequestBuilder request;
 
     private MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
@@ -97,24 +102,29 @@ public class BaseControllerTest {
     }
 
     protected void whenPerformGet() throws Exception {
-        if(requestUser == null)
-            resultActions = mockMvc.perform(get(url, uriVariables).params(params));
-        else
-            resultActions = mockMvc.perform(get(url, uriVariables).params(params).with(requestUser));
+        performRequest(HttpMethod.GET);
     }
 
     protected void whenPerformPost() throws Exception {
-        if(requestUser == null)
-            resultActions = mockMvc.perform(post(url, uriVariables).params(params).with(csrf()));
-        else
-            resultActions = mockMvc.perform(post(url, uriVariables).params(params).with(requestUser).with(csrf()));
+        performRequest(HttpMethod.POST);
     }
 
     protected void whenPerformDelete() throws Exception {
-        if(requestUser == null)
-            resultActions = mockMvc.perform(delete(url, uriVariables).params(params).with(csrf()));
-        else
-            resultActions = mockMvc.perform(delete(url, uriVariables).params(params).with(requestUser).with(csrf()));
+        performRequest(HttpMethod.DELETE);
+    }
+
+    private void performRequest(HttpMethod method) throws Exception{
+        request = request(method, url, uriVariables);
+
+        if(requestUser != null){
+            request.with(requestUser);
+        }
+        if(method == HttpMethod.POST || method == HttpMethod.DELETE) {
+            request.with(csrf());
+        }
+        request.params(params);
+
+        resultActions = mockMvc.perform(request);
     }
 
     protected void thenExpect3xxRedirectionTo(String location) throws Exception {
@@ -154,5 +164,9 @@ public class BaseControllerTest {
 
     protected User getOwner() {
         return owner;
+    }
+
+    protected UserService andExpectUserServiceMethodCalledOnce() {
+        return  verify(userService);
     }
 }

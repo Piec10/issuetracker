@@ -9,7 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.annotation.PostConstruct;
 
 import static com.piec10.issuetracker.controller.util.MockRequestUsers.*;
-import static org.mockito.Mockito.*;
 
 @Import(SecurityConfig.class)
 @WebMvcTest(DashboardController.class)
@@ -23,6 +22,7 @@ public class DashboardControllerTest extends BaseControllerTest {
     public void setup() {
         getOwner().setPassword(new BCryptPasswordEncoder().encode("oldPass"));
     }
+    
     @Test
     public void getDashboardAnonymousUser() throws Exception {
         givenUrl(dashboardUrl);
@@ -143,8 +143,7 @@ public class DashboardControllerTest extends BaseControllerTest {
             andParam("matchingNewPassword", "newPass");
         whenPerformPost();
         thenExpect3xxRedirectionTo("/dashboard/profile");
-
-        verify(userService).changePassword("owner","newPass");
+            andExpectUserServiceMethodCalledOnce().changePassword("owner","newPass");
     }
 
     @Test
@@ -182,7 +181,6 @@ public class DashboardControllerTest extends BaseControllerTest {
             andParam("matchingNewPassword", "newPass");
         whenPerformPost();
         thenExpect3xxRedirectionTo("/dashboard/adminPanel/");
-
-        verify(userService).changePassword("owner","newPass");
+            andExpectUserServiceMethodCalledOnce().changePassword("owner","newPass");
     }
 }

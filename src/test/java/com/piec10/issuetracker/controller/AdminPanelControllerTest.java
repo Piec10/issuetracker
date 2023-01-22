@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Import;
 
 import static com.piec10.issuetracker.controller.util.MockRequestUsers.admin;
 import static com.piec10.issuetracker.controller.util.MockRequestUsers.user;
-import static org.mockito.Mockito.*;
 
 @Import(SecurityConfig.class)
 @WebMvcTest(AdminPanelController.class)
@@ -44,7 +43,6 @@ public class AdminPanelControllerTest extends BaseControllerTest {
             andUser(admin());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/adminPanel/");
-
-        verify(userService).deleteById("user");
+            andExpectUserServiceMethodCalledOnce().deleteById("user");
     }
 }
