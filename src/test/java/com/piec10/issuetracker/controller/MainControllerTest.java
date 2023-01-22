@@ -15,43 +15,33 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(MainController.class)
-public class MainControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
-    private UserService userService;
+public class MainControllerTest extends BaseControllerTest {
 
     @Test
     public void getHomeAnonymousUser() throws Exception {
-
-        this.mockMvc.perform(get("/home"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("home"));
+        givenUrl("/home");
+        whenPerformGet();
+        thenExpectIsOkAndView("home");
     }
 
     @Test
     public void getContactAnonymousUser() throws Exception {
-
-        this.mockMvc.perform(get("/contact"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("contact"));
+        givenUrl("/contact");
+        whenPerformGet();
+        thenExpectIsOkAndView("contact");
     }
 
     @Test
     public void getAboutAnonymousUser() throws Exception {
-
-        this.mockMvc.perform(get("/about"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("about"));
+        givenUrl("/about");
+        whenPerformGet();
+        thenExpectIsOkAndView("about");
     }
 
     @Test
     public void getLoginAnonymousUser() throws Exception {
-
-        this.mockMvc.perform(get("/login"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("login"));
+        givenUrl("/login");
+        whenPerformGet();
+        thenExpectIsOkAndView("login");
     }
 }

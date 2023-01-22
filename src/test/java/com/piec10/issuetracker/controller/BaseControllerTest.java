@@ -162,11 +162,11 @@ public class BaseControllerTest {
         resultActions.andExpect(model().attributeHasErrors(attribute));
     }
 
-    protected User getOwner() {
-        return owner;
-    }
-
     protected UserService andExpectUserServiceMethodCalledOnce() {
         return  verify(userService);
+    }
+
+    protected User getOwner() {
+        return owner;
     }
 }

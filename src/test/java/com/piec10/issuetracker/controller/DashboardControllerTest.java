@@ -22,7 +22,7 @@ public class DashboardControllerTest extends BaseControllerTest {
     public void setup() {
         getOwner().setPassword(new BCryptPasswordEncoder().encode("oldPass"));
     }
-    
+
     @Test
     public void getDashboardAnonymousUser() throws Exception {
         givenUrl(dashboardUrl);
