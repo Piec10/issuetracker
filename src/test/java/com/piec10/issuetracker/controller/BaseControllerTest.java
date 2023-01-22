@@ -32,8 +32,8 @@ public class BaseControllerTest {
 
     protected ResultActions resultActions;
 
-    @MockBean
-    protected UserService userService;
+//    @MockBean
+//    protected UserService userService;
 
     private String url;
 
@@ -45,19 +45,19 @@ public class BaseControllerTest {
 
     private MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
-    private User user = new User("user");
+//    private User user = new User("user");
+//
+//    private User guest = new User("guest");
+//
+//    private User owner = new User("owner");
 
-    private User guest = new User("guest");
-
-    private User owner = new User("owner");
-
-    @PostConstruct
-    private void mockSetup() {
-        when(userService.findAll()).thenReturn(new ArrayList<>());
-        when(userService.findByUsername("user")).thenReturn(user);
-        when(userService.findByUsername("guest")).thenReturn(guest);
-        when(userService.findByUsername("owner")).thenReturn(owner);
-    }
+//    @PostConstruct
+//    private void mockSetup() {
+//        when(userService.findAll()).thenReturn(new ArrayList<>());
+//        when(userService.findByUsername("user")).thenReturn(user);
+//        when(userService.findByUsername("guest")).thenReturn(guest);
+//        when(userService.findByUsername("owner")).thenReturn(owner);
+//    }
 
     protected void givenUrl(String url, Object... uriVariables) {
         givenUrl(url);
@@ -162,11 +162,15 @@ public class BaseControllerTest {
         resultActions.andExpect(model().attributeHasErrors(attribute));
     }
 
-    protected UserService andExpectUserServiceMethodCalledOnce() {
-        return  verify(userService);
+    protected <T extends Object> T andExpectMethodCalledOnceIn(T service) {
+        return verify(service);
     }
 
-    protected User getOwner() {
-        return owner;
-    }
+//    protected UserService andExpectUserServiceMethodCalledOnce() {
+//        return  verify(userService);
+//    }
+
+//    protected User getOwner() {
+//        return owner;
+//    }
 }

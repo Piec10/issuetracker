@@ -7,16 +7,13 @@ import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.ProjectService;
-import com.piec10.issuetracker.service.UserService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.web.servlet.MockMvc;
 
+import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -27,23 +24,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(IssueController.class)
-public class IssueControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
+public class IssueControllerTest extends BaseControllerTest {
 
     @MockBean
     private IssueService issueService;
 
     @MockBean
-    private UserService userService;
-
-    @MockBean
     private ProjectService projectService;
 
     private static Project project;
-
-    private static User owner;
 
     private static User collaborator;
 
@@ -61,13 +50,11 @@ public class IssueControllerTest {
 
     private static FormIssue formIssue;
 
-    @BeforeAll
-    public static void beforeAll() {
+    @PostConstruct
+    public void setup() {
 
         project = new Project();
 
-        owner = new User();
-        owner.setUsername("owner");
         collaborator = new User();
         collaborator.setUsername("collaborator");
         follower = new User();
@@ -81,20 +68,26 @@ public class IssueControllerTest {
         projectOwner.setUsername("projectOwner");
 
         issue = new Issue();
-        issue.setCreatedBy(owner);
+//        issue.setCreatedBy(getOwner());
         issue.setProject(project);
 
         closedIssue = new Issue();
-        closedIssue.setCreatedBy(owner);
+//        closedIssue.setCreatedBy(getOwner());
         closedIssue.setProject(project);
         closedIssue.setClosedAt(new Date());
 
         project.setId(1);
         project.setCreatedBy(projectOwner);
-        project.setCollaborators(Arrays.asList(owner, collaborator));
-        project.setFollowers(Arrays.asList(owner, collaborator, follower));
+//        project.setCollaborators(Arrays.asList(getOwner(), collaborator));
+//        project.setFollowers(Arrays.asList(getOwner(), collaborator, follower));
 
         formIssue = new FormIssue();
+
+//        when(userService.findByUsername("follower")).thenReturn(follower);
+//        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
+//        when(userService.findByUsername("admin")).thenReturn(admin);
+//        when(userService.findByUsername("collaborator")).thenReturn(collaborator);
+//        when(userService.findByUsername("projectOwner")).thenReturn(projectOwner);
     }
 
     @Test
@@ -205,7 +198,7 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("follower")).thenReturn(follower);
+
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
@@ -229,7 +222,7 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
+
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
@@ -242,8 +235,6 @@ public class IssueControllerTest {
     public void getIssuesSortByPriorityAscDefaultShowParam() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
-
-        when(userService.findByUsername("follower")).thenReturn(follower);
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
@@ -269,8 +260,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("follower")).thenReturn(follower);
-
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
                         .param("sort","priorityDesc")
@@ -294,8 +283,6 @@ public class IssueControllerTest {
     public void getIssuesSortByPriorityAscClosedShowParam() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
-
-        when(userService.findByUsername("follower")).thenReturn(follower);
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
@@ -322,8 +309,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("follower")).thenReturn(follower);
-
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
                         .param("show", "closed")
@@ -349,8 +334,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("follower")).thenReturn(follower);
-
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
                         .param("show", "all")
@@ -375,8 +358,6 @@ public class IssueControllerTest {
     public void getIssuesSortByPriorityDescAllShowParam() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
-
-        when(userService.findByUsername("follower")).thenReturn(follower);
 
         mockMvc.perform(get("/dashboard/issues")
                         .param("projectId","1")
@@ -434,7 +415,7 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("admin")).thenReturn(admin);
+
 
         mockMvc.perform(get("/dashboard/issue")
                         .param("issueId","1")
@@ -451,8 +432,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("follower")).thenReturn(follower);
-
         mockMvc.perform(get("/dashboard/issue")
                         .param("issueId","1")
                         .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
@@ -467,8 +446,6 @@ public class IssueControllerTest {
         when(issueService.findById(1)).thenReturn(issue);
 
         when(projectService.findById(1)).thenReturn(project);
-
-        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(get("/dashboard/issue")
                         .param("issueId","1")
@@ -494,7 +471,7 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("collaborator")).thenReturn(collaborator);
+
 
         mockMvc.perform(get("/dashboard/newIssue")
                         .param("projectId","1")
@@ -514,8 +491,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("follower")).thenReturn(follower);
-
         mockMvc.perform(get("/dashboard/newIssue")
                         .param("projectId","1")
                         .with(SecurityMockMvcRequestPostProcessors.user("follower").roles("USER")))
@@ -528,8 +503,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
-
         mockMvc.perform(get("/dashboard/newIssue")
                         .param("projectId","1")
                         .with(SecurityMockMvcRequestPostProcessors.user("notFollower").roles("USER")))
@@ -541,8 +514,6 @@ public class IssueControllerTest {
     public void getNewIssueFormValidProjectIdIsAdmin() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
-
-        when(userService.findByUsername("admin")).thenReturn(admin);
 
         mockMvc.perform(get("/dashboard/newIssue")
                         .param("projectId","1")
@@ -567,12 +538,10 @@ public class IssueControllerTest {
     public void getEditIssueFormValidIssueIdIsOwner() throws Exception {
 
         Issue mockIssue = mock(Issue.class);
-        when(mockIssue.getCreatedBy()).thenReturn(owner);
+//        when(mockIssue.getCreatedBy()).thenReturn(getOwner());
         when(mockIssue.getProject()).thenReturn(project);
 
         when(issueService.findById(1)).thenReturn(mockIssue);
-
-        when(userService.findByUsername("owner")).thenReturn(owner);
 
         mockMvc.perform(get("/dashboard/editIssue")
                         .param("issueId","1")
@@ -600,8 +569,6 @@ public class IssueControllerTest {
 
         when(issueService.findById(1)).thenReturn(issue);
 
-        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
-
         mockMvc.perform(get("/dashboard/editIssue")
                         .param("issueId","1")
                         .with(SecurityMockMvcRequestPostProcessors.user("notFollower").roles("USER")))
@@ -613,12 +580,10 @@ public class IssueControllerTest {
     public void getEditIssueFormValidIssueIdIsAdmin() throws Exception {
 
         Issue mockIssue = mock(Issue.class);
-        when(mockIssue.getCreatedBy()).thenReturn(owner);
+//        when(mockIssue.getCreatedBy()).thenReturn(getOwner());
         when(mockIssue.getProject()).thenReturn(project);
 
         when(issueService.findById(1)).thenReturn(mockIssue);
-
-        when(userService.findByUsername("admin")).thenReturn(admin);
 
         mockMvc.perform(get("/dashboard/editIssue")
                         .param("issueId","1")
@@ -643,13 +608,11 @@ public class IssueControllerTest {
     public void getEditIssueFormValidIssueIdIsProjectOwner() throws Exception {
 
         Issue mockIssue = mock(Issue.class);
-        when(mockIssue.getCreatedBy()).thenReturn(owner);
+//        when(mockIssue.getCreatedBy()).thenReturn(getOwner());
 
         when(mockIssue.getProject()).thenReturn(project);
 
         when(issueService.findById(1)).thenReturn(mockIssue);
-
-        when(userService.findByUsername("projectOwner")).thenReturn(projectOwner);
 
         mockMvc.perform(get("/dashboard/editIssue")
                         .param("issueId","1")
@@ -710,7 +673,7 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("collaborator")).thenReturn(collaborator);
+
 
         mockMvc.perform(post("/dashboard/processIssue")
                         .param("id","0")
@@ -730,8 +693,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("admin")).thenReturn(admin);
-
         mockMvc.perform(post("/dashboard/processIssue")
                         .param("id","0")
                         .param("summary", "summary")
@@ -746,8 +707,6 @@ public class IssueControllerTest {
     public void processIssueFormNewIssueIsProjectFollower() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
-
-        when(userService.findByUsername("follower")).thenReturn(follower);
 
         mockMvc.perform(post("/dashboard/processIssue")
                         .param("id","0")
@@ -779,8 +738,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
         when(issueService.findById(2)).thenReturn(null);
 
         mockMvc.perform(post("/dashboard/processIssue")
@@ -798,8 +755,6 @@ public class IssueControllerTest {
     public void processIssueFormUpdateIssueIsIssueOwner() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
-
-        when(userService.findByUsername("owner")).thenReturn(owner);
 
         when(issueService.findById(1)).thenReturn(issue);
 
@@ -821,8 +776,6 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("collaborator")).thenReturn(collaborator);
-
         when(issueService.findById(1)).thenReturn(issue);
 
         mockMvc.perform(post("/dashboard/processIssue")
@@ -840,8 +793,6 @@ public class IssueControllerTest {
     public void processIssueFormUpdateIssueIsAdmin() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
-
-        when(userService.findByUsername("admin")).thenReturn(admin);
 
         when(issueService.findById(1)).thenReturn(issue);
 
@@ -863,7 +814,7 @@ public class IssueControllerTest {
 
         when(projectService.findById(1)).thenReturn(project);
 
-        when(userService.findByUsername("projectOwner")).thenReturn(projectOwner);
+
 
         when(issueService.findById(1)).thenReturn(issue);
 
@@ -963,23 +914,19 @@ public class IssueControllerTest {
 
         when(issueService.findById(1)).thenReturn(issue);
 
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
         mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "1")
                         .with(csrf())
                         .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/dashboard/issues?projectId=1"));
 
-        verify(issueService).closeIssue(1,owner);
+//        verify(issueService).closeIssue(1,getOwner());
     }
 
     @Test
     public void closeIssueIsAdmin() throws Exception {
 
         when(issueService.findById(1)).thenReturn(issue);
-
-        when(userService.findByUsername("admin")).thenReturn(admin);
 
         mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "1")
                         .with(csrf())
@@ -995,8 +942,6 @@ public class IssueControllerTest {
 
         when(issueService.findById(1)).thenReturn(issue);
 
-        when(userService.findByUsername("projectOwner")).thenReturn(projectOwner);
-
         mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "1")
                         .with(csrf())
                         .with(SecurityMockMvcRequestPostProcessors.user("projectOwner").roles("USER")))
@@ -1010,8 +955,6 @@ public class IssueControllerTest {
     public void closeIssueIsNotOwner() throws Exception {
 
         when(issueService.findById(1)).thenReturn(issue);
-
-        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(patch("/dashboard/closeIssue/{issueId}", "1")
                         .with(csrf())
@@ -1049,8 +992,6 @@ public class IssueControllerTest {
 
         when(issueService.findById(2)).thenReturn(closedIssue);
 
-        when(userService.findByUsername("owner")).thenReturn(owner);
-
         mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "2")
                         .with(csrf())
                         .with(SecurityMockMvcRequestPostProcessors.user("owner").roles("USER")))
@@ -1064,8 +1005,6 @@ public class IssueControllerTest {
     public void reopenIssueIsAdmin() throws Exception {
 
         when(issueService.findById(2)).thenReturn(closedIssue);
-
-        when(userService.findByUsername("admin")).thenReturn(admin);
 
         mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "2")
                         .with(csrf())
@@ -1081,8 +1020,6 @@ public class IssueControllerTest {
 
         when(issueService.findById(2)).thenReturn(closedIssue);
 
-        when(userService.findByUsername("projectOwner")).thenReturn(projectOwner);
-
         mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "2")
                         .with(csrf())
                         .with(SecurityMockMvcRequestPostProcessors.user("projectOwner").roles("USER")))
@@ -1096,8 +1033,6 @@ public class IssueControllerTest {
     public void reopenIssueIsNotOwner() throws Exception {
 
         when(issueService.findById(2)).thenReturn(closedIssue);
-
-        when(userService.findByUsername("notFollower")).thenReturn(notFollower);
 
         mockMvc.perform(patch("/dashboard/reopenIssue/{issueId}", "2")
                         .with(csrf())

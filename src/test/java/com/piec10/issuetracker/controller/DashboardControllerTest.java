@@ -1,8 +1,11 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
+import com.piec10.issuetracker.controller.util.MockUserService;
+import com.piec10.issuetracker.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -18,9 +21,13 @@ public class DashboardControllerTest extends BaseControllerTest {
     private final String changePasswordUrl = "/dashboard/changePassword";
     private final String processPasswordChangeUrl = "/dashboard/processPasswordChange";
 
+    @MockBean
+    private UserService userService;
+
     @PostConstruct
     public void setup() {
-        getOwner().setPassword(new BCryptPasswordEncoder().encode("oldPass"));
+        MockUserService.mockSetup(userService);
+        MockUserService.getOwner().setPassword(new BCryptPasswordEncoder().encode("oldPass"));
     }
 
     @Test
@@ -143,7 +150,7 @@ public class DashboardControllerTest extends BaseControllerTest {
             andParam("matchingNewPassword", "newPass");
         whenPerformPost();
         thenExpect3xxRedirectionTo("/dashboard/profile");
-            andExpectUserServiceMethodCalledOnce().changePassword("owner","newPass");
+            andExpectMethodCalledOnceIn(userService).changePassword("owner","newPass");
     }
 
     @Test
@@ -181,6 +188,6 @@ public class DashboardControllerTest extends BaseControllerTest {
             andParam("matchingNewPassword", "newPass");
         whenPerformPost();
         thenExpect3xxRedirectionTo("/dashboard/adminPanel/");
-            andExpectUserServiceMethodCalledOnce().changePassword("owner","newPass");
+            andExpectMethodCalledOnceIn(userService).changePassword("owner","newPass");
     }
 }

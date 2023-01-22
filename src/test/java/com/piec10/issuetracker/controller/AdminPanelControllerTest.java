@@ -1,8 +1,10 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
+import com.piec10.issuetracker.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 
 import static com.piec10.issuetracker.controller.util.MockRequestUsers.admin;
@@ -13,6 +15,10 @@ import static com.piec10.issuetracker.controller.util.MockRequestUsers.user;
 public class AdminPanelControllerTest extends BaseControllerTest {
 
     private final String adminPanelUrl = "/dashboard/adminPanel/";
+
+    @MockBean
+    private UserService userService;
+
     @Test
     public void getAdminPanelAnonymousUser() throws Exception {
         givenUrl(adminPanelUrl);
@@ -43,6 +49,6 @@ public class AdminPanelControllerTest extends BaseControllerTest {
             andUser(admin());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/adminPanel/");
-            andExpectUserServiceMethodCalledOnce().deleteById("user");
+            andExpectMethodCalledOnceIn(userService).deleteById("user");
     }
 }
