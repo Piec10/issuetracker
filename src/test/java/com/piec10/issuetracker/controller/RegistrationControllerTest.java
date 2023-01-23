@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
+import com.piec10.issuetracker.controller.util.MockUserService;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormUser;
 import com.piec10.issuetracker.service.UserService;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.annotation.PostConstruct;
+
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,13 +23,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Import(SecurityConfig.class)
 @WebMvcTest(RegistrationController.class)
-public class RegistrationControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
+public class RegistrationControllerTest extends BaseControllerTest{
 
     @MockBean
     private UserService userService;
+
+    @PostConstruct
+    public void setup() {
+        MockUserService.mockSetup(userService);
+        when(userService.exists("user")).thenReturn(true);
+        when(userService.findByEmail("email@email.com")).thenReturn(new User());
+    }
 
     @Test
     public void getRegistrationFormAnonymousUser() throws Exception {
@@ -70,8 +77,6 @@ public class RegistrationControllerTest {
     @Test
     public void processRegistrationFormUserAlreadyExist() throws Exception {
 
-        when(userService.exists("user")).thenReturn(true);
-
         mockMvc.perform(post("/register/processRegistrationForm")
                         .param("username", "user")
                         .param("email", "email@email.com")
@@ -86,11 +91,10 @@ public class RegistrationControllerTest {
     @Test
     public void processRegistrationFormEmailAlreadyExist() throws Exception {
 
-        when(userService.exists("user")).thenReturn(false);
-        when(userService.findByEmail("email@email.com")).thenReturn(new User());
+
 
         mockMvc.perform(post("/register/processRegistrationForm")
-                        .param("username", "user")
+                        .param("username", "user2")
                         .param("email", "email@email.com")
                         .param("password", "password")
                         .param("matchingPassword", "password")
@@ -106,8 +110,8 @@ public class RegistrationControllerTest {
         FormUser formUser = new FormUser();
 
         mockMvc.perform(post("/register/processRegistrationForm")
-                        .param("username", "user")
-                        .param("email", "email@email.com")
+                        .param("username", "user2")
+                        .param("email", "email2@email.com")
                         .param("password", "password")
                         .param("matchingPassword", "password")
                         .flashAttr("formUser", formUser)
