@@ -137,7 +137,9 @@ public class IssueController {
 
         if(issue == null) return "redirect:/dashboard/projects";
 
-        if(isAdminOrOwner(issue.getCreatedBy(), request) || isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())){
+        Project project = issue.getProject();
+
+        if(isAdminOrOwner(issue.getCreatedBy(), request) || isProjectOwner(project.getCreatedBy(), request.getUserPrincipal())){
 
             FormIssue formIssue = new FormIssue();
 
@@ -145,7 +147,7 @@ public class IssueController {
             formIssue.setSummary(issue.getSummary());
             formIssue.setDescription(issue.getDescription());
             formIssue.setPriority(issue.getPriority());
-            formIssue.setProjectId(issue.getProject().getId());
+            formIssue.setProjectId(project.getId());
 
             List<Integer> issueTags = issue.getIssueTags().stream()
                     .map(issueType -> issueType.getId()).collect(Collectors.toList());

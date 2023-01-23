@@ -1,5 +1,6 @@
 package com.piec10.issuetracker.controller;
 
+import com.piec10.issuetracker.form.FormIssue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -9,7 +10,10 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -36,6 +40,8 @@ public abstract class BaseControllerTest {
 
     private MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
+    private Map<String, Object> flashAttributes = new LinkedHashMap<>();
+
     protected void givenUrl(String url, Object... uriVariables) {
         givenUrl(url);
         this.uriVariables = uriVariables;
@@ -46,6 +52,7 @@ public abstract class BaseControllerTest {
         requestUser = null;
         params.clear();
         uriVariables = new Object[]{};
+        flashAttributes.clear();
     }
 
     protected void andUrl(String url, Object... uriVariables) {
@@ -61,6 +68,7 @@ public abstract class BaseControllerTest {
         andUser(requestUser);
         params.clear();
         uriVariables = new Object[]{};
+        flashAttributes.clear();
     }
 
     protected void andUser(SecurityMockMvcRequestPostProcessors.UserRequestPostProcessor requestUser) {
@@ -70,12 +78,17 @@ public abstract class BaseControllerTest {
     protected void givenParam(String name, String value) {
         requestUser = null;
         params.clear();
+        flashAttributes.clear();
         uriVariables = new Object[]{};
         andParam(name, value);
     }
 
     protected void andParam(String name, String value) {
         params.put(name, List.of(value));
+    }
+
+    protected void andAttribute(String name, Object value) {
+        flashAttributes.put(name, value);
     }
 
     protected void whenPerformGet() throws Exception {
@@ -90,14 +103,21 @@ public abstract class BaseControllerTest {
         performRequest(HttpMethod.DELETE);
     }
 
+    protected void whenPerformPatch() throws Exception {
+        performRequest(HttpMethod.PATCH);
+    }
+
     private void performRequest(HttpMethod method) throws Exception{
         request = request(method, url, uriVariables);
 
         if(requestUser != null){
             request.with(requestUser);
         }
-        if(method == HttpMethod.POST || method == HttpMethod.DELETE) {
+        if(method == HttpMethod.POST || method == HttpMethod.DELETE || method == HttpMethod.PATCH) {
             request.with(csrf());
+        }
+        if(!flashAttributes.isEmpty()){
+            request.flashAttrs(flashAttributes);
         }
         request.params(params);
 
@@ -142,4 +162,5 @@ public abstract class BaseControllerTest {
     protected <T extends Object> T andExpectMethodCalledOnceIn(T service) {
         return verify(service);
     }
+
 }
