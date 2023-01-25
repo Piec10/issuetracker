@@ -1,5 +1,7 @@
 package com.piec10.issuetracker.controller;
 
+import com.piec10.issuetracker.dto.ProjectDto;
+import com.piec10.issuetracker.dto.ProjectDtoWrapper;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormProject;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
@@ -28,6 +31,9 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
 
+    @Autowired
+    ProjectDtoWrapper projectDtoWrapper;
+
     private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/projects")
@@ -40,7 +46,7 @@ public class ProjectController {
         if (isAdmin(request)) projects = projectService.findAll();
         else projects = currentUser.getFollowedProjects();
 
-        model.addAttribute("projects", projects);
+        model.addAttribute("projects", projects.stream().map(pr -> projectDtoWrapper.wrap(pr)).collect(Collectors.toList()));
         model.addAttribute("user", currentUser);
 
         return "dashboard/projects";
