@@ -43,7 +43,11 @@ public interface IssueService {
 
     IssueType findIssueTypeById(int issueTypeId);
 
+    IssueType findIssueTypeByName(String name);
+
     IssueStatus findIssueStatusById(int issueStatusId);
+
+    IssueStatus findIssueStatusByName(String name);
 
     IssueTag findIssueTagById(int issueTagId);
 

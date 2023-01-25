@@ -181,12 +181,24 @@ public class IssueServiceImpl implements IssueService{
     }
 
     @Override
+    public IssueType findIssueTypeByName(String name) {
+
+        return issueTypeRepository.findByName(name);
+    }
+
+    @Override
     public IssueStatus findIssueStatusById(int issueStatusId) {
 
         Optional<IssueStatus> issueStatus = issueStatusRepository.findById(issueStatusId);
 
         if(issueStatus.isPresent()) return issueStatus.get();
         else return null;
+    }
+
+    @Override
+    public IssueStatus findIssueStatusByName(String name) {
+
+        return issueStatusRepository.findByName(name);
     }
 
     @Override

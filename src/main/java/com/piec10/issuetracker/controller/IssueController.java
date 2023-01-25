@@ -1,8 +1,6 @@
 package com.piec10.issuetracker.controller;
 
-import com.piec10.issuetracker.entity.Issue;
-import com.piec10.issuetracker.entity.Project;
-import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.entity.*;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.ProjectService;
@@ -119,8 +117,15 @@ public class IssueController {
             FormIssue formIssue = new FormIssue();
             formIssue.setProjectId(projectId);
 
+            List<IssueStatus> issueStatuses = issueService.findAllIssueStatuses();
+            IssueStatus done = issueService.findIssueStatusByName("Done");
+
+            if(done != null){
+                issueStatuses.remove(done);
+            }
+
             model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
-            model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
+            model.addAttribute("allIssueStatuses", issueStatuses);
             model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";

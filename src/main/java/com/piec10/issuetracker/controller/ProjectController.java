@@ -108,6 +108,9 @@ public class ProjectController {
                                             @RequestParam("username") String followerUsername,
                                             BindingResult theBindingResult) {
 
+        if (formProject.getCollaboratorsNames().contains(followerUsername))
+            formProject.getCollaboratorsNames().remove(followerUsername);
+
         if (!formProject.getFollowersNames().contains(followerUsername))
             formProject.getFollowersNames().add(followerUsername);
 
