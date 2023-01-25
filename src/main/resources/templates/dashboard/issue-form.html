@@ -15,7 +15,7 @@
     <link rel="stylesheet" th:href="@{/css/home-fade.css}"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
-    <title>Issue Tracker Dashboard</title>
+    <title th:text="${(formIssue.id == 0) ? 'Issue Tracker | New Issue' : 'Issue Tracker | Edit Issue'}"/>
 
 </head>
 <body>
@@ -37,101 +37,101 @@
                         <div class="col-auto flex-grow-1 fs-3">
                             <span th:text="${(formIssue.id == 0) ? 'Create New Issue' : 'Edit Issue'}"/>
                         </div>
-<div class="col-12">
+                        <div class="col-12">
 
-                        <form class="p-3 border rounded-3 bg-light" th:action="@{/dashboard/processIssue}"
-                              th:object="${formIssue}" method="POST">
-                            <div class="row g-4">
-                                <div class="col-12 col-md-6">
+                            <form class="p-3 border rounded-3 bg-light" th:action="@{/dashboard/processIssue}"
+                                  th:object="${formIssue}" method="POST">
+                                <div class="row g-4">
+                                    <div class="col-12 col-md-6">
 
-                                    <!-- Summary -->
-                                    <div class="form-floating">
+                                        <!-- Summary -->
+                                        <div class="form-floating">
 
-                                        <!-- Add hidden form field to handle update -->
-                                        <input type="hidden" th:field="*{id}"/>
+                                            <!-- Add hidden form field to handle update -->
+                                            <input type="hidden" th:field="*{id}"/>
 
-                                        <!-- Add hidden form field for projectId -->
-                                        <input type="hidden" th:field="*{projectId}"/>
+                                            <!-- Add hidden form field for projectId -->
+                                            <input type="hidden" th:field="*{projectId}"/>
 
-                                        <input th:field="*{summary}" type="text" name="summary" id="floatingInput"
-                                               placeholder="Summary" class="form-control">
-                                        <label for="floatingInput" class="text-secondary">Summary</label>
-                                    </div>
-                                    <div th:if="${#fields.hasErrors('summary')}" class="text-danger">
-                                        <small>
-                                            <ul>
-                                                <li th:each="err : ${#fields.errors('summary')}" th:text="${err}"/>
-                                            </ul>
-                                        </small>
-                                    </div>
+                                            <input th:field="*{summary}" type="text" name="summary" id="floatingInput"
+                                                   placeholder="Summary" class="form-control">
+                                            <label for="floatingInput" class="text-secondary">Summary</label>
+                                        </div>
+                                        <div th:if="${#fields.hasErrors('summary')}" class="text-danger">
+                                            <small>
+                                                <ul>
+                                                    <li th:each="err : ${#fields.errors('summary')}" th:text="${err}"/>
+                                                </ul>
+                                            </small>
+                                        </div>
 
-                                    <!-- Description -->
-                                    <div class="form-floating mt-4">
+                                        <!-- Description -->
+                                        <div class="form-floating mt-4">
                                 <textarea th:field="*{description}" class="form-control" id="floatingTextarea"
                                           placeholder="Description" style="height: 100px"></textarea>
-                                        <label for="floatingTextarea" class="text-secondary">Description</label>
-                                    </div>
+                                            <label for="floatingTextarea" class="text-secondary">Description</label>
+                                        </div>
 
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="form-floating">
-                                        <select th:field="*{priority}" class="form-select" id="floatingSelect">
-                                            <option th:each="tempPriority, iteration : ${priorities.getPriorities()}"
-                                                    th:value="${iteration.index}" th:text="${tempPriority}">
-                                            </option>
-                                        </select>
-                                        <label for="floatingSelect">Priority</label>
                                     </div>
-                                    <div class="row mt-0 g-3 p-2">
-                                        <div class="col-12 border rounded-3 p-3">
-                                            <span class="mb-3">Issue type:</span>
-                                            <div class="row row-cols-auto g-3 mt-0">
-                                                <div th:each="issueType, stat : ${allIssueTypes}">
-                                                    <input type="radio" class="btn-check"
-                                                           th:value="${issueType.id}"
-                                                           th:field="*{issueTypeId}"/>
-                                                    <label class="btn btn-outline-secondary"
-                                                           th:for="'issueTypeId'+${stat.count}"
-                                                           th:text="${issueType.name}"/>
+                                    <div class="col-12 col-md-6">
+                                        <div class="form-floating">
+                                            <select th:field="*{priority}" class="form-select" id="floatingSelect">
+                                                <option th:each="tempPriority, iteration : ${priorities.getPriorities()}"
+                                                        th:value="${iteration.index}" th:text="${tempPriority}">
+                                                </option>
+                                            </select>
+                                            <label for="floatingSelect">Priority</label>
+                                        </div>
+                                        <div class="row mt-0 g-3 p-2">
+                                            <div class="col-12 border rounded-3 p-3">
+                                                <span class="mb-3">Issue type:</span>
+                                                <div class="row row-cols-auto g-3 mt-0">
+                                                    <div th:each="issueType, stat : ${allIssueTypes}">
+                                                        <input type="radio" class="btn-check"
+                                                               th:value="${issueType.id}"
+                                                               th:field="*{issueTypeId}"/>
+                                                        <label class="btn btn-outline-secondary"
+                                                               th:for="'issueTypeId'+${stat.count}"
+                                                               th:text="${issueType.name}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 border rounded-3 p-3">
+                                                <span class="mb-3">Status:</span>
+                                                <div class="row row-cols-auto g-3 mt-0">
+                                                    <div th:each="issueStatus, stat : ${allIssueStatuses}">
+                                                        <input type="radio" class="btn-check"
+                                                               th:value="${issueStatus.id}"
+                                                               th:field="*{issueStatusId}"/>
+                                                        <label class="btn btn-outline-secondary"
+                                                               th:for="'issueStatusId'+${stat.count}"
+                                                               th:text="${issueStatus.name}"/>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div class="col-12 border rounded-3 p-3">
-                                            <span class="mb-3">Status:</span>
-                                            <div class="row row-cols-auto g-3 mt-0">
-                                                <div th:each="issueStatus, stat : ${allIssueStatuses}">
-                                                    <input type="radio" class="btn-check"
-                                                           th:value="${issueStatus.id}"
-                                                           th:field="*{issueStatusId}"/>
-                                                    <label class="btn btn-outline-secondary"
-                                                           th:for="'issueStatusId'+${stat.count}"
-                                                           th:text="${issueStatus.name}"/>
-                                                </div>
-                                            </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4">
+                                <div class="row">
+                                    <div th:if="${guestUserError}">
+                                        <div class="alert alert-danger mt-4">
+                                            <small>
+                                                <span th:text="${guestUserError}"></span>
+                                            </small>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <hr class="my-4">
-                            <div class="row">
-                                <div th:if="${guestUserError}">
-                                    <div class="alert alert-danger mt-4">
-                                        <small>
-                                            <span th:text="${guestUserError}"></span>
-                                        </small>
+                                    <div class="col">
+                                        <button class="w-100 btn btn-outline-secondary" type="submit">Save</button>
+                                    </div>
+                                    <div class="col">
+                                        <a class="w-100 btn btn-outline-secondary"
+                                           th:href="@{/dashboard/issues(projectId=${formIssue.projectId})}">Cancel</a>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <button class="w-100 btn btn-outline-secondary" type="submit">Save</button>
-                                </div>
-                                <div class="col">
-                                    <a class="w-100 btn btn-outline-secondary"
-                                       th:href="@{/dashboard/issues(projectId=${formIssue.projectId})}">Cancel</a>
-                                </div>
-                            </div>
-                        </form>
-</div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
