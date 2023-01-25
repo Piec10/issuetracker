@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
