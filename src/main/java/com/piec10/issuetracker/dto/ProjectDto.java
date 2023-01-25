@@ -1,8 +1,6 @@
 package com.piec10.issuetracker.dto;
 
 import com.piec10.issuetracker.entity.Project;
-import com.piec10.issuetracker.service.IssueService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 public class ProjectDto extends Project {

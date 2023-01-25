@@ -46,7 +46,8 @@ public class ProjectController {
         if (isAdmin(request)) projects = projectService.findAll();
         else projects = currentUser.getFollowedProjects();
 
-        model.addAttribute("projects", projects.stream().map(pr -> projectDtoWrapper.wrap(pr)).collect(Collectors.toList()));
+        model.addAttribute("projects",
+                projects.stream().map(project -> projectDtoWrapper.wrap(project)).collect(Collectors.toList()));
         model.addAttribute("user", currentUser);
 
         return "dashboard/projects";
