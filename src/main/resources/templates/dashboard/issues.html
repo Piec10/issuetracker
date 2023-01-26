@@ -265,7 +265,8 @@
                                             <h2 class="accordion-header" th:id="'heading'+${tempIssue.id}">
                                                 <div class="btn-group w-100 border-bottom rounded-0" role="group"
                                                      aria-label="Basic example">
-                                                    <a th:href="@{/dashboard/issue(issueId=${tempIssue.id})}"
+                                                    <a href="" data-bs-toggle="modal"
+                                                       th:data-bs-target="'#issueDetailsModal_'+${tempIssue.id}"
                                                        class="btn btn-light text-start " style="">
                                                         <span th:text="${tempIssue.summary}"/>
                                                     </a>
