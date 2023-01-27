@@ -54,4 +54,6 @@ public interface IssueService {
     List<IssueType> findAllIssueTypes();
 
     List<IssueStatus> findAllIssueStatuses();
+
+    void changeIssueStatus(Issue issue, int statusId);
 }

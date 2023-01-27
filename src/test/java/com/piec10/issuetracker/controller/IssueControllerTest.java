@@ -24,14 +24,15 @@ import static org.mockito.Mockito.*;
 @WebMvcTest(IssueController.class)
 public class IssueControllerTest extends BaseControllerTest {
 
-    private final String ISSUES_URL = "/dashboard/issues";
-    private final String ISSUE_DETAILS_URL = "/dashboard/issue";
-    private final String NEW_ISSUE_URL = "/dashboard/newIssue";
-    private final String EDIT_ISSUE_URL = "/dashboard/editIssue";
-    private final String PROCESS_ISSUE_URL = "/dashboard/processIssue";
-    private final String DELETE_ISSUE_URL = "/dashboard/deleteIssue/{issueId}";
-    private final String CLOSE_ISSUE_URL = "/dashboard/closeIssue/{issueId}";
-    private final String REOPEN_ISSUE_URL = "/dashboard/reopenIssue/{issueId}";
+    private static final String ISSUES_URL = "/dashboard/issues";
+    private static final String ISSUE_DETAILS_URL = "/dashboard/issue";
+    private static final String NEW_ISSUE_URL = "/dashboard/newIssue";
+    private static final String EDIT_ISSUE_URL = "/dashboard/editIssue";
+    private static final String PROCESS_ISSUE_URL = "/dashboard/processIssue";
+    private static final String DELETE_ISSUE_URL = "/dashboard/deleteIssue/{issueId}";
+    private static final String CLOSE_ISSUE_URL = "/dashboard/closeIssue/{issueId}";
+    private static final String REOPEN_ISSUE_URL = "/dashboard/reopenIssue/{issueId}";
+    private static final String CHANGE_ISSUE_STATUS_URL = "/dashboard/changeIssueStatus/{issueId}";
     @MockBean
     private UserService userService;
     @MockBean
@@ -626,6 +627,16 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(owner());
         whenPerformPatch();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
+    }
+    
+    @Test
+    public void changeIssueStatusIsOwner() throws Exception {
+        givenUrl(CHANGE_ISSUE_STATUS_URL, "1");
+        andUser(owner());
+        andParam("statusId", "1");
+        whenPerformPatch();
+        thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
+        andExpectMethodCalledOnceIn(issueService).changeIssueStatus(MockIssueService.getIssue(),1);
     }
 
     private void thenExpectValidOpenIssuesView() throws Exception {

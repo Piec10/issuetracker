@@ -346,4 +346,17 @@ public class IssueServiceTest {
 
     }
 
+    @Test
+    public void changeIssueStatusService() {
+        IssueStatus issueStatus = new IssueStatus();
+        issueStatus.setId(2);
+
+        when(issueStatusRepository.findById(2)).thenReturn(Optional.of(issueStatus));
+
+        issueService.changeIssueStatus(issue, 2);
+        verify(issueRepository).save(capturedIssue.capture());
+
+        assertEquals(issueStatus, capturedIssue.getValue().getIssueStatus(), "Issue status should be updated");
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
+import com.piec10.issuetracker.dto.ProjectDtoWrapper;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormProject;
@@ -35,6 +36,9 @@ public class ProjectControllerTest {
 
     @MockBean
     private ProjectService projectService;
+
+    @MockBean
+    private ProjectDtoWrapper projectDtoWrapper;
 
     private static User user;
 

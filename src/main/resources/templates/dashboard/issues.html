@@ -147,8 +147,8 @@
                                         <div class="col">
                                             <div class="row">
                                                 <div class="col">Summary</div>
-                                                <div class="col-4 col-xl-3 col-xxl-2">Reporter</div>
-                                                <div th:if="${show == 'closed' or show == 'all'}" class="col-4 col-xl-3 col-xxl-2">Closed
+                                                <div class="col-4 col-xl-3">Reporter</div>
+                                                <div th:if="${show == 'closed' or show == 'all'}" class="col-4 col-xl-3">Closed
                                                     by
                                                 </div>
                                             </div>
@@ -420,7 +420,7 @@
                                                 <div class="col"><span th:text="${tempIssue.summary}"/></div>
 
 
-                                                <div class="col-4 col-xl-3 col-xxl-2">
+                                                <div class="col-4 col-xl-3">
                                                     <div th:switch="${tempIssue.createdBy == null}">
                                                         <div th:case="true">
                                                             <small class="text-secondary fst-italic">
@@ -433,7 +433,7 @@
                                                     </div>
                                                     <small><span th:text="${tempIssue.createdAt}"/></small>
                                                 </div>
-                                                <div class="col-4 col-xl-3 col-xxl-2" th:if="${show == 'closed' or show == 'all'}">
+                                                <div class="col-4 col-xl-3" th:if="${show == 'closed' or show == 'all'}">
                                                     <div th:if="${tempIssue.closedAt != null}">
                                                         <div th:switch="${tempIssue.closedBy == null}">
                                                             <div th:case="true">

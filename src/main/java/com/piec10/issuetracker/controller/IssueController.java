@@ -280,6 +280,23 @@ public class IssueController {
         } else return "redirect:/access-denied";
     }
 
+    @PatchMapping("/changeIssueStatus/{issueId}")
+    public String changeIssueStatus(@PathVariable int issueId,
+                                    @RequestParam("statusId") int statusId,
+                                    HttpServletRequest request) {
+
+        Issue issue = issueService.findById(issueId);
+        if (issue == null) return "redirect:/dashboard/projects";
+
+        if (isAdminOrOwner(issue.getCreatedBy(), request) ||
+                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())) {
+
+            issueService.changeIssueStatus(issue, statusId);
+            return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
+        }
+        else return "redirect:/access-denied";
+    }
+
     private List<Issue> getIssues(int projectId, String show, String sort) {
 
         if(show.equals("open")) {

@@ -219,4 +219,13 @@ public class IssueServiceImpl implements IssueService{
     public List<IssueStatus> findAllIssueStatuses() {
         return issueStatusRepository.findAll();
     }
+
+    @Override
+    public void changeIssueStatus(Issue issue, int statusId) {
+        IssueStatus issueStatus = findIssueStatusById(statusId);
+        if(issueStatus != null) {
+            issue.setIssueStatus(issueStatus);
+            issueRepository.save(issue);
+        }
+    }
 }
