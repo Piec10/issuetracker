@@ -498,7 +498,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(owner());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteById(1);
+        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
     }
 
     @Test
@@ -507,7 +507,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(admin());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteById(1);
+        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
     }
 
     @Test
@@ -516,7 +516,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(projectOwner());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteById(1);
+        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
     }
 
     @Test
@@ -541,7 +541,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(owner());
         whenPerformPatch();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).closeIssue(1, MockUserService.getOwner());
+        andExpectMethodCalledOnceIn(issueService).closeIssue(MockIssueService.getIssue(), MockUserService.getOwner());
     }
 
     @Test
@@ -550,7 +550,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(admin());
         whenPerformPatch();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).closeIssue(1, MockUserService.getAdmin());
+        andExpectMethodCalledOnceIn(issueService).closeIssue(MockIssueService.getIssue(), MockUserService.getAdmin());
     }
 
     @Test
@@ -559,7 +559,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(projectOwner());
         whenPerformPatch();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).closeIssue(1, MockUserService.getProjectOwner());
+        andExpectMethodCalledOnceIn(issueService).closeIssue(MockIssueService.getIssue(), MockUserService.getProjectOwner());
     }
 
     @Test
@@ -675,7 +675,7 @@ public class IssueControllerTest extends BaseControllerTest {
         verify(MockIssueService.getMockIssue()).getSummary();
         verify(MockIssueService.getMockIssue()).getDescription();
         verify(MockIssueService.getMockIssue()).getPriority();
-        verify(MockIssueService.getMockIssue()).getProject();
+        verify(MockIssueService.getMockIssue(), times(2)).getProject();
         verify(MockIssueService.getMockIssue()).getIssueTags();
         verify(MockIssueService.getMockIssue()).getIssueType();
         verify(MockIssueService.getMockIssue()).getIssueStatus();

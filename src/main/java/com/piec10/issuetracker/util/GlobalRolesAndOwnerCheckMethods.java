@@ -20,16 +20,16 @@ public class GlobalRolesAndOwnerCheckMethods {
         return request.isUserInRole("ROLE_ADMIN");
     }
 
-    public static boolean isOwner(User user, Principal principal) {
-        return (user != null ? (user.getUsername().equals(principal.getName())) : false);
+    public static boolean isAdminOrOwner(User owner, HttpServletRequest request) {
+        return isAdmin(request) || isOwner(owner, request.getUserPrincipal());
     }
 
-    public static boolean isAdminOrOwner(User user, HttpServletRequest request) {
-        return request.isUserInRole("ROLE_ADMIN") || isOwner(user, request.getUserPrincipal());
+    public static boolean isProjectOwner(User owner, Principal principal) {
+        return isOwner(owner, principal);
     }
 
-    public static boolean isProjectOwner(User user, Principal principal) {
-        return (user != null ? (user.getUsername().equals(principal.getName())) : false);
+    public static boolean isOwner(User owner, Principal principal) {
+        return (owner != null ? (owner.getUsername().equals(principal.getName())) : false);
     }
 
     public static UserProjectRoles getUserProjectRoles(Project project, User user) {

@@ -94,17 +94,13 @@ public class IssueServiceImpl implements IssueService {
     }
 
     @Override
-    public void closeIssue(int issueId, User closedBy) {
+    public void closeIssue(Issue issue, User closedBy) {
 
-        Issue issue = findById(issueId);
+        if (issue.getClosedAt() == null) {
+            issue.setClosedBy(closedBy);
+            issue.setClosedAt(new Date());
 
-        if (issue != null) {
-            if (issue.getClosedBy() == null) {
-                issue.setClosedBy(closedBy);
-                issue.setClosedAt(new Date());
-
-                issueRepository.save(issue);
-            }
+            issueRepository.save(issue);
         }
     }
 
@@ -222,5 +218,10 @@ public class IssueServiceImpl implements IssueService {
             issue.setIssueStatus(issueStatus);
             issueRepository.save(issue);
         }
+    }
+
+    @Override
+    public void deleteIssue(Issue issue) {
+        issueRepository.delete(issue);
     }
 }

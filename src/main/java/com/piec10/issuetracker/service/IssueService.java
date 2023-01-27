@@ -17,7 +17,7 @@ public interface IssueService {
 
     void deleteById(int issueId);
 
-    void closeIssue(int issueId, User closedBy);
+    void closeIssue(Issue issue, User closedBy);
 
     void reopenIssue(Issue issue);
 
@@ -56,4 +56,6 @@ public interface IssueService {
     List<IssueStatus> findAllIssueStatuses();
 
     void changeIssueStatus(Issue issue, int statusId);
+
+    void deleteIssue(Issue issue);
 }

@@ -296,9 +296,7 @@ public class IssueServiceTest {
 
         issue.setId(id);
 
-        when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
-
-        issueService.closeIssue(id, closedBy);
+        issueService.closeIssue(issue, closedBy);
 
         verify(issueRepository).save(capturedIssue.capture());
 
