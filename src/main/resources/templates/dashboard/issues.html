@@ -148,7 +148,8 @@
                                             <div class="row">
                                                 <div class="col">Summary</div>
                                                 <div class="col-4 col-xl-3">Reporter</div>
-                                                <div th:if="${show == 'closed' or show == 'all'}" class="col-4 col-xl-3">Closed
+                                                <div th:if="${show == 'closed' or show == 'all'}"
+                                                     class="col-4 col-xl-3">Closed
                                                     by
                                                 </div>
                                             </div>
@@ -195,32 +196,38 @@
                                                         aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <div class="row row-cols-2 row-cols-md-3 text-md-center gy-2">
-                                                    <div class="">
-                                                        Type:
-                                                        <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <div class="row row-cols-2 row-cols-md-3 text-md-center gy-2">
+                                                            <div class="col">
+                                                                Priority:
+                                                                <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                            </div>
+                                                            <div class="col">
+                                                                Type:
+                                                                <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
+                                                            </div>
+                                                            <div class="col">
+                                                                Status:
+                                                                <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="">
-                                                        Priority:
-                                                        <span th:text="${priorities.getName(tempIssue.priority)}"/>
-                                                    </div>
-                                                    <div class="">
-                                                        Status:
-                                                        <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div th:switch="${tempIssue.description == null}">
-                                                    <div th:case="true">
-                                                        <span>No description</span>
-                                                    </div>
-                                                    <div th:case="false">
+                                                    <div class="card-body">
+                                                        <div th:switch="${tempIssue.description == null}">
+                                                            <div th:case="true">
+                                                                <span>No description</span>
+                                                            </div>
+                                                            <div th:case="false">
                                                         <span style="white-space: pre-line"
                                                               th:text="${tempIssue.description}"/>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="modal-footer"
                                                  th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
                                                 <div class="row w-100">
@@ -433,7 +440,8 @@
                                                     </div>
                                                     <small><span th:text="${tempIssue.createdAt}"/></small>
                                                 </div>
-                                                <div class="col-4 col-xl-3" th:if="${show == 'closed' or show == 'all'}">
+                                                <div class="col-4 col-xl-3"
+                                                     th:if="${show == 'closed' or show == 'all'}">
                                                     <div th:if="${tempIssue.closedAt != null}">
                                                         <div th:switch="${tempIssue.closedBy == null}">
                                                             <div th:case="true">
