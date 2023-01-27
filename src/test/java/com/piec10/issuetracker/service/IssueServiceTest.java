@@ -327,9 +327,8 @@ public class IssueServiceTest {
         issue.setClosedBy(closedBy);
         issue.setClosedAt(closedAt);
 
-        when(issueRepository.findById(id)).thenReturn(Optional.of(issue));
 
-        issueService.reopenIssue(id);
+        issueService.reopenIssue(issue);
 
         verify(issueRepository).save(capturedIssue.capture());
 

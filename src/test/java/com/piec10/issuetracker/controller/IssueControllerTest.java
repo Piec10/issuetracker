@@ -592,7 +592,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(owner());
         whenPerformPatch();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).reopenIssue(3);
+        andExpectMethodCalledOnceIn(issueService).reopenIssue(MockIssueService.getClosedIssue());
     }
 
     @Test
@@ -601,7 +601,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(admin());
         whenPerformPatch();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).reopenIssue(3);
+        andExpectMethodCalledOnceIn(issueService).reopenIssue(MockIssueService.getClosedIssue());
     }
 
     @Test
@@ -610,7 +610,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(projectOwner());
         whenPerformPatch();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).reopenIssue(3);
+        andExpectMethodCalledOnceIn(issueService).reopenIssue(MockIssueService.getClosedIssue());
     }
 
     @Test

@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class IssueServiceImpl implements IssueService{
+public class IssueServiceImpl implements IssueService {
 
     @Autowired
     private IssueRepository issueRepository;
@@ -37,12 +37,11 @@ public class IssueServiceImpl implements IssueService{
 
     @Override
     public Issue findById(int issueId) {
-        Optional<Issue> issue =  issueRepository.findById(issueId);
+        Optional<Issue> issue = issueRepository.findById(issueId);
 
-        if(issue.isPresent()){
+        if (issue.isPresent()) {
             return issue.get();
-        }
-        else return null;
+        } else return null;
     }
 
     @Override
@@ -72,7 +71,7 @@ public class IssueServiceImpl implements IssueService{
 
         Issue issue = findById(formIssue.getId());
 
-        if(issue != null) {
+        if (issue != null) {
             issue.setSummary(formIssue.getSummary());
             issue.setDescription(formIssue.getDescription());
             issue.setPriority(formIssue.getPriority());
@@ -99,25 +98,21 @@ public class IssueServiceImpl implements IssueService{
 
         Issue issue = findById(issueId);
 
-        if(issue != null) {
-            issue.setClosedBy(closedBy);
-            issue.setClosedAt(new Date());
+        if (issue != null) {
+            if (issue.getClosedBy() == null) {
+                issue.setClosedBy(closedBy);
+                issue.setClosedAt(new Date());
 
-            issueRepository.save(issue);
+                issueRepository.save(issue);
+            }
         }
     }
 
     @Override
-    public void reopenIssue(int issueId) {
-
-        Issue issue = findById(issueId);
-
-        if(issue != null) {
-            issue.setClosedBy(null);
-            issue.setClosedAt(null);
-
-            issueRepository.save(issue);
-        }
+    public void reopenIssue(Issue issue) {
+        issue.setClosedBy(null);
+        issue.setClosedAt(null);
+        issueRepository.save(issue);
     }
 
     @Override
@@ -176,7 +171,7 @@ public class IssueServiceImpl implements IssueService{
 
         Optional<IssueType> issueType = issueTypeRepository.findById(issueTypeId);
 
-        if(issueType.isPresent()) return issueType.get();
+        if (issueType.isPresent()) return issueType.get();
         else return null;
     }
 
@@ -191,7 +186,7 @@ public class IssueServiceImpl implements IssueService{
 
         Optional<IssueStatus> issueStatus = issueStatusRepository.findById(issueStatusId);
 
-        if(issueStatus.isPresent()) return issueStatus.get();
+        if (issueStatus.isPresent()) return issueStatus.get();
         else return null;
     }
 
@@ -206,7 +201,7 @@ public class IssueServiceImpl implements IssueService{
 
         Optional<IssueTag> issueTag = issueTagRepository.findById(issueTagId);
 
-        if(issueTag.isPresent()) return issueTag.get();
+        if (issueTag.isPresent()) return issueTag.get();
         else return null;
     }
 
@@ -223,7 +218,7 @@ public class IssueServiceImpl implements IssueService{
     @Override
     public void changeIssueStatus(Issue issue, int statusId) {
         IssueStatus issueStatus = findIssueStatusById(statusId);
-        if(issueStatus != null) {
+        if (issueStatus != null) {
             issue.setIssueStatus(issueStatus);
             issueRepository.save(issue);
         }

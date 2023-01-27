@@ -19,7 +19,7 @@ public interface IssueService {
 
     void closeIssue(int issueId, User closedBy);
 
-    void reopenIssue(int issueId);
+    void reopenIssue(Issue issue);
 
     int getOpenIssuesCount(int projectId);
 

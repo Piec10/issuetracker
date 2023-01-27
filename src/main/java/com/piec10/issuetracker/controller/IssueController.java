@@ -6,6 +6,7 @@ import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
 import com.piec10.issuetracker.util.UserProjectRoles;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,12 +44,12 @@ public class IssueController {
 
         Project project = projectService.findById(projectId);
 
-        if(project == null) return "redirect:/dashboard/projects";
+        if (project == null) return toProjects();
 
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
-        if(isAdmin(request) || userProjectRoles.isFollower()){
+        if (isAdmin(request) || userProjectRoles.isFollower()) {
 
             List<Issue> issues;
 
@@ -73,8 +74,7 @@ public class IssueController {
             model.addAttribute("projectRoles", userProjectRoles);
 
             return "dashboard/issues";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 
     @GetMapping("/issue")
@@ -82,24 +82,24 @@ public class IssueController {
 
         Issue issue = issueService.findById(issueId);
 
-        if(issue == null) return "redirect:/dashboard/projects";
+        if (issue == null) return toProjects();
 
         Project project = issue.getProject();
 
-        if(project == null) return "redirect:/dashboard/projects";
+        if (project == null) return "redirect:/dashboard/projects";
 
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
-        if(isAdmin(request) || userProjectRoles.isFollower()){
+        if (isAdmin(request) || userProjectRoles.isFollower()) {
 
             model.addAttribute("issue", issue);
 
             return "dashboard/issue-details";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
 
     }
+
 
     @GetMapping("/newIssue")
     public String showNewIssueForm(@RequestParam(value = "projectId") int projectId,
@@ -107,12 +107,12 @@ public class IssueController {
 
         Project project = projectService.findById(projectId);
 
-        if(project == null) return "redirect:/dashboard/projects";
+        if (project == null) return "redirect:/dashboard/projects";
 
         User currentUser = userService.findByUsername(principal.getName());
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
-        if(userProjectRoles.isCollaborator()){
+        if (userProjectRoles.isCollaborator()) {
 
             FormIssue formIssue = new FormIssue();
             formIssue.setProjectId(projectId);
@@ -120,7 +120,7 @@ public class IssueController {
             List<IssueStatus> issueStatuses = issueService.findAllIssueStatuses();
             IssueStatus done = issueService.findIssueStatusByName("Done");
 
-            if(done != null){
+            if (done != null) {
                 issueStatuses.remove(done);
             }
 
@@ -129,8 +129,7 @@ public class IssueController {
             model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
 
     }
 
@@ -139,11 +138,11 @@ public class IssueController {
 
         Issue issue = issueService.findById(issueId);
 
-        if(issue == null) return "redirect:/dashboard/projects";
+        if (issue == null) return "redirect:/dashboard/projects";
 
         Project project = issue.getProject();
 
-        if(isAdminOrOwner(issue.getCreatedBy(), request) || isProjectOwner(project.getCreatedBy(), request.getUserPrincipal())){
+        if (isAdminOrOwner(issue.getCreatedBy(), request) || isProjectOwner(project.getCreatedBy(), request.getUserPrincipal())) {
 
             FormIssue formIssue = new FormIssue();
 
@@ -158,11 +157,11 @@ public class IssueController {
 
             formIssue.setIssueTags(issueTags);
 
-            if(issue.getIssueType() != null) {
+            if (issue.getIssueType() != null) {
                 formIssue.setIssueTypeId(issue.getIssueType().getId());
             }
 
-            if(issue.getIssueStatus() != null) {
+            if (issue.getIssueStatus() != null) {
                 formIssue.setIssueStatusId(issue.getIssueStatus().getId());
             }
 
@@ -171,13 +170,12 @@ public class IssueController {
             model.addAttribute("formIssue", formIssue);
 
             return "dashboard/issue-form";
-        }
-        else return "redirect:/access-denied";
+        } else return "redirect:/access-denied";
     }
 
     @PostMapping("/processIssue")
     public String processIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
-                                  BindingResult theBindingResult, HttpServletRequest request, Model model) {
+                               BindingResult theBindingResult, HttpServletRequest request, Model model) {
 
         // form validation
         if (theBindingResult.hasErrors()) {
@@ -196,33 +194,31 @@ public class IssueController {
 
         Project project = projectService.findById(formIssue.getProjectId());
 
-        if(project == null) return "redirect:/dashboard/projects";
+        if (project == null) return "redirect:/dashboard/projects";
 
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
         UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
 
-        if(formIssue.getId() == 0){
+        if (formIssue.getId() == 0) {
 
-            if(userProjectRoles.isCollaborator()) {
+            if (userProjectRoles.isCollaborator()) {
 
                 User createdBy = userService.findByUsername(request.getUserPrincipal().getName());
 
                 issueService.createIssue(formIssue, createdBy, project);
-                return "redirect:/dashboard/issues?projectId=" + project.getId();
-            }
-            else return "redirect:/access-denied";
+                return toCurrentProject(project);
+            } else return "redirect:/access-denied";
         }
 
         Issue issue = issueService.findById(formIssue.getId());
 
-        if(issue == null) return "redirect:/dashboard/issues?projectId=" + project.getId();
+        if (issue == null) return toCurrentProject(project);
 
-        if(isAdminOrOwner(issue.getCreatedBy(),request) || isProjectOwner(project.getCreatedBy(), request.getUserPrincipal())){
+        if (isAdminOrOwner(issue.getCreatedBy(), request) || isProjectOwner(project.getCreatedBy(), request.getUserPrincipal())) {
 
             issueService.updateIssue(formIssue);
-            return "redirect:/dashboard/issues?projectId=" + project.getId();
-        }
-        else return "redirect:/access-denied";
+            return toCurrentProject(project);
+        } else return "redirect:/access-denied";
     }
 
     @DeleteMapping("/deleteIssue/{issueId}")
@@ -232,11 +228,10 @@ public class IssueController {
 
         if (issue == null) return "redirect:/dashboard/projects";
 
-        if (isAdminOrOwner(issue.getCreatedBy(), request) ||
-                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())) {
+        if (hasPermissionToModify(issue, request)) {
 
             issueService.deleteById(issueId);
-            return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
+            return toCurrentProject(issue.getProject());
 
         } else return "redirect:/access-denied";
     }
@@ -245,39 +240,25 @@ public class IssueController {
     public String closeIssue(@PathVariable int issueId, HttpServletRequest request) {
 
         Issue issue = issueService.findById(issueId);
+        if (issue == null) return toProjects();
+        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
 
-        if (issue == null) return "redirect:/dashboard/projects";
+        User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
+        issueService.closeIssue(issueId, closedBy);
 
-        if (isAdminOrOwner(issue.getCreatedBy(), request) ||
-                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())) {
-
-            if(issue.getClosedAt() == null){
-
-                User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
-                issueService.closeIssue(issueId, closedBy);
-            }
-            return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
-
-        } else return "redirect:/access-denied";
+        return toCurrentProject(issue.getProject());
     }
 
     @PatchMapping("/reopenIssue/{issueId}")
     public String reopenIssue(@PathVariable int issueId, HttpServletRequest request) {
 
         Issue issue = issueService.findById(issueId);
+        if (issue == null) return toProjects();
+        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
 
-        if (issue == null) return "redirect:/dashboard/projects";
+        issueService.reopenIssue(issue);
 
-        if (isAdminOrOwner(issue.getCreatedBy(), request) ||
-                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())) {
-
-            if(issue.getClosedAt() != null){
-
-                issueService.reopenIssue(issueId);
-            }
-            return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
-
-        } else return "redirect:/access-denied";
+        return toCurrentProject(issue.getProject());
     }
 
     @PatchMapping("/changeIssueStatus/{issueId}")
@@ -286,46 +267,65 @@ public class IssueController {
                                     HttpServletRequest request) {
 
         Issue issue = issueService.findById(issueId);
-        if (issue == null) return "redirect:/dashboard/projects";
+        if (issue == null) return toProjects();
+        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
 
-        if (isAdminOrOwner(issue.getCreatedBy(), request) ||
-                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())) {
+        issueService.changeIssueStatus(issue, statusId);
 
-            issueService.changeIssueStatus(issue, statusId);
-            return "redirect:/dashboard/issues?projectId=" + issue.getProject().getId();
-        }
-        else return "redirect:/access-denied";
+        return toCurrentProject(issue.getProject());
     }
 
     private List<Issue> getIssues(int projectId, String show, String sort) {
 
-        if(show.equals("open")) {
+        if (show.equals("open")) {
 
-            if(sort.equals("noop")) return issueService.findOpen(projectId);
+            if (sort.equals("noop")) return issueService.findOpen(projectId);
 
-            if(sort.equals("priorityAsc")) return issueService.findOpenPriorityAsc(projectId);
+            if (sort.equals("priorityAsc")) return issueService.findOpenPriorityAsc(projectId);
 
-            if(sort.equals("priorityDesc")) return issueService.findOpenPriorityDesc(projectId);
+            if (sort.equals("priorityDesc")) return issueService.findOpenPriorityDesc(projectId);
         }
 
-        if(show.equals("closed")) {
+        if (show.equals("closed")) {
 
-            if(sort.equals("noop")) return issueService.findClosed(projectId);
+            if (sort.equals("noop")) return issueService.findClosed(projectId);
 
-            if(sort.equals("priorityAsc")) return issueService.findClosedPriorityAsc(projectId);
+            if (sort.equals("priorityAsc")) return issueService.findClosedPriorityAsc(projectId);
 
-            if(sort.equals("priorityDesc")) return issueService.findClosedPriorityDesc(projectId);
+            if (sort.equals("priorityDesc")) return issueService.findClosedPriorityDesc(projectId);
         }
 
-        if(show.equals("all")) {
+        if (show.equals("all")) {
 
-            if(sort.equals("noop")) return issueService.findAll(projectId);
+            if (sort.equals("noop")) return issueService.findAll(projectId);
 
-            if(sort.equals("priorityAsc")) return issueService.findAllPriorityAsc(projectId);
+            if (sort.equals("priorityAsc")) return issueService.findAllPriorityAsc(projectId);
 
-            if(sort.equals("priorityDesc")) return issueService.findAllPriorityDesc(projectId);
+            if (sort.equals("priorityDesc")) return issueService.findAllPriorityDesc(projectId);
         }
 
         return null;
+    }
+
+
+    private static boolean doesNotHavePermissionToModify(Issue issue, HttpServletRequest request) {
+        return !hasPermissionToModify(issue, request);
+    }
+
+    private static boolean hasPermissionToModify(Issue issue, HttpServletRequest request) {
+        return isAdminOrOwner(issue.getCreatedBy(), request) ||
+                isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal());
+    }
+
+    private static String toProjects() {
+        return "redirect:/dashboard/projects";
+    }
+
+    private static String toCurrentProject(Project project) {
+        return "redirect:/dashboard/issues?projectId=" + project.getId();
+    }
+
+    private static String toAccessDenied() {
+        return "redirect:/access-denied";
     }
 }
