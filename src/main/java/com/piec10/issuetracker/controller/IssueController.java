@@ -5,6 +5,7 @@ import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
+import com.piec10.issuetracker.util.ProjectRolesCheckMethods;
 import com.piec10.issuetracker.util.UserProjectRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
-import static com.piec10.issuetracker.util.ProjectRolesCheckMethods.getUserProjectRoles;
+import static com.piec10.issuetracker.util.ProjectRolesCheckMethods.*;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -48,7 +49,7 @@ public class IssueController {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
         UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
 
-        if (isNotAdminOrProjectFollower(request, userProjectRoles)) return toAccessDenied();
+        if (isNotAdminOrProjectFollower(request, project)) return toAccessDenied();
 
         List<Issue> issues;
 
@@ -279,9 +280,8 @@ public class IssueController {
 
     private boolean isNotProjectCollaborator(HttpServletRequest request, Project project) {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-        UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
 
-        return !userProjectRoles.isCollaborator();
+        return ProjectRolesCheckMethods.isNotProjectCollaborator(currentUser, project);
     }
 
     private boolean isNotAdminOrProjectFollower(HttpServletRequest request, Project project) {
