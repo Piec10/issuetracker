@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "issues")
-public class Issue {
+public class Issue implements HasCreator {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

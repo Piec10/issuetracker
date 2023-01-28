@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements HasCreator{
 
     @Id
     @Column(name = "username")
@@ -143,5 +143,10 @@ public class User {
                 ", createdAt=" + createdAt +
                 ", roles=" + roles +
                 '}';
+    }
+
+    @Override
+    public User getCreatedBy() {
+        return this;
     }
 }
