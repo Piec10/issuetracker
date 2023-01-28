@@ -304,8 +304,7 @@ public class IssueController {
     }
 
     private static boolean hasPermissionToModify(Issue issue, HttpServletRequest request) {
-        return isProjectOwner(issue.getProject().getCreatedBy(), request.getUserPrincipal())
-                || isAdminOrOwner(issue.getCreatedBy(), request);
+        return isOwner(issue.getProject(), request) || isOwner(issue, request) || isAdmin(request);
     }
 
     private static String toProjects() {
