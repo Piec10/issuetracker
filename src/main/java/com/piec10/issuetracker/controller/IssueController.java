@@ -285,18 +285,13 @@ public class IssueController {
     }
 
     private boolean isNotAdminOrProjectFollower(HttpServletRequest request, Project project) {
+        return !isAdminOrProjectFollower(request, project);
+    }
+
+    private boolean isAdminOrProjectFollower(HttpServletRequest request, Project project) {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-        UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
 
-        return isNotAdminOrProjectFollower(request, userProjectRoles);
-    }
-
-    private static boolean isNotAdminOrProjectFollower(HttpServletRequest request, UserProjectRoles userProjectRoles) {
-        return !isAdminOrProjectFollower(request, userProjectRoles);
-    }
-
-    private static boolean isAdminOrProjectFollower(HttpServletRequest request, UserProjectRoles userProjectRoles) {
-        return isAdmin(request) || userProjectRoles.isFollower();
+        return isAdmin(request) || isProjectFollower(currentUser, project);
     }
 
     private static boolean doesNotHavePermissionToModify(Issue issue, HttpServletRequest request) {
