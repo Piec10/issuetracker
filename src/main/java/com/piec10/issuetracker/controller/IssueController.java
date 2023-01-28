@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
+import static com.piec10.issuetracker.util.ProjectRolesCheckMethods.getUserProjectRoles;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -45,7 +46,7 @@ public class IssueController {
         if (project == null) return toProjects();
 
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
+        UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
 
         if (isNotAdminOrProjectFollower(request, userProjectRoles)) return toAccessDenied();
 
@@ -175,7 +176,7 @@ public class IssueController {
         if (project == null) return toProjects();
 
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
+        UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
 
         if (formIssue.getId() == 0) {
             if (!userProjectRoles.isCollaborator()) return toAccessDenied();
@@ -278,14 +279,14 @@ public class IssueController {
 
     private boolean isNotProjectCollaborator(HttpServletRequest request, Project project) {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
+        UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
 
         return !userProjectRoles.isCollaborator();
     }
 
     private boolean isNotAdminOrProjectFollower(HttpServletRequest request, Project project) {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-        UserProjectRoles userProjectRoles = getUserProjectRoles(project, currentUser);
+        UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
 
         return isNotAdminOrProjectFollower(request, userProjectRoles);
     }

@@ -77,7 +77,7 @@ public class DashboardController {
 
         if(user == null) return "redirect:/dashboard/projects";
 
-        if(isOwner(user,request.getUserPrincipal())){
+        if(isOwner(user,request)){
 
             if(passwordEncoder.matches(formPassword.getOldPassword(),user.getPassword())) {
 
