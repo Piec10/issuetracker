@@ -3,6 +3,7 @@ package com.piec10.issuetracker.controller.issue;
 import com.piec10.issuetracker.controller.Request;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
+import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,12 +12,14 @@ import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isOwn
 
 public abstract class IssueRequest implements Request {
 
+    protected IssueService issueService;
     protected Issue issue;
     private HttpServletRequest request;
 
-    public IssueRequest(Issue issue, HttpServletRequest request) {
-        this.issue = issue;
+    public IssueRequest(IssueService issueService, int issueId, HttpServletRequest request) {
+        this.issueService = issueService;
         this.request = request;
+        issue = issueService.findById(issueId);
     }
 
     public String processRequest() {

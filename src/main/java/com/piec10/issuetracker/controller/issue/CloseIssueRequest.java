@@ -8,12 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 
 public class CloseIssueRequest extends IssueRequest {
 
-    private IssueService issueService;
     private User closedBy;
 
-    public CloseIssueRequest(IssueService issueService, Issue issue, HttpServletRequest request, User closedBy) {
-        super(issue, request);
-        this.issueService = issueService;
+    public CloseIssueRequest(IssueService issueService, int issueId, HttpServletRequest request, User closedBy) {
+        super(issueService, issueId, request);
         this.closedBy = closedBy;
     }
 

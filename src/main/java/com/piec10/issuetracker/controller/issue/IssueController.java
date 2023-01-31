@@ -218,13 +218,9 @@ public class IssueController {
     @PatchMapping("/reopenIssue/{issueId}")
     public String reopenIssue(@PathVariable int issueId, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(issueId);
-        if (issue == null) return toProjects();
-        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
+        issueRequest = issueRequestFactory.createReopenIssueRequest(issueId, request);
 
-        issueService.reopenIssue(issue);
-
-        return toCurrentProject(issue.getProject());
+        return issueRequest.processRequest();
     }
 
     @PatchMapping("/changeIssueStatus/{issueId}")

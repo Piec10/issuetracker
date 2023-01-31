@@ -1,10 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
 import com.piec10.issuetracker.controller.Request;
-import com.piec10.issuetracker.controller.issue.CloseIssueRequest;
-import com.piec10.issuetracker.controller.issue.DeleteIssueRequest;
-import com.piec10.issuetracker.controller.issue.IssueRequestFactory;
-import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.UserService;
@@ -25,16 +21,20 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
     @Override
     public Request createDeleteIssueRequest(int issueId, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(issueId);
-        return new DeleteIssueRequest(issueService, issue, request);
+        return new DeleteIssueRequest(issueService, issueId, request);
     }
 
     @Override
     public Request createCloseIssueRequest(int issueId, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(issueId);
         User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
 
-        return new CloseIssueRequest(issueService, issue, request, closedBy);
+        return new CloseIssueRequest(issueService, issueId, request, closedBy);
+    }
+
+    @Override
+    public Request createReopenIssueRequest(int issueId, HttpServletRequest request) {
+
+        return new ReopenIssueRequest(issueService, issueId, request);
     }
 }

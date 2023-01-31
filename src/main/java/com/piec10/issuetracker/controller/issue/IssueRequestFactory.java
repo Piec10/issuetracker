@@ -9,4 +9,6 @@ public interface IssueRequestFactory {
     Request createDeleteIssueRequest(int issueId, HttpServletRequest request);
 
     Request createCloseIssueRequest(int issueId, HttpServletRequest request);
+
+    Request createReopenIssueRequest(int issueId, HttpServletRequest request);
 }
