@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.config;
 
-import com.piec10.issuetracker.controller.IssueController;
+import com.piec10.issuetracker.controller.issue.IssueController;
 import com.piec10.issuetracker.util.Priorities;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.ControllerAdvice;

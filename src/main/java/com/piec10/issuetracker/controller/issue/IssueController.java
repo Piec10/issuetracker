@@ -1,5 +1,6 @@
-package com.piec10.issuetracker.controller;
+package com.piec10.issuetracker.controller.issue;
 
+import com.piec10.issuetracker.controller.Request;
 import com.piec10.issuetracker.entity.*;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
@@ -209,14 +210,9 @@ public class IssueController {
     @PatchMapping("/closeIssue/{issueId}")
     public String closeIssue(@PathVariable int issueId, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(issueId);
-        if (issue == null) return toProjects();
-        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
+        issueRequest = issueRequestFactory.createCloseIssueRequest(issueId, request);
 
-        User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
-        issueService.closeIssue(issue, closedBy);
-
-        return toCurrentProject(issue.getProject());
+        return issueRequest.processRequest();
     }
 
     @PatchMapping("/reopenIssue/{issueId}")

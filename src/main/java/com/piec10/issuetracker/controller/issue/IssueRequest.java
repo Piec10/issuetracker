@@ -1,5 +1,6 @@
-package com.piec10.issuetracker.controller;
+package com.piec10.issuetracker.controller.issue;
 
+import com.piec10.issuetracker.controller.Request;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 
@@ -8,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isAdmin;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isOwner;
 
-public abstract class IssueRequest implements Request{
+public abstract class IssueRequest implements Request {
 
     protected Issue issue;
     private HttpServletRequest request;
