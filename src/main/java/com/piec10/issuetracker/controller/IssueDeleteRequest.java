@@ -4,7 +4,7 @@ import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class IssueDeleteRequest extends IssueRequestImpl {
+public class IssueDeleteRequest extends IssueRequest {
 
 
     public IssueDeleteRequest(IssueService issueService, int issueId, HttpServletRequest request) {

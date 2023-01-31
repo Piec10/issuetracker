@@ -3,23 +3,20 @@ package com.piec10.issuetracker.controller;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.service.IssueService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isAdmin;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isOwner;
 
-@Component
-public abstract class IssueRequestImpl implements Request{
+public abstract class IssueRequest implements Request{
 
     protected IssueService issueService;
 
     protected int issueId;
     private HttpServletRequest request;
 
-    public IssueRequestImpl(IssueService issueService, int issueId, HttpServletRequest request) {
+    public IssueRequest(IssueService issueService, int issueId, HttpServletRequest request) {
         this.issueService = issueService;
         this.issueId = issueId;
         this.request = request;
