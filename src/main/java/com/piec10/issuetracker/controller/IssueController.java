@@ -35,8 +35,10 @@ public class IssueController {
     @Autowired
     private ProjectService projectService;
 
-    private Request issueRequest;
+    @Autowired
+    private IssueRequestFactory issueRequestFactory;
 
+    private Request issueRequest;
 
     @GetMapping("/issues")
     public String getIssues(@RequestParam(value = "projectId") int projectId,

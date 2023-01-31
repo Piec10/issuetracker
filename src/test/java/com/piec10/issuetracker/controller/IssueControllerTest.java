@@ -40,6 +40,9 @@ public class IssueControllerTest extends BaseControllerTest {
     @MockBean
     private ProjectService projectService;
 
+    @MockBean
+    private IssueRequestFactory issueRequestFactory;
+
     private static FormIssue formIssue;
 
     @PostConstruct
