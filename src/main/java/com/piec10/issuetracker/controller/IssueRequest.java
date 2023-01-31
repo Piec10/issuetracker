@@ -2,7 +2,6 @@ package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
-import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,21 +10,17 @@ import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isOwn
 
 public abstract class IssueRequest implements Request{
 
-    protected IssueService issueService;
-
-    protected int issueId;
+    protected Issue issue;
     private HttpServletRequest request;
 
-    public IssueRequest(IssueService issueService, int issueId, HttpServletRequest request) {
-        this.issueService = issueService;
-        this.issueId = issueId;
+    public IssueRequest(Issue issue, HttpServletRequest request) {
+        this.issue = issue;
         this.request = request;
     }
 
     public String processRequest() {
-        Issue issue = issueService.findById(issueId);
-        if (issue == null) return toProjects();
 
+        if (issue == null) return toProjects();
         if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
 
         modifyIssue();

@@ -20,7 +20,7 @@ import java.util.Date;
 import static com.piec10.issuetracker.controller.util.MockRequestUsers.*;
 import static org.mockito.Mockito.*;
 
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, IssueRequestFactoryImpl.class})
 @WebMvcTest(IssueController.class)
 public class IssueControllerTest extends BaseControllerTest {
 
@@ -40,13 +40,11 @@ public class IssueControllerTest extends BaseControllerTest {
     @MockBean
     private ProjectService projectService;
 
-    @MockBean
-    private IssueRequestFactory issueRequestFactory;
-
     private static FormIssue formIssue;
 
     @PostConstruct
     public void setup() {
+
         MockUserService.mockSetup(userService);
         MockIssueService.mockSetup(issueService);
         MockProjectService.mockSetup(projectService);
@@ -501,7 +499,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(owner());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteById(1);
+        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
     }
 
     @Test
@@ -510,7 +508,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(admin());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteById(1);
+        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
     }
 
     @Test
@@ -519,7 +517,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(projectOwner());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteById(1);
+        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
     }
 
     @Test

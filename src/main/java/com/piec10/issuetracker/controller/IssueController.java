@@ -201,17 +201,9 @@ public class IssueController {
     @DeleteMapping("/deleteIssue/{issueId}")
     public String deleteIssue(@PathVariable int issueId, HttpServletRequest request) {
 
-        issueRequest = new IssueDeleteRequest(issueService, issueId, request);
+        issueRequest = issueRequestFactory.createDeleteIssueRequest(issueId, request);
 
         return issueRequest.processRequest();
-
-//        Issue issue = issueService.findById(issueId);
-//        if (issue == null) return toProjects();
-//        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
-//
-//        issueService.deleteIssue(issue);
-//
-//        return toCurrentProject(issue.getProject());
     }
 
     @PatchMapping("/closeIssue/{issueId}")
