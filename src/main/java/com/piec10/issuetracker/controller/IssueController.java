@@ -45,11 +45,10 @@ public class IssueController {
 
         Project project = projectService.findById(projectId);
         if (project == null) return toProjects();
+        if (isNotAdminOrProjectFollower(request, project)) return toAccessDenied();
 
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
         UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
-
-        if (isNotAdminOrProjectFollower(request, project)) return toAccessDenied();
 
         List<Issue> issues;
 

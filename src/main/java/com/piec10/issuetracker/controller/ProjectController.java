@@ -190,10 +190,9 @@ public class ProjectController {
 
         if (project == null) return "redirect:/dashboard/projects";
 
-        if (isAdminOrOwner(project.getCreatedBy(), request)) {
+        if (isNotAdminOrOwner(project, request)) return "redirect:/access-denied";
 
-            projectService.deleteById(projectId);
-            return "redirect:/dashboard/projects";
-        } else return "redirect:/access-denied";
+        projectService.deleteById(projectId);
+        return "redirect:/dashboard/projects";
     }
 }

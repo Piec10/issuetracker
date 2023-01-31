@@ -6,6 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 
 public abstract class GlobalRolesAndOwnerCheckMethods {
 
+    public static boolean isNotAdminOrOwner(HasCreator object, HttpServletRequest request) {
+        return !isAdminOrOwner(object, request);
+    }
+
     public static boolean isAdminOrOwner(HasCreator object, HttpServletRequest request) {
         return isAdmin(request) || isOwner(object, request);
     }
