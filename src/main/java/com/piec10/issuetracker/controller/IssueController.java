@@ -199,13 +199,17 @@ public class IssueController {
     @DeleteMapping("/deleteIssue/{issueId}")
     public String deleteIssue(@PathVariable int issueId, HttpServletRequest request) {
 
-        Issue issue = issueService.findById(issueId);
-        if (issue == null) return toProjects();
-        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
+        issueRequest = new IssueDeleteRequest(issueService, issueId, request);
 
-        issueService.deleteIssue(issue);
+        return issueRequest.processRequest();
 
-        return toCurrentProject(issue.getProject());
+//        Issue issue = issueService.findById(issueId);
+//        if (issue == null) return toProjects();
+//        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
+//
+//        issueService.deleteIssue(issue);
+//
+//        return toCurrentProject(issue.getProject());
     }
 
     @PatchMapping("/closeIssue/{issueId}")

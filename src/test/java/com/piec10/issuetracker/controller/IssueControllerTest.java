@@ -498,7 +498,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(owner());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
+        andExpectMethodCalledOnceIn(issueService).deleteById(1);
     }
 
     @Test
@@ -507,7 +507,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(admin());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
+        andExpectMethodCalledOnceIn(issueService).deleteById(1);
     }
 
     @Test
@@ -516,7 +516,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andUser(projectOwner());
         whenPerformDelete();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
-        andExpectMethodCalledOnceIn(issueService).deleteIssue(MockIssueService.getIssue());
+        andExpectMethodCalledOnceIn(issueService).deleteById(1);
     }
 
     @Test

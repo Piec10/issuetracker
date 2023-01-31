@@ -1,11 +1,14 @@
 package com.piec10.issuetracker.controller;
 
+import com.piec10.issuetracker.service.IssueService;
+
 import javax.servlet.http.HttpServletRequest;
 
 public class IssueDeleteRequest extends IssueRequestImpl {
 
-    public IssueDeleteRequest(int issueId, HttpServletRequest request) {
-        super(issueId, request);
+
+    public IssueDeleteRequest(IssueService issueService, int issueId, HttpServletRequest request) {
+        super(issueService, issueId, request);
     }
 
     @Override
