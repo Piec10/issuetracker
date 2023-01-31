@@ -13,9 +13,9 @@ import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isOwn
 public abstract class IssueRequest {
 
     @Autowired
-    private IssueService issueService;
+    protected IssueService issueService;
 
-    private int issueId;
+    protected int issueId;
     private HttpServletRequest request;
 
     public IssueRequest(int issueId, HttpServletRequest request) {
