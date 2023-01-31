@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isAdmin;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isOwner;
 
-public abstract class IssueRequest {
+public abstract class IssueRequestImpl implements Request{
 
     @Autowired
     protected IssueService issueService;
@@ -18,7 +18,7 @@ public abstract class IssueRequest {
     protected int issueId;
     private HttpServletRequest request;
 
-    public IssueRequest(int issueId, HttpServletRequest request) {
+    public IssueRequestImpl(int issueId, HttpServletRequest request) {
         this.issueId = issueId;
         this.request = request;
     }
