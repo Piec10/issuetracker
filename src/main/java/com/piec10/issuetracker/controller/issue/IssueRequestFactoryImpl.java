@@ -37,4 +37,10 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
 
         return new ReopenIssueRequest(issueService, issueId, request);
     }
+
+    @Override
+    public Request createChangeStatusIssueRequest(int issueId, HttpServletRequest request, int statusId) {
+
+        return new ChangeStatusIssueRequest(issueService, issueId, request, statusId);
+    }
 }

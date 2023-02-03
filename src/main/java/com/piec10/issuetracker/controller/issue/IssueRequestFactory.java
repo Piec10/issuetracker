@@ -11,4 +11,6 @@ public interface IssueRequestFactory {
     Request createCloseIssueRequest(int issueId, HttpServletRequest request);
 
     Request createReopenIssueRequest(int issueId, HttpServletRequest request);
+
+    Request createChangeStatusIssueRequest(int issueId, HttpServletRequest request, int statusId);
 }

@@ -228,13 +228,9 @@ public class IssueController {
                                     @RequestParam("statusId") int statusId,
                                     HttpServletRequest request) {
 
-        Issue issue = issueService.findById(issueId);
-        if (issue == null) return toProjects();
-        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
+        issueRequest = issueRequestFactory.createChangeStatusIssueRequest(issueId, request, statusId);
 
-        issueService.changeIssueStatus(issue, statusId);
-
-        return toCurrentProject(issue.getProject());
+        return issueRequest.processRequest();
     }
 
     private List<Issue> getIssues(int projectId, String show, String sort) {
