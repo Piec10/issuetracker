@@ -76,6 +76,7 @@ public class IssueController {
         model.addAttribute("closedIssuesCount", closedIssuesCount);
         model.addAttribute("project", project);
         model.addAttribute("projectRoles", userProjectRoles);
+        model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
 
         return "dashboard/issues";
     }

@@ -419,7 +419,18 @@
                                                 <div class="col" th:if="${show == 'open'}">
                                                     <div th:switch="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
                                                         <div th:case="true">
-                                                            Dropdown:
+                                                            <div class="dropdown">
+                                                                <button class="btn w-100 btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
+                                                                </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li th:each="issueStatus : ${allIssueStatuses}">
+                                                                        <a class="dropdown-item" href="#">
+                                                                            <span th:text="${issueStatus.name}"/>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
                                                         <div th:case="false">
                                                             <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
