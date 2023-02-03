@@ -417,7 +417,14 @@
                                                     <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
                                                 </div>
                                                 <div class="col" th:if="${show == 'open'}">
-                                                    <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
+                                                    <div th:switch="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
+                                                        <div th:case="true">
+                                                            Dropdown:
+                                                        </div>
+                                                        <div th:case="false">
+                                                            <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
