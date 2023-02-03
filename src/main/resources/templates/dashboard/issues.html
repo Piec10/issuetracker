@@ -182,6 +182,18 @@
                                     <input hidden type="submit" value="Patch"/>
                                 </form>
 
+                                <!-- hidden forms for performing change issue status request -->
+
+                                <!-- add form for each status -->
+                                <div th:each="issueStatus : ${allIssueStatuses}">
+                                    <form th:name="'changeIssueStatusForm_'+${tempIssue.id}+${issueStatus.id}"
+                                          th:action="@{'/dashboard/changeIssueStatus/'+${tempIssue.id}(statusId=${issueStatus.id})}"
+                                          th:method="patch" th:hidden="true">
+                                        <input hidden type="submit" value="Patch"/>
+                                    </form>
+                                </div>
+
+
                                 <!-- Issue Details Modal -->
                                 <div class="modal fade" th:id="'issueDetailsModal_'+${tempIssue.id}" tabindex="-1"
                                      th:aria-labelledby="'issueDetailsModalLabel_'+${tempIssue.id}" aria-hidden="true">
