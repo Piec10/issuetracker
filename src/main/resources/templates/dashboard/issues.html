@@ -423,10 +423,16 @@
                                         <div th:class="${(show == 'open') ? 'col-6 col-lg-5 col-xl-4 col-xxl-3' : 'col-4 col-lg-3 col-xxl-2'}">
                                             <div class="row">
                                                 <div class="col">
-                                                    <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                    <button class="btn w-100 btn-sm btn-outline-secondary"
+                                                            style="font-size: 0.8rem">
+                                                        <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                    </button>
                                                 </div>
                                                 <div class="col">
-                                                    <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
+                                                    <button class="btn w-100 btn-sm btn-outline-secondary"
+                                                            style="font-size: 0.8rem">
+                                                        <span th:text="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"/>
+                                                    </button>
                                                 </div>
                                                 <div class="col" th:if="${show == 'open'}">
                                                     <div th:switch="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
