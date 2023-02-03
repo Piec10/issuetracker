@@ -432,12 +432,16 @@
                                                     <div th:switch="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
                                                         <div th:case="true">
                                                             <div class="dropdown">
-                                                                <button class="btn w-100 btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
+                                                                <button class="btn w-100 btn-sm btn-outline-secondary"
+                                                                        style="font-size: 0.8rem"
+                                                                        type="button" data-bs-toggle="dropdown"
+                                                                        aria-expanded="false">
+                                                                    <span th:text="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"/>
                                                                 </button>
                                                                 <ul class="dropdown-menu">
                                                                     <li th:each="issueStatus : ${allIssueStatuses}">
-                                                                        <a class="dropdown-item" href="#">
+                                                                        <a class="dropdown-item"
+                                                                           th:href="'javascript: document.changeIssueStatusForm_'+${tempIssue.id}+${issueStatus.id}+'.submit()'">
                                                                             <span th:text="${issueStatus.name}"/>
                                                                         </a>
                                                                     </li>
