@@ -1,18 +1,15 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.Request;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import org.springframework.ui.Model;
 
 
-import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isAdmin;
-import static com.piec10.issuetracker.util.ProjectRolesCheckMethods.isProjectFollower;
+import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
-public class IssueDetailsRequest implements Request {
+public class IssueDetailsRequest extends IssueRequest {
 
-    private Issue issue;
     private User currentUser;
     private Model model;
 
@@ -35,21 +32,5 @@ public class IssueDetailsRequest implements Request {
         model.addAttribute("issue", issue);
 
         return "dashboard/issue-details";
-    }
-
-    private static String toProjects() {
-        return "redirect:/dashboard/projects";
-    }
-
-    private static String toAccessDenied() {
-        return "redirect:/access-denied";
-    }
-
-    private boolean isNotAdminOrProjectFollower(User currentUser, Project project) {
-        return !isAdminOrProjectFollower(currentUser, project);
-    }
-
-    private boolean isAdminOrProjectFollower(User currentUser, Project project) {
-        return isAdmin(currentUser) || isProjectFollower(currentUser, project);
     }
 }
