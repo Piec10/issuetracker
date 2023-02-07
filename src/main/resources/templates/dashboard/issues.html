@@ -438,8 +438,8 @@
                                                     <div th:switch="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
                                                         <div th:case="true">
                                                             <div class="dropdown">
-                                                                <button class="btn w-100 btn-sm btn-outline-secondary"
-                                                                        style="font-size: 0.8rem"
+                                                                <button class="btn w-100 btn-sm" th:classappend="${(tempIssue.issueStatus == null) ? 'btn-outline-secondary' : ''}"
+                                                                        style="font-size: 0.8rem;" th:styleappend="${(tempIssue.issueStatus == null) ? '' : (' background-color: '+tempIssue.issueStatus.color)}"
                                                                         type="button" data-bs-toggle="dropdown"
                                                                         aria-expanded="false">
                                                                     <span th:text="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"/>
