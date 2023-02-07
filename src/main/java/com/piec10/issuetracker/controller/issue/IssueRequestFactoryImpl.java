@@ -1,11 +1,13 @@
 package com.piec10.issuetracker.controller.issue;
 
 import com.piec10.issuetracker.controller.Request;
+import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -42,5 +44,14 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
     public Request createChangeStatusIssueRequest(int issueId, HttpServletRequest request, int statusId) {
 
         return new ChangeStatusIssueRequest(issueService, issueId, request, statusId);
+    }
+
+    @Override
+    public Request createIssueDetailsRequest(int issueId, HttpServletRequest request, Model model) {
+
+        Issue issue = issueService.findById(issueId);
+        User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
+
+        return new IssueDetailsRequest(issue, currentUser, model);
     }
 }

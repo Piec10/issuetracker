@@ -82,19 +82,11 @@ public class IssueController {
     }
 
     @GetMapping("/issue")
-    public String issueDetails(@RequestParam("issueId") int issueId, Model model, HttpServletRequest request) {
+    public String issueDetails(@RequestParam("issueId") int issueId, HttpServletRequest request, Model model) {
 
-        Issue issue = issueService.findById(issueId);
-        if (issue == null) return toProjects();
+        issueRequest = issueRequestFactory.createIssueDetailsRequest(issueId, request, model);
 
-        Project project = issue.getProject();
-        if (project == null) return toProjects();
-
-        if (isNotAdminOrProjectFollower(request, project)) return toAccessDenied();
-
-        model.addAttribute("issue", issue);
-
-        return "dashboard/issue-details";
+        return issueRequest.processRequest();
     }
 
     @GetMapping("/newIssue")

@@ -1,9 +1,11 @@
 package com.piec10.issuetracker.controller.util;
 
+import com.piec10.issuetracker.entity.Role;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.UserService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -22,6 +24,25 @@ public abstract class MockUserService {
     }
 
     public static void mockSetup(UserService userService) {
+        List<Role> roles = new ArrayList<>();
+        roles.add(new Role("ROLE_USER"));
+        user.setRoles(roles);
+        owner.setRoles(roles);
+        collaborator.setRoles(roles);
+        follower.setRoles(roles);
+        notFollower.setRoles(roles);
+        projectOwner.setRoles(roles);
+
+        roles = new ArrayList<>();
+        roles.add(new Role("ROLE_USER"));
+        roles.add(new Role("ROLE_GUEST"));
+        guest.setRoles(roles);
+
+        roles = new ArrayList<>();
+        roles.add(new Role("ROLE_USER"));
+        roles.add(new Role("ROLE_ADMIN"));
+        admin.setRoles(roles);
+
         when(userService.findAll()).thenReturn(new ArrayList<>());
         when(userService.findByUsername("user")).thenReturn(user);
         when(userService.findByUsername("guest")).thenReturn(guest);
