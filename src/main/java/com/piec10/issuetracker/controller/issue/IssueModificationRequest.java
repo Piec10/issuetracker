@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isAdmin;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isOwner;
 
-public abstract class IssueRequest implements Request {
+public abstract class IssueModificationRequest implements Request {
 
     protected IssueService issueService;
     protected Issue issue;
     private HttpServletRequest request;
 
-    public IssueRequest(IssueService issueService, int issueId, HttpServletRequest request) {
+    public IssueModificationRequest(IssueService issueService, int issueId, HttpServletRequest request) {
         this.issueService = issueService;
         this.request = request;
         issue = issueService.findById(issueId);

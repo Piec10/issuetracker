@@ -1,8 +1,10 @@
 package com.piec10.issuetracker.util;
 
 import com.piec10.issuetracker.entity.HasCreator;
+import com.piec10.issuetracker.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.stream.Collectors;
 
 public abstract class GlobalRolesAndOwnerCheckMethods {
 
@@ -16,6 +18,10 @@ public abstract class GlobalRolesAndOwnerCheckMethods {
 
     public static boolean isAdmin(HttpServletRequest request) {
         return request.isUserInRole("ROLE_ADMIN");
+    }
+
+    public static boolean isAdmin(User user) {
+        return user.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()).contains("ROLE_ADMIN");
     }
 
     public static boolean isOwner(HasCreator object, HttpServletRequest request) {

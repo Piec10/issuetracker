@@ -1,12 +1,11 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class CloseIssueRequest extends IssueRequest {
+public class CloseIssueRequest extends IssueModificationRequest {
 
     private User closedBy;
 

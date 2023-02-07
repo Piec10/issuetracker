@@ -4,7 +4,7 @@ import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ChangeStatusIssueRequest extends IssueRequest{
+public class ChangeStatusIssueRequest extends IssueModificationRequest {
 
     private int statusId;
 
