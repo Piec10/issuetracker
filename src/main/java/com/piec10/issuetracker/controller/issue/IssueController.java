@@ -104,38 +104,39 @@ public class IssueController {
 
         issueRequest = issueRequestFactory.createEditIssueRequest(issueId, request, model);
 
+        return issueRequest.processRequest();
 
-        Issue issue = issueService.findById(issueId);
-        if (issue == null) return toProjects();
-
-        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
-
-        FormIssue formIssue = new FormIssue();
-
-        formIssue.setId(issue.getId());
-        formIssue.setSummary(issue.getSummary());
-        formIssue.setDescription(issue.getDescription());
-        formIssue.setPriority(issue.getPriority());
-        formIssue.setProjectId(issue.getProject().getId());
-
-        List<Integer> issueTags = issue.getIssueTags().stream()
-                .map(issueType -> issueType.getId()).collect(Collectors.toList());
-
-        formIssue.setIssueTags(issueTags);
-
-        if (issue.getIssueType() != null) {
-            formIssue.setIssueTypeId(issue.getIssueType().getId());
-        }
-
-        if (issue.getIssueStatus() != null) {
-            formIssue.setIssueStatusId(issue.getIssueStatus().getId());
-        }
-
-        model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
-        model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
-        model.addAttribute("formIssue", formIssue);
-
-        return "dashboard/issue-form";
+//        Issue issue = issueService.findById(issueId);
+//        if (issue == null) return toProjects();
+//
+//        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
+//
+//        FormIssue formIssue = new FormIssue();
+//
+//        formIssue.setId(issue.getId());
+//        formIssue.setSummary(issue.getSummary());
+//        formIssue.setDescription(issue.getDescription());
+//        formIssue.setPriority(issue.getPriority());
+//        formIssue.setProjectId(issue.getProject().getId());
+//
+//        List<Integer> issueTags = issue.getIssueTags().stream()
+//                .map(issueTag -> issueTag.getId()).collect(Collectors.toList());
+//
+//        formIssue.setIssueTags(issueTags);
+//
+//        if (issue.getIssueType() != null) {
+//            formIssue.setIssueTypeId(issue.getIssueType().getId());
+//        }
+//
+//        if (issue.getIssueStatus() != null) {
+//            formIssue.setIssueStatusId(issue.getIssueStatus().getId());
+//        }
+//
+//        model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
+//        model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
+//        model.addAttribute("formIssue", formIssue);
+//
+//        return "dashboard/issue-form";
     }
 
     @PostMapping("/processIssue")

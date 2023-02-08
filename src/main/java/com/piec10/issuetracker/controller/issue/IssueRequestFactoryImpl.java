@@ -70,7 +70,6 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
     @Override
     public Request createEditIssueRequest(int issueId, HttpServletRequest request, Model model) {
 
-
-        return null;
+        return new EditIssueFormRequest(issueService, issueId, request, model);
     }
 }
