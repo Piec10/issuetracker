@@ -16,4 +16,6 @@ public interface IssueRequestFactory {
     Request createChangeStatusIssueRequest(int issueId, HttpServletRequest request, int statusId);
 
     Request createIssueDetailsRequest(int issueId, HttpServletRequest request, Model model);
+
+    Request createNewIssueRequest(int projectId, HttpServletRequest request, Model model);
 }

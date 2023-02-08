@@ -54,4 +54,9 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
 
         return new IssueDetailsRequest(issue, currentUser, model);
     }
+
+    @Override
+    public Request createNewIssueRequest(int projectId, HttpServletRequest request, Model model) {
+        return null;
+    }
 }

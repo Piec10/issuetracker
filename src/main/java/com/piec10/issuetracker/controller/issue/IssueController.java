@@ -91,7 +91,11 @@ public class IssueController {
 
     @GetMapping("/newIssue")
     public String showNewIssueForm(@RequestParam(value = "projectId") int projectId,
-                                   Model model, HttpServletRequest request, Principal principal) {
+                                   HttpServletRequest request, Model model) {
+
+        issueRequest = issueRequestFactory.createNewIssueRequest(projectId, request, model);
+
+        issueRequest.processRequest();
 
         Project project = projectService.findById(projectId);
         if (project == null) return toProjects();
@@ -272,14 +276,6 @@ public class IssueController {
         User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
 
         return isAdmin(request) || isProjectFollower(currentUser, project);
-    }
-
-    private static boolean doesNotHavePermissionToModify(Issue issue, HttpServletRequest request) {
-        return !hasPermissionToModify(issue, request);
-    }
-
-    private static boolean hasPermissionToModify(Issue issue, HttpServletRequest request) {
-        return isOwner(issue.getProject(), request) || isOwner(issue, request) || isAdmin(request);
     }
 
     private static String toProjects() {
