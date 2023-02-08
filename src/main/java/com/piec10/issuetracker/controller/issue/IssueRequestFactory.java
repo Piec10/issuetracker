@@ -18,4 +18,6 @@ public interface IssueRequestFactory {
     Request createIssueDetailsRequest(int issueId, HttpServletRequest request, Model model);
 
     Request createNewIssueRequest(int projectId, HttpServletRequest request, Model model);
+
+    Request createEditIssueRequest(int issueId, HttpServletRequest request, Model model);
 }

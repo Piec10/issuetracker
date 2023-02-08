@@ -10,12 +10,12 @@ import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
 public class IssueDetailsRequest extends IssueRequest {
 
-    private User currentUser;
-    private Model model;
+    private final User requestUser;
+    private final Model model;
 
-    public IssueDetailsRequest(Issue issue, User currentUser, Model model) {
+    public IssueDetailsRequest(Issue issue, User requestUser, Model model) {
         this.issue = issue;
-        this.currentUser = currentUser;
+        this.requestUser = requestUser;
         this.model = model;
     }
 
@@ -27,7 +27,7 @@ public class IssueDetailsRequest extends IssueRequest {
         Project project = issue.getProject();
         if (project == null) return toProjects();
 
-        if (isNotAdminOrProjectFollower(currentUser, project)) return toAccessDenied();
+        if (isNotAdminOrProjectFollower(requestUser, project)) return toAccessDenied();
 
         model.addAttribute("issue", issue);
 

@@ -95,33 +95,15 @@ public class IssueController {
 
         issueRequest = issueRequestFactory.createNewIssueRequest(projectId, request, model);
 
-        issueRequest.processRequest();
-
-        Project project = projectService.findById(projectId);
-        if (project == null) return toProjects();
-
-        if (isNotProjectCollaborator(request, project)) return toAccessDenied();
-
-        FormIssue formIssue = new FormIssue();
-        formIssue.setProjectId(projectId);
-
-        List<IssueStatus> issueStatuses = issueService.findAllIssueStatuses();
-        IssueStatus done = issueService.findIssueStatusByName("Done");
-
-        if (done != null) {
-            issueStatuses.remove(done);
-        }
-
-        model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
-        model.addAttribute("allIssueStatuses", issueStatuses);
-        model.addAttribute("formIssue", formIssue);
-
-        return "dashboard/issue-form";
+        return issueRequest.processRequest();
     }
 
 
     @GetMapping("/editIssue")
-    public String showEditIssueForm(@RequestParam("issueId") int issueId, Model model, HttpServletRequest request) {
+    public String showEditIssueForm(@RequestParam("issueId") int issueId, HttpServletRequest request, Model model) {
+
+        issueRequest = issueRequestFactory.createEditIssueRequest(issueId, request, model);
+
 
         Issue issue = issueService.findById(issueId);
         if (issue == null) return toProjects();

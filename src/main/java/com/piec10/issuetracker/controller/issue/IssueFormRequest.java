@@ -1,10 +1,10 @@
 package com.piec10.issuetracker.controller.issue;
 
-public class IssueFormRequest extends IssueRequest {
+import com.piec10.issuetracker.service.IssueService;
+import org.springframework.ui.Model;
 
-    
-    @Override
-    public String processRequest() {
-        return null;
-    }
+public abstract class IssueFormRequest extends IssueRequest {
+
+    protected IssueService issueService;
+    protected Model model;
 }
