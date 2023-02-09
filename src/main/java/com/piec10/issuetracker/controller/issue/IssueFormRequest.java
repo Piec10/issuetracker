@@ -10,13 +10,15 @@ import java.util.List;
 public abstract class IssueFormRequest extends IssueRequest {
 
     protected IssueService issueService;
+
     protected Model model;
     protected FormIssue formIssue = new FormIssue();
     protected List<IssueStatus> allIssueStatuses;
     protected List<IssueType> allIssueTypes;
 
-    public IssueFormRequest(IssueService issueService) {
+    public IssueFormRequest(IssueService issueService, Model model) {
         this.issueService = issueService;
+        this.model= model;
         allIssueStatuses = issueService.findAllIssueStatuses();
         allIssueTypes = issueService.findAllIssueTypes();
     }

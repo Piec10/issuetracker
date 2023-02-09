@@ -14,10 +14,9 @@ public class EditIssueFormRequest extends IssueFormRequest{
     HttpServletRequest request;
 
     public EditIssueFormRequest(IssueService issueService, int issueId, HttpServletRequest request, Model model) {
-        super(issueService);
+        super(issueService, model);
         this.issue = issueService.findById(issueId);
         this.request = request;
-        this.model = model;
     }
 
     @Override

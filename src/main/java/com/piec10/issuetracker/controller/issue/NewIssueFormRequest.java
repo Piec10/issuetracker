@@ -14,10 +14,9 @@ public class NewIssueFormRequest extends IssueFormRequest {
     private User requestUser;
 
     public NewIssueFormRequest(IssueService issueService, Project project, User requestUser, Model model) {
-        super(issueService);
+        super(issueService, model);
         this.project = project;
         this.requestUser = requestUser;
-        this.model = model;
     }
 
     @Override
