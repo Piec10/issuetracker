@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.controller;
+package com.piec10.issuetracker.controller.request;
 
 public interface ModificationRequest {
 

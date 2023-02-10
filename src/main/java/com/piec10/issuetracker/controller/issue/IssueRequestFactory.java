@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.Request;
+import com.piec10.issuetracker.controller.request.Request;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;

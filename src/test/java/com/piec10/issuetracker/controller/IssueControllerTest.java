@@ -1,7 +1,6 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
-import com.piec10.issuetracker.controller.issue.IssueController;
 import com.piec10.issuetracker.controller.issue.IssueRequestFactoryImpl;
 import com.piec10.issuetracker.controller.util.MockIssueService;
 import com.piec10.issuetracker.controller.util.MockProjectService;

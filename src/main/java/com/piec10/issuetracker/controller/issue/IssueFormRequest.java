@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.ModificationRequest;
+import com.piec10.issuetracker.controller.request.ModificationRequest;
 import com.piec10.issuetracker.entity.IssueStatus;
 import com.piec10.issuetracker.entity.IssueType;
 import com.piec10.issuetracker.form.FormIssue;

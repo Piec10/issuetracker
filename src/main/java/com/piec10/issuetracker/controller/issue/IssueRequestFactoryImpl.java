@@ -1,8 +1,8 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.ModificationRequest;
-import com.piec10.issuetracker.controller.ModificationRequestStrategy;
-import com.piec10.issuetracker.controller.Request;
+import com.piec10.issuetracker.controller.request.ModificationRequest;
+import com.piec10.issuetracker.controller.request.ModificationRequestStrategy;
+import com.piec10.issuetracker.controller.request.Request;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;

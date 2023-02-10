@@ -1,7 +1,9 @@
-package com.piec10.issuetracker.controller.issue;
+package com.piec10.issuetracker.controller;
 
-import com.piec10.issuetracker.controller.ModificationRequestStrategy;
-import com.piec10.issuetracker.controller.Request;
+import com.piec10.issuetracker.controller.request.ModificationRequestStrategy;
+import com.piec10.issuetracker.controller.request.Request;
+import com.piec10.issuetracker.controller.issue.IssueRequestFactory;
+import com.piec10.issuetracker.controller.issue.UpdateIssueRequest;
 import com.piec10.issuetracker.entity.*;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
@@ -17,9 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 import static com.piec10.issuetracker.util.ProjectRolesCheckMethods.*;
