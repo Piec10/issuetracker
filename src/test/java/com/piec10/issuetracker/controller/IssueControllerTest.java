@@ -434,7 +434,7 @@ public class IssueControllerTest extends BaseControllerTest {
         andParam("summary", "summary");
         andParam("projectId", "1");
         whenPerformPost();
-        thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
+        thenExpect3xxRedirectionTo("/dashboard/projects");
     }
 
     @Test
