@@ -1,6 +1,7 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
+import com.piec10.issuetracker.controller.project.ProjectRequestFactoryImpl;
 import com.piec10.issuetracker.dto.ProjectDtoWrapper;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
@@ -8,6 +9,7 @@ import com.piec10.issuetracker.form.FormProject;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,13 +20,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 
-import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Import(SecurityConfig.class)
+@Import({SecurityConfig.class, ProjectRequestFactoryImpl.class})
 @WebMvcTest(ProjectController.class)
 public class ProjectControllerTest {
 
@@ -46,13 +47,14 @@ public class ProjectControllerTest {
 
     private static FormProject formProject;
 
-    @BeforeAll
-    public static void beforeAll() {
+    @BeforeEach
+    public void beforeEach() {
 
         formProject = new FormProject();
         user = new User();
         user.setUsername("user");
         project = new Project();
+        project.setId(1);
         project.setCreatedBy(user);
     }
 
@@ -159,7 +161,7 @@ public class ProjectControllerTest {
     public void getEditProjectFormIsNotOwner() throws Exception {
 
         when(projectService.findById(1)).thenReturn(project);
-        when(project.getCreatedBy()).thenReturn(user);
+//        when(project.getCreatedBy()).thenReturn(user);
 
         mockMvc.perform(get("/dashboard/editProject")
                         .param("projectId","1")

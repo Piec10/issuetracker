@@ -1,5 +1,7 @@
 package com.piec10.issuetracker.controller;
 
+import com.piec10.issuetracker.controller.project.ProjectRequestFactory;
+import com.piec10.issuetracker.controller.request.Request;
 import com.piec10.issuetracker.dto.ProjectDto;
 import com.piec10.issuetracker.dto.ProjectDtoWrapper;
 import com.piec10.issuetracker.entity.Project;
@@ -26,15 +28,21 @@ import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 public class ProjectController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    ProjectService projectService;
+    private ProjectService projectService;
 
     @Autowired
-    ProjectDtoWrapper projectDtoWrapper;
+    private ProjectDtoWrapper projectDtoWrapper;
 
-    private Logger logger = Logger.getLogger(getClass().getName());
+    @Autowired
+    private ProjectRequestFactory projectRequestFactory;
+
+    private Request projectRequest;
+
+
+//    private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/projects")
     public String getProjects(Model model, HttpServletRequest request) {
@@ -170,9 +178,6 @@ public class ProjectController {
 
         if (isAdminOrOwner(project.getCreatedBy(), request)) {
 
-            logger.info(formProject.getCollaboratorsNames().toString());
-            logger.info(formProject.getFollowersNames().toString());
-
             projectService.updateProject(formProject);
             return "redirect:/dashboard/projects";
         } else return "redirect:/access-denied";
@@ -181,13 +186,8 @@ public class ProjectController {
     @DeleteMapping("/deleteProject/{projectId}")
     public String deleteProject(@PathVariable int projectId, HttpServletRequest request) {
 
-        Project project = projectService.findById(projectId);
+        projectRequest = projectRequestFactory.createDeleteProjectRequest(projectId, request);
 
-        if (project == null) return "redirect:/dashboard/projects";
-
-        if (isNotAdminOrOwner(project, request)) return "redirect:/access-denied";
-
-        projectService.deleteById(projectId);
-        return "redirect:/dashboard/projects";
+        return projectRequest.processRequest();
     }
 }
