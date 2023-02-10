@@ -15,7 +15,7 @@ public class CloseIssueRequest extends IssueModificationRequest {
     }
 
     @Override
-    public void modifyIssue() {
+    public void modify() {
         issueService.closeIssue(issue, closedBy);
     }
 }

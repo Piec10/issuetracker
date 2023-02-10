@@ -1,9 +1,8 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.Request;
 import com.piec10.issuetracker.entity.Issue;
 
-public abstract class IssueRequest implements Request {
+public abstract class IssueRequest {
 
     protected Issue issue;
 

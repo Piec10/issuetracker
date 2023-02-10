@@ -20,20 +20,6 @@ public class NewIssueFormRequest extends IssueFormRequest {
     }
 
     @Override
-    public String processRequest() {
-
-        if (project == null) return toProjects();
-
-        if (isNotProjectCollaborator(requestUser, project)) return toAccessDenied();
-
-        prepareModelAttributes();
-
-        addModelAttributes();
-
-        return toIssueForm();
-    }
-
-    @Override
     protected void prepareModelAttributes() {
 
         formIssue.setProjectId(project.getId());
@@ -42,5 +28,15 @@ public class NewIssueFormRequest extends IssueFormRequest {
         if (done != null) {
             allIssueStatuses.remove(done);
         }
+    }
+
+    @Override
+    public boolean isNull() {
+        return project == null;
+    }
+
+    @Override
+    public boolean hasNoPermission() {
+        return isNotProjectCollaborator(requestUser, project);
     }
 }

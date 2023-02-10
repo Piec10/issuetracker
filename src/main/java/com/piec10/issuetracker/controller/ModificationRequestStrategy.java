@@ -2,7 +2,11 @@ package com.piec10.issuetracker.controller;
 
 public class ModificationRequestStrategy implements Request{
 
-    ModificationRequest request;
+    private ModificationRequest request;
+
+    public ModificationRequestStrategy(ModificationRequest request) {
+        this.request = request;
+    }
 
     @Override
     public String processRequest() {

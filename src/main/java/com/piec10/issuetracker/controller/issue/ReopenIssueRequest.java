@@ -12,7 +12,7 @@ public class ReopenIssueRequest extends IssueModificationRequest {
     }
 
     @Override
-    public void modifyIssue() {
+    public void modify() {
         issueService.reopenIssue(issue);
     }
 }

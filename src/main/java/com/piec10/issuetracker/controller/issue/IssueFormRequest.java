@@ -1,5 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
+import com.piec10.issuetracker.controller.ModificationRequest;
 import com.piec10.issuetracker.entity.IssueStatus;
 import com.piec10.issuetracker.entity.IssueType;
 import com.piec10.issuetracker.form.FormIssue;
@@ -7,7 +8,7 @@ import com.piec10.issuetracker.service.IssueService;
 import org.springframework.ui.Model;
 import java.util.List;
 
-public abstract class IssueFormRequest extends IssueRequest {
+public abstract class IssueFormRequest extends IssueRequest implements ModificationRequest {
 
     protected IssueService issueService;
 
@@ -24,14 +25,35 @@ public abstract class IssueFormRequest extends IssueRequest {
         allIssueTypes = issueService.findAllIssueTypes();
     }
 
+    @Override
+    public void modify() {
+        prepareModelAttributes();
+        addModelAttributes();
+    }
+
     protected abstract void prepareModelAttributes();
-    protected void addModelAttributes() {
+    private void addModelAttributes() {
         model.addAttribute("allIssueTypes", allIssueTypes);
         model.addAttribute("allIssueStatuses", allIssueStatuses);
         model.addAttribute("formIssue", formIssue);
     }
 
+    @Override
+    public String redirectWhenSuccess() {
+        return toIssueForm();
+    }
+
     protected String toIssueForm() {
         return "dashboard/issue-form";
+    }
+
+    @Override
+    public String redirectWhenNull() {
+        return toProjects();
+    }
+
+    @Override
+    public String redirectWhenNoPermission() {
+        return toAccessDenied();
     }
 }

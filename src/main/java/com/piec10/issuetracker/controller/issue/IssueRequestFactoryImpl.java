@@ -1,5 +1,7 @@
 package com.piec10.issuetracker.controller.issue;
 
+import com.piec10.issuetracker.controller.ModificationRequest;
+import com.piec10.issuetracker.controller.ModificationRequestStrategy;
 import com.piec10.issuetracker.controller.Request;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
@@ -26,7 +28,9 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
     @Override
     public Request createDeleteIssueRequest(int issueId, HttpServletRequest request) {
 
-        return new DeleteIssueRequest(issueService, issueId, request);
+        ModificationRequest deleteRequest = new DeleteIssueRequest(issueService, issueId, request);
+
+        return new ModificationRequestStrategy(deleteRequest);
     }
 
     @Override
@@ -34,19 +38,25 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
 
         User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
 
-        return new CloseIssueRequest(issueService, issueId, request, closedBy);
+        ModificationRequest closeIssueRequest = new CloseIssueRequest(issueService, issueId, request, closedBy);
+
+        return new ModificationRequestStrategy(closeIssueRequest);
     }
 
     @Override
     public Request createReopenIssueRequest(int issueId, HttpServletRequest request) {
 
-        return new ReopenIssueRequest(issueService, issueId, request);
+        ModificationRequest reopenIssueRequest = new ReopenIssueRequest(issueService, issueId, request);
+
+        return new ModificationRequestStrategy(reopenIssueRequest);
     }
 
     @Override
     public Request createChangeStatusIssueRequest(int issueId, HttpServletRequest request, int statusId) {
 
-        return new ChangeStatusIssueRequest(issueService, issueId, request, statusId);
+        ModificationRequest changeStatusIssueRequest = new ChangeStatusIssueRequest(issueService, issueId, request, statusId);
+
+        return new ModificationRequestStrategy(changeStatusIssueRequest);
     }
 
     @Override
@@ -55,7 +65,9 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
         Issue issue = issueService.findById(issueId);
         User requestUser = userService.findByUsername(request.getUserPrincipal().getName());
 
-        return new IssueDetailsRequest(issue, requestUser, model);
+        ModificationRequest issueDetailsRequest = new IssueDetailsRequest(issue, requestUser, model);
+
+        return new ModificationRequestStrategy(issueDetailsRequest);
     }
 
     @Override
@@ -64,12 +76,16 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
         Project project = projectService.findById(projectId);
         User requestUser = userService.findByUsername(request.getUserPrincipal().getName());
 
-        return new NewIssueFormRequest(issueService, project, requestUser, model);
+        ModificationRequest newIssueFormRequest = new NewIssueFormRequest(issueService, project, requestUser, model);
+
+        return new ModificationRequestStrategy(newIssueFormRequest);
     }
 
     @Override
     public Request createEditIssueRequest(int issueId, HttpServletRequest request, Model model) {
 
-        return new EditIssueFormRequest(issueService, issueId, request, model);
+        ModificationRequest editIssueFormRequest = new EditIssueFormRequest(issueService, issueId, request, model);
+
+        return new ModificationRequestStrategy(editIssueFormRequest);
     }
 }

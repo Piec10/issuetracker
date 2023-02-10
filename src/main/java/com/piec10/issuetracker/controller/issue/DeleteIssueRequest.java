@@ -11,7 +11,7 @@ public class DeleteIssueRequest extends IssueModificationRequest {
     }
 
     @Override
-    public void modifyIssue() {
+    public void modify() {
         issueService.deleteIssue(issue);
     }
 }

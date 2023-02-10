@@ -15,7 +15,7 @@ public class UpdateIssueRequest extends IssueModificationRequest {
     }
 
     @Override
-    public void modifyIssue() {
+    public void modify() {
         issueService.updateIssue(formIssue);
     }
 }

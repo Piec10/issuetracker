@@ -20,19 +20,6 @@ public class EditIssueFormRequest extends IssueFormRequest{
     }
 
     @Override
-    public String processRequest() {
-
-        if (issue == null) return toProjects();
-        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
-
-        prepareModelAttributes();
-
-        addModelAttributes();
-
-        return toIssueForm();
-    }
-
-    @Override
     protected void prepareModelAttributes() {
         formIssue.setId(issue.getId());
         formIssue.setSummary(issue.getSummary());
@@ -50,5 +37,15 @@ public class EditIssueFormRequest extends IssueFormRequest{
         if (issue.getIssueStatus() != null) {
             formIssue.setIssueStatusId(issue.getIssueStatus().getId());
         }
+    }
+
+    @Override
+    public boolean isNull() {
+        return issue == null;
+    }
+
+    @Override
+    public boolean hasNoPermission() {
+        return doesNotHavePermissionToModify(issue, request);
     }
 }

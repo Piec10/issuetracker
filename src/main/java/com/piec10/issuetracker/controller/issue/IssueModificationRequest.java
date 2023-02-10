@@ -1,5 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
+import com.piec10.issuetracker.controller.ModificationRequest;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.service.IssueService;
 
@@ -7,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
-public abstract class IssueModificationRequest extends IssueRequest {
+public abstract class IssueModificationRequest extends IssueRequest implements ModificationRequest {
 
     protected IssueService issueService;
     private HttpServletRequest request;
@@ -18,17 +19,30 @@ public abstract class IssueModificationRequest extends IssueRequest {
         issue = issueService.findById(issueId);
     }
 
-    public String processRequest() {
-
-        if (issue == null) return toProjects();
-        if (doesNotHavePermissionToModify(issue, request)) return toAccessDenied();
-
-        modifyIssue();
-
-        return toCurrentProject(issue.getProject());
+    @Override
+    public boolean isNull() {
+        return issue == null;
     }
 
-    public abstract void modifyIssue();
+    @Override
+    public String redirectWhenNull() {
+        return toProjects();
+    }
+
+    @Override
+    public boolean hasNoPermission() {
+        return doesNotHavePermissionToModify(issue, request);
+    }
+
+    @Override
+    public String redirectWhenNoPermission() {
+        return toAccessDenied();
+    }
+
+    @Override
+    public String redirectWhenSuccess() {
+        return toCurrentProject(issue.getProject());
+    }
 
     private static String toCurrentProject(Project project) {
         return "redirect:/dashboard/issues?projectId=" + project.getId();

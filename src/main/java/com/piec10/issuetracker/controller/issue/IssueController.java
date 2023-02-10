@@ -1,5 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
+import com.piec10.issuetracker.controller.ModificationRequestStrategy;
 import com.piec10.issuetracker.controller.Request;
 import com.piec10.issuetracker.entity.*;
 import com.piec10.issuetracker.form.FormIssue;
@@ -138,7 +139,7 @@ public class IssueController {
             return toCurrentProject(project);
         }
 
-        issueRequest = new UpdateIssueRequest(issueService, formIssue.getId(), request, formIssue);
+        issueRequest = new ModificationRequestStrategy(new UpdateIssueRequest(issueService, formIssue.getId(), request, formIssue));
         return issueRequest.processRequest();
     }
 
