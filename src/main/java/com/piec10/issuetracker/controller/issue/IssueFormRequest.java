@@ -12,6 +12,7 @@ public abstract class IssueFormRequest extends IssueRequest {
     protected IssueService issueService;
 
     protected Model model;
+
     protected FormIssue formIssue = new FormIssue();
     protected List<IssueStatus> allIssueStatuses;
     protected List<IssueType> allIssueTypes;

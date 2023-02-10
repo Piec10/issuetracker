@@ -54,7 +54,7 @@ public class ProjectController {
     }
 
     @GetMapping("/newProject")
-    public String showNewProjectForm(Model model, HttpServletRequest request) {
+    public String showNewProjectForm(Model model) {
 
         model.addAttribute("formProject", new FormProject());
         return "dashboard/project-form";
@@ -84,8 +84,7 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/processProject", params = "action=search")
-    public String processProjectSearch(@ModelAttribute("formProject") FormProject formProject,
-                                       BindingResult theBindingResult) {
+    public String processProjectSearch(@ModelAttribute("formProject") FormProject formProject) {
 
         formProject.getSearchResults().clear();
 
@@ -98,8 +97,7 @@ public class ProjectController {
 
     @PostMapping(value = "/processProject", params = "action=addCollaborator")
     public String processProjectAddCollaborator(@ModelAttribute("formProject") FormProject formProject,
-                                                @RequestParam("username") String collaboratorUsername,
-                                                BindingResult theBindingResult) {
+                                                @RequestParam("username") String collaboratorUsername) {
 
         if (!formProject.getCollaboratorsNames().contains(collaboratorUsername))
             formProject.getCollaboratorsNames().add(collaboratorUsername);
@@ -112,8 +110,7 @@ public class ProjectController {
 
     @PostMapping(value = "/processProject", params = "action=addFollower")
     public String processProjectAddFollower(@ModelAttribute("formProject") FormProject formProject,
-                                            @RequestParam("username") String followerUsername,
-                                            BindingResult theBindingResult) {
+                                            @RequestParam("username") String followerUsername) {
 
         if (formProject.getCollaboratorsNames().contains(followerUsername))
             formProject.getCollaboratorsNames().remove(followerUsername);
@@ -126,8 +123,7 @@ public class ProjectController {
 
     @PostMapping(value = "/processProject", params = "action=removeFollower")
     public String processProjectRemoveFollower(@ModelAttribute("formProject") FormProject formProject,
-                                               @RequestParam("username") String followerUsername,
-                                               BindingResult theBindingResult) {
+                                               @RequestParam("username") String followerUsername) {
 
         if (formProject.getCollaboratorsNames().contains(followerUsername))
             formProject.getCollaboratorsNames().remove(followerUsername);
@@ -140,8 +136,7 @@ public class ProjectController {
 
     @PostMapping(value = "/processProject", params = "action=removeCollaborator")
     public String processProjectRemoveCollaborator(@ModelAttribute("formProject") FormProject formProject,
-                                                   @RequestParam("username") String collaboratorUsername,
-                                                   BindingResult theBindingResult) {
+                                                   @RequestParam("username") String collaboratorUsername) {
 
         if (formProject.getCollaboratorsNames().contains(collaboratorUsername))
             formProject.getCollaboratorsNames().remove(collaboratorUsername);
