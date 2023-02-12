@@ -45,7 +45,7 @@ public class ProjectController {
 //    private Logger logger = Logger.getLogger(getClass().getName());
 
     @GetMapping("/projects")
-    public String getProjects(Model model, HttpServletRequest request) {
+    public String getProjects(HttpServletRequest request, Model model) {
 
         Collection<Project> projects;
 
@@ -69,26 +69,11 @@ public class ProjectController {
     }
 
     @GetMapping("/editProject")
-    public String showEditProjectForm(@RequestParam("projectId") int projectId, Model model, HttpServletRequest request) {
+    public String showEditProjectForm(@RequestParam("projectId") int projectId, HttpServletRequest request, Model model) {
 
-        Project project = projectService.findById(projectId);
+        projectRequest = projectRequestFactory.createEditProjectRequest(projectId, request, model);
 
-        if (project == null) return "redirect:/dashboard/projects";
-
-        if (isAdminOrOwner(project.getCreatedBy(), request)) {
-
-            FormProject formProject = new FormProject();
-
-            formProject.setId(projectId);
-            formProject.setTitle(project.getTitle());
-            formProject.setDescription(project.getDescription());
-            formProject.setFollowersNamesFromUsers(project.getFollowers());
-            formProject.setCollaboratorsNamesFromUsers(project.getCollaborators());
-
-            model.addAttribute("formProject", formProject);
-
-            return "dashboard/project-form";
-        } else return "redirect:/access-denied";
+        return projectRequest.processRequest();
     }
 
     @PostMapping(value = "/processProject", params = "action=search")
