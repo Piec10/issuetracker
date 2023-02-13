@@ -1,10 +1,7 @@
 package com.piec10.issuetracker.controller;
 
-import com.piec10.issuetracker.controller.request.issue.CreateIssueRequest;
-import com.piec10.issuetracker.controller.request.RestrictedAccessRequestStrategy;
 import com.piec10.issuetracker.controller.request.Request;
 import com.piec10.issuetracker.controller.request.issue.IssueRequestFactory;
-import com.piec10.issuetracker.controller.request.issue.modification.UpdateIssueRequest;
 import com.piec10.issuetracker.entity.*;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
@@ -77,6 +74,7 @@ public class IssueController {
         model.addAttribute("project", project);
         model.addAttribute("projectRoles", userProjectRoles);
         model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
+        model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
 
         return "dashboard/issues";
     }
@@ -150,6 +148,16 @@ public class IssueController {
         return issueRequest.processRequest();
     }
 
+    @PatchMapping("/changeIssueType/{issueId}")
+    public String changeIssueType(@PathVariable int issueId,
+                                    @RequestParam("typeId") int typeId,
+                                    HttpServletRequest request) {
+
+        issueRequest = issueRequestFactory.createChangeTypeIssueRequest(issueId, request, typeId);
+
+        return issueRequest.processRequest();
+    }
+
     private List<Issue> getIssues(int projectId, String show, String sort) {
 
         if (show.equals("open")) {
@@ -194,10 +202,6 @@ public class IssueController {
 
     private static String toProjects() {
         return "redirect:/dashboard/projects";
-    }
-
-    private static String toCurrentProject(Project project) {
-        return "redirect:/dashboard/issues?projectId=" + project.getId();
     }
 
     private static String toAccessDenied() {

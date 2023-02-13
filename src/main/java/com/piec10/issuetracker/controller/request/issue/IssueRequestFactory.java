@@ -28,4 +28,6 @@ public interface IssueRequestFactory {
     Request createUpdateIssueRequest(HttpServletRequest request, FormIssue formIssue);
 
     Request getCreateIssueRequest(HttpServletRequest request, FormIssue formIssue);
+
+    Request createChangeTypeIssueRequest(int issueId, HttpServletRequest request, int typeId);
 }

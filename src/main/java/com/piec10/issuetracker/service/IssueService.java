@@ -58,4 +58,6 @@ public interface IssueService {
     void changeIssueStatus(Issue issue, int statusId);
 
     void deleteIssue(Issue issue);
+
+    void changeIssueType(Issue issue, int typeId);
 }

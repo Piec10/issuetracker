@@ -34,6 +34,7 @@ public class IssueControllerTest extends BaseControllerTest {
     private static final String CLOSE_ISSUE_URL = "/dashboard/closeIssue/{issueId}";
     private static final String REOPEN_ISSUE_URL = "/dashboard/reopenIssue/{issueId}";
     private static final String CHANGE_ISSUE_STATUS_URL = "/dashboard/changeIssueStatus/{issueId}";
+    private static final String CHANGE_ISSUE_TYPE_URL = "/dashboard/changeIssueType/{issueId}";
     @MockBean
     private UserService userService;
     @MockBean
@@ -639,6 +640,16 @@ public class IssueControllerTest extends BaseControllerTest {
         whenPerformPatch();
         thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
         andExpectMethodCalledOnceIn(issueService).changeIssueStatus(MockIssueService.getIssue(),1);
+    }
+
+    @Test
+    public void changeIssueTypeIsOwner() throws Exception {
+        givenUrl(CHANGE_ISSUE_TYPE_URL, "1");
+        andUser(owner());
+        andParam("typeId", "1");
+        whenPerformPatch();
+        thenExpect3xxRedirectionTo("/dashboard/issues?projectId=1");
+        andExpectMethodCalledOnceIn(issueService).changeIssueType(MockIssueService.getIssue(),1);
     }
 
     private void thenExpectValidOpenIssuesView() throws Exception {

@@ -193,6 +193,17 @@
                                     </form>
                                 </div>
 
+                                <!-- hidden forms for performing change issue type request -->
+
+                                <!-- add form for each type -->
+                                <div th:each="issueType : ${allIssueTypes}">
+                                    <form th:name="'changeIssueTypeForm_'+${tempIssue.id}+${issueType.id}"
+                                          th:action="@{'/dashboard/changeIssueType/'+${tempIssue.id}(typeId=${issueType.id})}"
+                                          th:method="patch" th:hidden="true">
+                                        <input hidden type="submit" value="Patch"/>
+                                    </form>
+                                </div>
+
 
                                 <!-- Issue Details Modal -->
                                 <div class="modal fade" th:id="'issueDetailsModal_'+${tempIssue.id}" tabindex="-1"
@@ -429,35 +440,45 @@
                                                     </button>
                                                 </div>
                                                 <div class="col">
-                                                    <button class="btn w-100 btn-sm btn-outline-secondary"
-                                                            style="font-size: 0.8rem">
-                                                        <span th:text="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"/>
-                                                    </button>
+
+
+                                                    <div class="dropdown">
+                                                        <button class="btn w-100 btn-sm btn-outline-secondary"
+                                                                style="font-size: 0.8rem;"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
+                                                            <span th:text="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"/>
+                                                        </button>
+                                                        <ul class="dropdown-menu"
+                                                            th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
+                                                            <li th:each="issueType : ${allIssueTypes}">
+                                                                <a class="dropdown-item"
+                                                                   th:href="'javascript: document.changeIssueTypeForm_'+${tempIssue.id}+${issueType.id}+'.submit()'">
+                                                                    <span th:text="${issueType.name}"/>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+
                                                 </div>
                                                 <div class="col" th:if="${show == 'open'}">
-<!--                                                    <div th:switch="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">-->
-<!--                                                        <div th:case="true">-->
-                                                            <div class="dropdown">
-                                                                <button class="btn w-100 btn-sm btn-outline-secondary"
-                                                                        style="font-size: 0.8rem;"
-                                                                        type="button" data-bs-toggle="dropdown"
-                                                                        aria-expanded="false">
-                                                                    <span th:text="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"/>
-                                                                </button>
-                                                                <ul class="dropdown-menu" th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
-                                                                    <li th:each="issueStatus : ${allIssueStatuses}">
-                                                                        <a class="dropdown-item"
-                                                                           th:href="'javascript: document.changeIssueStatusForm_'+${tempIssue.id}+${issueStatus.id}+'.submit()'">
-                                                                            <span th:text="${issueStatus.name}"/>
-                                                                        </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-<!--                                                        </div>-->
-<!--                                                        <div th:case="false">-->
-<!--                                                            <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>-->
-<!--                                                        </div>-->
-<!--                                                    </div>-->
+                                                    <div class="dropdown">
+                                                        <button class="btn w-100 btn-sm btn-outline-secondary"
+                                                                style="font-size: 0.8rem;"
+                                                                type="button" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
+                                                            <span th:text="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"/>
+                                                        </button>
+                                                        <ul class="dropdown-menu"
+                                                            th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
+                                                            <li th:each="issueStatus : ${allIssueStatuses}">
+                                                                <a class="dropdown-item"
+                                                                   th:href="'javascript: document.changeIssueStatusForm_'+${tempIssue.id}+${issueStatus.id}+'.submit()'">
+                                                                    <span th:text="${issueStatus.name}"/>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

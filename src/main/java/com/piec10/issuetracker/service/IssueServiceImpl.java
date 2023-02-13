@@ -224,4 +224,13 @@ public class IssueServiceImpl implements IssueService {
     public void deleteIssue(Issue issue) {
         issueRepository.delete(issue);
     }
+
+    @Override
+    public void changeIssueType(Issue issue, int typeId) {
+        IssueType issueType = findIssueTypeById(typeId);
+        if(issueType != null) {
+            issue.setIssueType(issueType);
+            issueRepository.save(issue);
+        }
+    }
 }

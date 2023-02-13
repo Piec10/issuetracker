@@ -119,4 +119,11 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
 
         return new RestrictedAccessRequestStrategy(createIssueRequest);
     }
+
+    @Override
+    public Request createChangeTypeIssueRequest(int issueId, HttpServletRequest request, int typeId) {
+        RestrictedAccessRequest changeTypeIssueRequest = new ChangeTypeIssueRequest(issueService, issueId, request, typeId);
+
+        return new RestrictedAccessRequestStrategy(changeTypeIssueRequest);
+    }
 }
