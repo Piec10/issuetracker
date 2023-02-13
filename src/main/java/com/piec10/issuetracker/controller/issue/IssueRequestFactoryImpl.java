@@ -65,7 +65,7 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
         Issue issue = issueService.findById(issueId);
         User requestUser = userService.findByUsername(request.getUserPrincipal().getName());
 
-        RestrictedAccessRequest issueDetailsRequest = new IssueDetailsRequest(issue, requestUser, model);
+        RestrictedAccessRequest issueDetailsRequest = new IssueDetailsRequest(issueService, issue, requestUser, model);
 
         return new RestrictedAccessRequestStrategy(issueDetailsRequest);
     }

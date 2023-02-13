@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.doesNotHavePermissionToModify;
 
-public class EditIssueFormRequest extends IssueFormRequest{
+public class EditIssueFormRequest extends RestrictedAccessIssueFormRequest {
 
     HttpServletRequest request;
 

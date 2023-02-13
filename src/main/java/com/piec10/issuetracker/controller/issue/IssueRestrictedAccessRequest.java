@@ -1,16 +1,18 @@
 package com.piec10.issuetracker.controller.issue;
 
 import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
-import com.piec10.issuetracker.entity.Project;
+import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.piec10.issuetracker.controller.request.RequestRedirections.*;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
-public abstract class IssueRestrictedAccessRequest extends IssueRequest implements RestrictedAccessRequest {
+public abstract class IssueRestrictedAccessRequest implements RestrictedAccessRequest {
 
     protected IssueService issueService;
+    protected Issue issue;
     private HttpServletRequest request;
 
     public IssueRestrictedAccessRequest(IssueService issueService, int issueId, HttpServletRequest request) {
@@ -44,7 +46,4 @@ public abstract class IssueRestrictedAccessRequest extends IssueRequest implemen
         return toCurrentProject(issue.getProject());
     }
 
-    private static String toCurrentProject(Project project) {
-        return "redirect:/dashboard/issues?projectId=" + project.getId();
-    }
 }

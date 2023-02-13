@@ -1,5 +1,6 @@
 package com.piec10.issuetracker.controller;
 
+import com.piec10.issuetracker.controller.issue.CreateIssueRequest;
 import com.piec10.issuetracker.controller.request.RestrictedAccessRequestStrategy;
 import com.piec10.issuetracker.controller.request.Request;
 import com.piec10.issuetracker.controller.issue.IssueRequestFactory;
@@ -124,13 +125,15 @@ public class IssueController {
             return "dashboard/issue-form";
         }
 
-        Project project = projectService.findById(formIssue.getProjectId());
-        if (project == null) return toProjects();
-
-        User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-        UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
-
         if (formIssue.getId() == 0) {
+            Project project = projectService.findById(formIssue.getProjectId());
+
+            issueRequest = new RestrictedAccessRequestStrategy(new CreateIssueRequest(issueService, project, request, formIssue));
+
+            if (project == null) return toProjects();
+
+            User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
+            UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
             if (!userProjectRoles.isCollaborator()) return toAccessDenied();
 
             issueService.createIssue(formIssue, currentUser, project);

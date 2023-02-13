@@ -1,22 +1,22 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
+import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.IssueStatus;
 import com.piec10.issuetracker.entity.IssueType;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import org.springframework.ui.Model;
+
 import java.util.List;
 
-public abstract class IssueFormRequest extends IssueRequest implements RestrictedAccessRequest {
-
-    protected IssueService issueService;
+public abstract class IssueFormRequest {
 
     protected Model model;
-
     protected FormIssue formIssue = new FormIssue();
     protected List<IssueStatus> allIssueStatuses;
     protected List<IssueType> allIssueTypes;
+    protected IssueService issueService;
+    protected Issue issue;
 
     public IssueFormRequest(IssueService issueService, Model model) {
         this.issueService = issueService;
@@ -25,35 +25,13 @@ public abstract class IssueFormRequest extends IssueRequest implements Restricte
         allIssueTypes = issueService.findAllIssueTypes();
     }
 
-    @Override
-    public void doWork() {
-        prepareModelAttributes();
-        addModelAttributes();
-    }
-
-    protected abstract void prepareModelAttributes();
-    private void addModelAttributes() {
+    protected void addModelAttributes() {
         model.addAttribute("allIssueTypes", allIssueTypes);
         model.addAttribute("allIssueStatuses", allIssueStatuses);
         model.addAttribute("formIssue", formIssue);
     }
 
-    @Override
-    public String redirectWhenSuccess() {
-        return toIssueForm();
-    }
-
     protected String toIssueForm() {
         return "dashboard/issue-form";
-    }
-
-    @Override
-    public String redirectWhenNull() {
-        return toProjects();
-    }
-
-    @Override
-    public String redirectWhenNoPermission() {
-        return toAccessDenied();
     }
 }

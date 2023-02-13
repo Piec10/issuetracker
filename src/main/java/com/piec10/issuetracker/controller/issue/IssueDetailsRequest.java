@@ -4,19 +4,25 @@ import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.service.IssueService;
 import org.springframework.ui.Model;
 
 
+import static com.piec10.issuetracker.controller.request.RequestRedirections.toAccessDenied;
+import static com.piec10.issuetracker.controller.request.RequestRedirections.toProjects;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
-public class IssueDetailsRequest extends IssueRequest implements RestrictedAccessRequest {
+public class IssueDetailsRequest implements RestrictedAccessRequest {
 
     private final User requestUser;
     private final Model model;
+    protected IssueService issueService;
+    protected Issue issue;
 
     private Project project;
 
-    public IssueDetailsRequest(Issue issue, User requestUser, Model model) {
+    public IssueDetailsRequest(IssueService issueService, Issue issue, User requestUser, Model model) {
+        this.issueService = issueService;
         this.issue = issue;
         this.requestUser = requestUser;
         this.model = model;

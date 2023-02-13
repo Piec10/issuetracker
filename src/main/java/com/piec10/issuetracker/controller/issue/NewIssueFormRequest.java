@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 
 import static com.piec10.issuetracker.util.ProjectRolesCheckMethods.isNotProjectCollaborator;
 
-public class NewIssueFormRequest extends IssueFormRequest {
+public class NewIssueFormRequest extends RestrictedAccessIssueFormRequest {
 
     private Project project;
     private User requestUser;

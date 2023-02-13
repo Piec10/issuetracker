@@ -4,11 +4,11 @@ public interface ProcessFormRequest {
 
     boolean formHasErrors();
 
-    String redirectWhenFormHasErrors();
+    String whenFormHasErrors();
 
-    boolean isGuest();
+    boolean isGuestUser();
 
-    String redirectWhenGuest();
+    String whenIsGuestUser();
 
     boolean isNew();
 

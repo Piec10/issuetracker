@@ -7,9 +7,9 @@ public class ProcessFormRequestStrategy implements Request {
     @Override
     public String processRequest() {
 
-        if(request.formHasErrors()) return request.redirectWhenFormHasErrors();
+        if(request.formHasErrors()) return request.whenFormHasErrors();
 
-        if(request.isGuest()) return request.redirectWhenGuest();
+        if(request.isGuestUser()) return request.whenIsGuestUser();
 
         if(request.isNew()) return request.createNew();
 
