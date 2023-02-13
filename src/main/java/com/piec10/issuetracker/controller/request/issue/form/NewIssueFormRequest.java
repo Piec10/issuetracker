@@ -1,6 +1,5 @@
 package com.piec10.issuetracker.controller.request.issue.form;
 
-import com.piec10.issuetracker.controller.request.issue.form.RestrictedAccessIssueFormRequest;
 import com.piec10.issuetracker.entity.IssueStatus;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
@@ -24,11 +23,7 @@ public class NewIssueFormRequest extends RestrictedAccessIssueFormRequest {
     protected void prepareModelAttributes() {
 
         formIssue.setProjectId(project.getId());
-
-        IssueStatus done = issueService.findIssueStatusByName("Done");
-        if (done != null) {
-            allIssueStatuses.remove(done);
-        }
+        removeDoneStatusFromList();
     }
 
     @Override

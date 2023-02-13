@@ -41,13 +41,18 @@ public class ProcessIssueFormRequest extends IssueFormRequest implements Process
 
     @Override
     public String whenFormHasErrors() {
+        if(isNew()) removeDoneStatusFromList();
         addCommonModelAttributes();
         return toIssueForm();
     }
 
     @Override
     public boolean isNotNew() {
-        return formIssue.getId() > 0;
+        return !isNew();
+    }
+
+    private boolean isNew() {
+        return formIssue.getId() == 0;
     }
 
     @Override
@@ -63,6 +68,7 @@ public class ProcessIssueFormRequest extends IssueFormRequest implements Process
 
     @Override
     public String whenIsGuestUser() {
+        removeDoneStatusFromList();
         addCommonModelAttributes();
         model.addAttribute("guestUserError", "Sorry, Guest user cannot create new issues.");
         return toIssueForm();

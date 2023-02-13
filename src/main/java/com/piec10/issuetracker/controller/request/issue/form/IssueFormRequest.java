@@ -34,4 +34,11 @@ public abstract class IssueFormRequest {
         model.addAttribute("allIssueTypes", allIssueTypes);
         model.addAttribute("allIssueStatuses", allIssueStatuses);
     }
+
+    protected void removeDoneStatusFromList() {
+        IssueStatus done = issueService.findIssueStatusByName("Done");
+        if (done != null) {
+            allIssueStatuses.remove(done);
+        }
+    }
 }
