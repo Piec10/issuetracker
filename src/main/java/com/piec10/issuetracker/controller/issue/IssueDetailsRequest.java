@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.request.ModificationRequest;
+import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
@@ -9,7 +9,7 @@ import org.springframework.ui.Model;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
-public class IssueDetailsRequest extends IssueRequest implements ModificationRequest {
+public class IssueDetailsRequest extends IssueRequest implements RestrictedAccessRequest {
 
     private final User requestUser;
     private final Model model;
@@ -45,7 +45,7 @@ public class IssueDetailsRequest extends IssueRequest implements ModificationReq
     }
 
     @Override
-    public void modify() {
+    public void doWork() {
         model.addAttribute("issue", issue);
     }
 

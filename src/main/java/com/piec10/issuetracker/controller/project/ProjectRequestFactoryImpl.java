@@ -1,9 +1,8 @@
 package com.piec10.issuetracker.controller.project;
 
-import com.piec10.issuetracker.controller.request.ModificationRequest;
-import com.piec10.issuetracker.controller.request.ModificationRequestStrategy;
+import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
+import com.piec10.issuetracker.controller.request.RestrictedAccessRequestStrategy;
 import com.piec10.issuetracker.controller.request.Request;
-import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,16 +19,16 @@ public class ProjectRequestFactoryImpl implements ProjectRequestFactory{
     @Override
     public Request createDeleteProjectRequest(int projectId, HttpServletRequest request) {
 
-        ModificationRequest deleteProjectRequest = new DeleteProjectRequest(projectService, projectId, request);
+        RestrictedAccessRequest deleteProjectRequest = new DeleteProjectRequest(projectService, projectId, request);
 
-        return new ModificationRequestStrategy(deleteProjectRequest);
+        return new RestrictedAccessRequestStrategy(deleteProjectRequest);
     }
 
     @Override
     public Request createEditProjectRequest(int projectId, HttpServletRequest request, Model model) {
 
-        ModificationRequest editProjectRequest = new EditProjectRequest(projectService, projectId, request, model);
+        RestrictedAccessRequest editProjectRequest = new EditProjectRequest(projectService, projectId, request, model);
 
-        return new ModificationRequestStrategy(editProjectRequest);
+        return new RestrictedAccessRequestStrategy(editProjectRequest);
     }
 }

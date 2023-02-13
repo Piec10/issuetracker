@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.request.ModificationRequest;
+import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.service.IssueService;
 
@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
 
-public abstract class IssueModificationRequest extends IssueRequest implements ModificationRequest {
+public abstract class IssueRestrictedAccessRequest extends IssueRequest implements RestrictedAccessRequest {
 
     protected IssueService issueService;
     private HttpServletRequest request;
 
-    public IssueModificationRequest(IssueService issueService, int issueId, HttpServletRequest request) {
+    public IssueRestrictedAccessRequest(IssueService issueService, int issueId, HttpServletRequest request) {
         this.issueService = issueService;
         this.request = request;
         issue = issueService.findById(issueId);

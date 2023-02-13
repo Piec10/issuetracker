@@ -1,7 +1,7 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.request.ModificationRequest;
-import com.piec10.issuetracker.controller.request.ModificationRequestStrategy;
+import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
+import com.piec10.issuetracker.controller.request.RestrictedAccessRequestStrategy;
 import com.piec10.issuetracker.controller.request.Request;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
@@ -28,9 +28,9 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
     @Override
     public Request createDeleteIssueRequest(int issueId, HttpServletRequest request) {
 
-        ModificationRequest deleteRequest = new DeleteIssueRequest(issueService, issueId, request);
+        RestrictedAccessRequest deleteRequest = new DeleteIssueRequest(issueService, issueId, request);
 
-        return new ModificationRequestStrategy(deleteRequest);
+        return new RestrictedAccessRequestStrategy(deleteRequest);
     }
 
     @Override
@@ -38,25 +38,25 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
 
         User closedBy = userService.findByUsername(request.getUserPrincipal().getName());
 
-        ModificationRequest closeIssueRequest = new CloseIssueRequest(issueService, issueId, request, closedBy);
+        RestrictedAccessRequest closeIssueRequest = new CloseIssueRequest(issueService, issueId, request, closedBy);
 
-        return new ModificationRequestStrategy(closeIssueRequest);
+        return new RestrictedAccessRequestStrategy(closeIssueRequest);
     }
 
     @Override
     public Request createReopenIssueRequest(int issueId, HttpServletRequest request) {
 
-        ModificationRequest reopenIssueRequest = new ReopenIssueRequest(issueService, issueId, request);
+        RestrictedAccessRequest reopenIssueRequest = new ReopenIssueRequest(issueService, issueId, request);
 
-        return new ModificationRequestStrategy(reopenIssueRequest);
+        return new RestrictedAccessRequestStrategy(reopenIssueRequest);
     }
 
     @Override
     public Request createChangeStatusIssueRequest(int issueId, HttpServletRequest request, int statusId) {
 
-        ModificationRequest changeStatusIssueRequest = new ChangeStatusIssueRequest(issueService, issueId, request, statusId);
+        RestrictedAccessRequest changeStatusIssueRequest = new ChangeStatusIssueRequest(issueService, issueId, request, statusId);
 
-        return new ModificationRequestStrategy(changeStatusIssueRequest);
+        return new RestrictedAccessRequestStrategy(changeStatusIssueRequest);
     }
 
     @Override
@@ -65,9 +65,9 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
         Issue issue = issueService.findById(issueId);
         User requestUser = userService.findByUsername(request.getUserPrincipal().getName());
 
-        ModificationRequest issueDetailsRequest = new IssueDetailsRequest(issue, requestUser, model);
+        RestrictedAccessRequest issueDetailsRequest = new IssueDetailsRequest(issue, requestUser, model);
 
-        return new ModificationRequestStrategy(issueDetailsRequest);
+        return new RestrictedAccessRequestStrategy(issueDetailsRequest);
     }
 
     @Override
@@ -76,16 +76,16 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
         Project project = projectService.findById(projectId);
         User requestUser = userService.findByUsername(request.getUserPrincipal().getName());
 
-        ModificationRequest newIssueFormRequest = new NewIssueFormRequest(issueService, project, requestUser, model);
+        RestrictedAccessRequest newIssueFormRequest = new NewIssueFormRequest(issueService, project, requestUser, model);
 
-        return new ModificationRequestStrategy(newIssueFormRequest);
+        return new RestrictedAccessRequestStrategy(newIssueFormRequest);
     }
 
     @Override
     public Request createEditIssueRequest(int issueId, HttpServletRequest request, Model model) {
 
-        ModificationRequest editIssueFormRequest = new EditIssueFormRequest(issueService, issueId, request, model);
+        RestrictedAccessRequest editIssueFormRequest = new EditIssueFormRequest(issueService, issueId, request, model);
 
-        return new ModificationRequestStrategy(editIssueFormRequest);
+        return new RestrictedAccessRequestStrategy(editIssueFormRequest);
     }
 }

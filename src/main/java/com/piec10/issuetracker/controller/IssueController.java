@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.controller;
 
-import com.piec10.issuetracker.controller.request.ModificationRequestStrategy;
+import com.piec10.issuetracker.controller.request.RestrictedAccessRequestStrategy;
 import com.piec10.issuetracker.controller.request.Request;
 import com.piec10.issuetracker.controller.issue.IssueRequestFactory;
 import com.piec10.issuetracker.controller.issue.UpdateIssueRequest;
@@ -45,8 +45,7 @@ public class IssueController {
     public String getIssues(@RequestParam(value = "projectId") int projectId,
                             @RequestParam(value = "show", required = false) String show,
                             @RequestParam(value = "sort", required = false) String sort,
-                            Model model,
-                            HttpServletRequest request) {
+                            HttpServletRequest request, Model model) {
 
         Project project = projectService.findById(projectId);
         if (project == null) return toProjects();
@@ -138,7 +137,7 @@ public class IssueController {
             return toCurrentProject(project);
         }
 
-        issueRequest = new ModificationRequestStrategy(new UpdateIssueRequest(issueService, formIssue.getId(), request, formIssue));
+        issueRequest = new RestrictedAccessRequestStrategy(new UpdateIssueRequest(issueService, formIssue.getId(), request, formIssue));
         return issueRequest.processRequest();
     }
 

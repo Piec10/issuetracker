@@ -4,7 +4,7 @@ import com.piec10.issuetracker.service.ProjectService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class DeleteProjectRequest extends ProjectModificationRequest {
+public class DeleteProjectRequest extends ProjectRestrictedAccessRequest {
 
 
     public DeleteProjectRequest(ProjectService projectService, int projectId, HttpServletRequest request) {
@@ -12,7 +12,7 @@ public class DeleteProjectRequest extends ProjectModificationRequest {
     }
 
     @Override
-    public void modify() {
+    public void doWork() {
         projectService.deleteById(project.getId());
     }
 

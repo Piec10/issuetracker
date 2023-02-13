@@ -5,7 +5,7 @@ import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class UpdateIssueRequest extends IssueModificationRequest {
+public class UpdateIssueRequest extends IssueRestrictedAccessRequest {
 
     private FormIssue formIssue;
 
@@ -15,7 +15,7 @@ public class UpdateIssueRequest extends IssueModificationRequest {
     }
 
     @Override
-    public void modify() {
+    public void doWork() {
         issueService.updateIssue(formIssue);
     }
 }

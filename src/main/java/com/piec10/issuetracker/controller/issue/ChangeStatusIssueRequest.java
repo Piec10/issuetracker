@@ -4,7 +4,7 @@ import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ChangeStatusIssueRequest extends IssueModificationRequest {
+public class ChangeStatusIssueRequest extends IssueRestrictedAccessRequest {
 
     private int statusId;
 
@@ -14,7 +14,7 @@ public class ChangeStatusIssueRequest extends IssueModificationRequest {
     }
 
     @Override
-    public void modify() {
+    public void doWork() {
         issueService.changeIssueStatus(issue, statusId);
     }
 }

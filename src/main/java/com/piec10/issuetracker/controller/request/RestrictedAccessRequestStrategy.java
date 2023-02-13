@@ -1,10 +1,10 @@
 package com.piec10.issuetracker.controller.request;
 
-public class ModificationRequestStrategy implements Request{
+public class RestrictedAccessRequestStrategy implements Request{
 
-    private ModificationRequest request;
+    private RestrictedAccessRequest request;
 
-    public ModificationRequestStrategy(ModificationRequest request) {
+    public RestrictedAccessRequestStrategy(RestrictedAccessRequest request) {
         this.request = request;
     }
 
@@ -15,7 +15,7 @@ public class ModificationRequestStrategy implements Request{
 
         if(request.hasNoPermission()) return request.redirectWhenNoPermission();
 
-        request.modify();
+        request.doWork();
 
         return request.redirectWhenSuccess();
     }

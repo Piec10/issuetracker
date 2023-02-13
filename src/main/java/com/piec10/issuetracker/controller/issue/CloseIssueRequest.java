@@ -5,7 +5,7 @@ import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class CloseIssueRequest extends IssueModificationRequest {
+public class CloseIssueRequest extends IssueRestrictedAccessRequest {
 
     private User closedBy;
 
@@ -15,7 +15,7 @@ public class CloseIssueRequest extends IssueModificationRequest {
     }
 
     @Override
-    public void modify() {
+    public void doWork() {
         issueService.closeIssue(issue, closedBy);
     }
 }

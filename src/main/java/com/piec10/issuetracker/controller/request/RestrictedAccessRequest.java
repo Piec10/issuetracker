@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.controller.request;
 
-public interface ModificationRequest {
+public interface RestrictedAccessRequest {
 
     boolean isNull();
 
@@ -10,7 +10,7 @@ public interface ModificationRequest {
 
     String redirectWhenNoPermission();
 
-    void modify();
+    void doWork();
 
     String redirectWhenSuccess();
 }

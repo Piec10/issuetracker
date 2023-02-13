@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class EditProjectRequest extends ProjectModificationRequest{
+public class EditProjectRequest extends ProjectRestrictedAccessRequest {
 
     private Model model;
 
@@ -16,7 +16,7 @@ public class EditProjectRequest extends ProjectModificationRequest{
     }
 
     @Override
-    public void modify() {
+    public void doWork() {
         FormProject formProject = new FormProject();
 
         formProject.setId(project.getId());

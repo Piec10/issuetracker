@@ -4,7 +4,7 @@ import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ReopenIssueRequest extends IssueModificationRequest {
+public class ReopenIssueRequest extends IssueRestrictedAccessRequest {
 
 
     public ReopenIssueRequest(IssueService issueService, int issueId, HttpServletRequest request) {
@@ -12,7 +12,7 @@ public class ReopenIssueRequest extends IssueModificationRequest {
     }
 
     @Override
-    public void modify() {
+    public void doWork() {
         issueService.reopenIssue(issue);
     }
 }

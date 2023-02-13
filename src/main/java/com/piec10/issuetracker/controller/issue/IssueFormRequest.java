@@ -1,6 +1,6 @@
 package com.piec10.issuetracker.controller.issue;
 
-import com.piec10.issuetracker.controller.request.ModificationRequest;
+import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
 import com.piec10.issuetracker.entity.IssueStatus;
 import com.piec10.issuetracker.entity.IssueType;
 import com.piec10.issuetracker.form.FormIssue;
@@ -8,7 +8,7 @@ import com.piec10.issuetracker.service.IssueService;
 import org.springframework.ui.Model;
 import java.util.List;
 
-public abstract class IssueFormRequest extends IssueRequest implements ModificationRequest {
+public abstract class IssueFormRequest extends IssueRequest implements RestrictedAccessRequest {
 
     protected IssueService issueService;
 
@@ -26,7 +26,7 @@ public abstract class IssueFormRequest extends IssueRequest implements Modificat
     }
 
     @Override
-    public void modify() {
+    public void doWork() {
         prepareModelAttributes();
         addModelAttributes();
     }
