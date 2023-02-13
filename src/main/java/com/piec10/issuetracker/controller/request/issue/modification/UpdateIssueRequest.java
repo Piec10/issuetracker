@@ -1,11 +1,11 @@
-package com.piec10.issuetracker.controller.issue;
+package com.piec10.issuetracker.controller.request.issue.modification;
 
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class UpdateIssueRequest extends IssueRestrictedAccessRequest {
+public class UpdateIssueRequest extends IssueModificationRequest {
 
     private FormIssue formIssue;
 

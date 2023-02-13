@@ -15,4 +15,8 @@ public abstract class RequestRedirections {
     public static String toCurrentProject(Project project) {
         return "redirect:/dashboard/issues?projectId=" + project.getId();
     }
+
+    public static String toIssueForm() {
+        return "dashboard/issue-form";
+    }
 }

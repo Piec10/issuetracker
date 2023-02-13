@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.controller.issue;
+package com.piec10.issuetracker.controller.request.issue;
 
 import com.piec10.issuetracker.service.IssueService;
 import org.springframework.ui.Model;

@@ -1,5 +1,9 @@
-package com.piec10.issuetracker.controller.issue;
+package com.piec10.issuetracker.controller.request.issue;
 
+import com.piec10.issuetracker.controller.request.issue.modification.ChangeStatusIssueRequest;
+import com.piec10.issuetracker.controller.request.issue.modification.CloseIssueRequest;
+import com.piec10.issuetracker.controller.request.issue.modification.DeleteIssueRequest;
+import com.piec10.issuetracker.controller.request.issue.modification.ReopenIssueRequest;
 import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
 import com.piec10.issuetracker.controller.request.RestrictedAccessRequestStrategy;
 import com.piec10.issuetracker.controller.request.Request;

@@ -1,10 +1,10 @@
 package com.piec10.issuetracker.controller;
 
-import com.piec10.issuetracker.controller.issue.CreateIssueRequest;
+import com.piec10.issuetracker.controller.request.issue.CreateIssueRequest;
 import com.piec10.issuetracker.controller.request.RestrictedAccessRequestStrategy;
 import com.piec10.issuetracker.controller.request.Request;
-import com.piec10.issuetracker.controller.issue.IssueRequestFactory;
-import com.piec10.issuetracker.controller.issue.UpdateIssueRequest;
+import com.piec10.issuetracker.controller.request.issue.IssueRequestFactory;
+import com.piec10.issuetracker.controller.request.issue.modification.UpdateIssueRequest;
 import com.piec10.issuetracker.entity.*;
 import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
@@ -128,7 +128,7 @@ public class IssueController {
         if (formIssue.getId() == 0) {
             Project project = projectService.findById(formIssue.getProjectId());
 
-            issueRequest = new RestrictedAccessRequestStrategy(new CreateIssueRequest(issueService, project, request, formIssue));
+//            issueRequest = new RestrictedAccessRequestStrategy(new CreateIssueRequest(issueService, project, request, formIssue));
 
             if (project == null) return toProjects();
 

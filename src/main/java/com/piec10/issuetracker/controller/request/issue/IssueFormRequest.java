@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.controller.issue;
+package com.piec10.issuetracker.controller.request.issue;
 
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.IssueStatus;
@@ -29,9 +29,5 @@ public abstract class IssueFormRequest {
         model.addAttribute("allIssueTypes", allIssueTypes);
         model.addAttribute("allIssueStatuses", allIssueStatuses);
         model.addAttribute("formIssue", formIssue);
-    }
-
-    protected String toIssueForm() {
-        return "dashboard/issue-form";
     }
 }

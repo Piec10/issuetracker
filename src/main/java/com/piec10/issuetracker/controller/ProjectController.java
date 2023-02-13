@@ -1,8 +1,7 @@
 package com.piec10.issuetracker.controller;
 
-import com.piec10.issuetracker.controller.project.ProjectRequestFactory;
+import com.piec10.issuetracker.controller.request.project.ProjectRequestFactory;
 import com.piec10.issuetracker.controller.request.Request;
-import com.piec10.issuetracker.dto.ProjectDto;
 import com.piec10.issuetracker.dto.ProjectDtoWrapper;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;

@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.controller.issue;
+package com.piec10.issuetracker.controller.request.issue;
 
 import com.piec10.issuetracker.controller.request.ProcessFormRequest;
 import com.piec10.issuetracker.service.IssueService;
@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.piec10.issuetracker.controller.request.RequestRedirections.toIssueForm;
 import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.isGuest;
 
 public class ProcessIssueFormRequest extends IssueFormRequest implements ProcessFormRequest {

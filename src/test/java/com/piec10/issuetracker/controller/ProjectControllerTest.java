@@ -1,14 +1,13 @@
 package com.piec10.issuetracker.controller;
 
 import com.piec10.issuetracker.config.SecurityConfig;
-import com.piec10.issuetracker.controller.project.ProjectRequestFactoryImpl;
+import com.piec10.issuetracker.controller.request.project.ProjectRequestFactoryImpl;
 import com.piec10.issuetracker.dto.ProjectDtoWrapper;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormProject;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

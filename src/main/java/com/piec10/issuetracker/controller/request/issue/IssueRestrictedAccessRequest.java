@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.controller.issue;
+package com.piec10.issuetracker.controller.request.issue;
 
 import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
 import com.piec10.issuetracker.entity.Issue;
@@ -7,7 +7,7 @@ import com.piec10.issuetracker.service.IssueService;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.piec10.issuetracker.controller.request.RequestRedirections.*;
-import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.*;
+import static com.piec10.issuetracker.util.GlobalRolesAndOwnerCheckMethods.doesNotHavePermissionToModify;
 
 public abstract class IssueRestrictedAccessRequest implements RestrictedAccessRequest {
 
@@ -17,8 +17,8 @@ public abstract class IssueRestrictedAccessRequest implements RestrictedAccessRe
 
     public IssueRestrictedAccessRequest(IssueService issueService, int issueId, HttpServletRequest request) {
         this.issueService = issueService;
-        this.request = request;
         issue = issueService.findById(issueId);
+        this.request = request;
     }
 
     @Override
@@ -40,10 +40,4 @@ public abstract class IssueRestrictedAccessRequest implements RestrictedAccessRe
     public String redirectWhenNoPermission() {
         return toAccessDenied();
     }
-
-    @Override
-    public String redirectWhenSuccess() {
-        return toCurrentProject(issue.getProject());
-    }
-
 }

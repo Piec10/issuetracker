@@ -1,11 +1,11 @@
-package com.piec10.issuetracker.controller.issue;
+package com.piec10.issuetracker.controller.request.issue.modification;
 
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class CloseIssueRequest extends IssueRestrictedAccessRequest {
+public class CloseIssueRequest extends IssueModificationRequest {
 
     private User closedBy;
 
