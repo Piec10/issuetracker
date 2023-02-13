@@ -10,7 +10,7 @@ public interface ProcessFormRequest {
 
     String whenIsGuestUser();
 
-    boolean isNew();
+    boolean isNotNew();
 
     String createNew();
 

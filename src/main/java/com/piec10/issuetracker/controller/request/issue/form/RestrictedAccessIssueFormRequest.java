@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.controller.request.issue;
+package com.piec10.issuetracker.controller.request.issue.form;
 
 import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
 import com.piec10.issuetracker.service.IssueService;
@@ -17,7 +17,7 @@ public abstract class RestrictedAccessIssueFormRequest extends IssueFormRequest 
     @Override
     public void doWork() {
         prepareModelAttributes();
-        addModelAttributes();
+        addModelAttributesWithNewFormIssue();
     }
 
     protected abstract void prepareModelAttributes();

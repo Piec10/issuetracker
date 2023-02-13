@@ -1,7 +1,6 @@
 package com.piec10.issuetracker.controller.request.issue;
 
 import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
-import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
 import com.piec10.issuetracker.form.FormIssue;
@@ -9,42 +8,43 @@ import com.piec10.issuetracker.service.IssueService;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static com.piec10.issuetracker.controller.request.RequestRedirections.toCurrentProject;
+import static com.piec10.issuetracker.controller.request.RequestRedirections.*;
+import static com.piec10.issuetracker.util.ProjectRolesCheckMethods.isNotProjectCollaborator;
 
 public class CreateIssueRequest implements RestrictedAccessRequest {
 
-    protected IssueService issueService;
-    protected Issue issue;
+    private IssueService issueService;
     private FormIssue formIssue;
     private User requestUser;
     private Project project;
     private HttpServletRequest request;
 
-    public CreateIssueRequest(IssueService issueService, Project project, HttpServletRequest request, FormIssue formIssue) {
+    public CreateIssueRequest(IssueService issueService, Project project, HttpServletRequest request, User requestUser, FormIssue formIssue) {
         this.issueService = issueService;
         this.project = project;
         this.request = request;
+        this.requestUser = requestUser;
         this.formIssue = formIssue;
     }
 
     @Override
     public boolean isNull() {
-        return false;
+        return (project == null) || (formIssue.getId() != 0);
     }
 
     @Override
     public String redirectWhenNull() {
-        return null;
+        return toProjects();
     }
 
     @Override
     public boolean hasNoPermission() {
-        return false;
+        return isNotProjectCollaborator(requestUser, project);
     }
 
     @Override
     public String redirectWhenNoPermission() {
-        return null;
+        return toAccessDenied();
     }
 
     @Override

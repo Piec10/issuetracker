@@ -1,21 +1,21 @@
 package com.piec10.issuetracker.controller.request.issue;
 
-import com.piec10.issuetracker.controller.request.issue.modification.ChangeStatusIssueRequest;
-import com.piec10.issuetracker.controller.request.issue.modification.CloseIssueRequest;
-import com.piec10.issuetracker.controller.request.issue.modification.DeleteIssueRequest;
-import com.piec10.issuetracker.controller.request.issue.modification.ReopenIssueRequest;
-import com.piec10.issuetracker.controller.request.RestrictedAccessRequest;
-import com.piec10.issuetracker.controller.request.RestrictedAccessRequestStrategy;
-import com.piec10.issuetracker.controller.request.Request;
+import com.piec10.issuetracker.controller.request.*;
+import com.piec10.issuetracker.controller.request.issue.form.EditIssueFormRequest;
+import com.piec10.issuetracker.controller.request.issue.form.NewIssueFormRequest;
+import com.piec10.issuetracker.controller.request.issue.form.ProcessIssueFormRequest;
+import com.piec10.issuetracker.controller.request.issue.modification.*;
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.Project;
 import com.piec10.issuetracker.entity.User;
+import com.piec10.issuetracker.form.FormIssue;
 import com.piec10.issuetracker.service.IssueService;
 import com.piec10.issuetracker.service.ProjectService;
 import com.piec10.issuetracker.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -91,5 +91,32 @@ public class IssueRequestFactoryImpl implements IssueRequestFactory {
         RestrictedAccessRequest editIssueFormRequest = new EditIssueFormRequest(issueService, issueId, request, model);
 
         return new RestrictedAccessRequestStrategy(editIssueFormRequest);
+    }
+
+    @Override
+    public Request createProcessIssueRequest(FormIssue formIssue, BindingResult bindingResult, HttpServletRequest request, Model model) {
+
+        ProcessFormRequest processFormRequest = new ProcessIssueFormRequest(this, issueService, formIssue, bindingResult, request, model);
+
+        return new ProcessFormRequestStrategy(processFormRequest);
+    }
+
+    @Override
+    public Request createUpdateIssueRequest(HttpServletRequest request, FormIssue formIssue) {
+
+        RestrictedAccessRequest updateIssueRequest = new UpdateIssueRequest(issueService, formIssue.getId(), request, formIssue);
+
+        return new RestrictedAccessRequestStrategy(updateIssueRequest);
+    }
+
+    @Override
+    public Request getCreateIssueRequest(HttpServletRequest request, FormIssue formIssue) {
+
+        Project project = projectService.findById(formIssue.getProjectId());
+        User requestUser = userService.findByUsername(request.getUserPrincipal().getName());
+
+        RestrictedAccessRequest createIssueRequest = new CreateIssueRequest(issueService, project, request, requestUser, formIssue);
+
+        return new RestrictedAccessRequestStrategy(createIssueRequest);
     }
 }

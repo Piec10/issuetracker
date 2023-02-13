@@ -109,38 +109,10 @@ public class IssueController {
 
     @PostMapping("/processIssue")
     public String processIssue(@Valid @ModelAttribute("formIssue") FormIssue formIssue,
-                               BindingResult theBindingResult, HttpServletRequest request, Model model) {
+                               BindingResult bindingResult, HttpServletRequest request, Model model) {
 
-        // form validation
-        if (theBindingResult.hasErrors()) {
+        issueRequest = issueRequestFactory.createProcessIssueRequest(formIssue, bindingResult, request, model);
 
-            model.addAttribute("allIssueTypes", issueService.findAllIssueTypes());
-            model.addAttribute("allIssueStatuses", issueService.findAllIssueStatuses());
-            return "dashboard/issue-form";
-        }
-
-        if (isGuest(request)) {
-
-            model.addAttribute("guestUserError", "Sorry, Guest user cannot create new issues.");
-            return "dashboard/issue-form";
-        }
-
-        if (formIssue.getId() == 0) {
-            Project project = projectService.findById(formIssue.getProjectId());
-
-//            issueRequest = new RestrictedAccessRequestStrategy(new CreateIssueRequest(issueService, project, request, formIssue));
-
-            if (project == null) return toProjects();
-
-            User currentUser = userService.findByUsername(request.getUserPrincipal().getName());
-            UserProjectRoles userProjectRoles = getUserProjectRoles(currentUser, project);
-            if (!userProjectRoles.isCollaborator()) return toAccessDenied();
-
-            issueService.createIssue(formIssue, currentUser, project);
-            return toCurrentProject(project);
-        }
-
-        issueRequest = new RestrictedAccessRequestStrategy(new UpdateIssueRequest(issueService, formIssue.getId(), request, formIssue));
         return issueRequest.processRequest();
     }
 

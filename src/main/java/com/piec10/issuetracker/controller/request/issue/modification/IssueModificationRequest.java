@@ -22,11 +22,6 @@ public abstract class IssueModificationRequest implements RestrictedAccessReques
     }
 
     @Override
-    public String redirectWhenSuccess() {
-        return toCurrentProject(issue.getProject());
-    }
-
-    @Override
     public boolean isNull() {
         return issue == null;
     }
@@ -44,5 +39,10 @@ public abstract class IssueModificationRequest implements RestrictedAccessReques
     @Override
     public String redirectWhenNoPermission() {
         return toAccessDenied();
+    }
+
+    @Override
+    public String redirectWhenSuccess() {
+        return toCurrentProject(issue.getProject());
     }
 }

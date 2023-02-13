@@ -4,15 +4,19 @@ public class ProcessFormRequestStrategy implements Request {
 
     private ProcessFormRequest request;
 
+    public ProcessFormRequestStrategy(ProcessFormRequest request) {
+        this.request = request;
+    }
+
     @Override
     public String processRequest() {
 
         if(request.formHasErrors()) return request.whenFormHasErrors();
 
+        if(request.isNotNew()) return request.update();
+
         if(request.isGuestUser()) return request.whenIsGuestUser();
 
-        if(request.isNew()) return request.createNew();
-
-        return request.update();
+        else return request.createNew();
     }
 }

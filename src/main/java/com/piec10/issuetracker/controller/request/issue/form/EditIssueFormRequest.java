@@ -1,5 +1,6 @@
-package com.piec10.issuetracker.controller.request.issue;
+package com.piec10.issuetracker.controller.request.issue.form;
 
+import com.piec10.issuetracker.controller.request.issue.form.RestrictedAccessIssueFormRequest;
 import com.piec10.issuetracker.service.IssueService;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;

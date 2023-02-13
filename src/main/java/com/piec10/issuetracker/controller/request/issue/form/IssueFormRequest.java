@@ -1,4 +1,4 @@
-package com.piec10.issuetracker.controller.request.issue;
+package com.piec10.issuetracker.controller.request.issue.form;
 
 import com.piec10.issuetracker.entity.Issue;
 import com.piec10.issuetracker.entity.IssueStatus;
@@ -25,9 +25,13 @@ public abstract class IssueFormRequest {
         allIssueTypes = issueService.findAllIssueTypes();
     }
 
-    protected void addModelAttributes() {
+    protected void addModelAttributesWithNewFormIssue() {
+        addCommonModelAttributes();
+        model.addAttribute("formIssue", formIssue);
+    }
+
+    protected void addCommonModelAttributes() {
         model.addAttribute("allIssueTypes", allIssueTypes);
         model.addAttribute("allIssueStatuses", allIssueStatuses);
-        model.addAttribute("formIssue", formIssue);
     }
 }
