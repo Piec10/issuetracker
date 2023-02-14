@@ -18,6 +18,95 @@
 
     <title>Issue Tracker | Project Issues</title>
 
+    <style th:inline="css" th:each="issueType : ${allIssueTypes}">
+
+        .btn-type[[${issueType.id}]]{
+            color: #fff;
+            background-color: #[[${issueType.color}]];
+            border-color: #[[${issueType.color}]];
+        }
+
+        .btn-type[[${issueType.id}]]:hover,
+        .btn-type[[${issueType.id}]]:hover:focus,
+        .btn-type[[${issueType.id}]]:focus,
+        .btn-type[[${issueType.id}]]:active:focus,
+        .btn-type[[${issueType.id}]]:active{
+            color: #fff;
+            background-color: #[(${issueType.activeColor})];
+            border-color: #[(${issueType.activeColor})];
+        }
+    </style>
+
+    <style th:inline="css" th:each="issueStatus : ${allIssueStatuses}">
+
+        .btn-status[(${issueStatus.id})]{
+            color: #fff;
+            background-color: #[(${issueStatus.color})];
+            border-color: #[(${issueStatus.color})];
+        }
+
+        .btn-status[(${issueStatus.id})]:hover,
+        .btn-status[(${issueStatus.id})]:hover:focus,
+        .btn-status[(${issueStatus.id})]:focus,
+        .btn-status[(${issueStatus.id})]:active:focus,
+        .btn-status[(${issueStatus.id})]:active{
+            color: #fff;
+            background-color: #[(${issueStatus.activeColor})];
+            border-color: #[(${issueStatus.activeColor})];
+        }
+    </style>
+
+    <style>
+        .btn-priority0{
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-priority0:hover,
+        .btn-priority0:hover:focus,
+        .btn-priority0:focus,
+        .btn-priority0:active:focus,
+        .btn-priority0:active{
+            color: #fff;
+            background-color: #b02a37;
+            border-color: #b02a37;
+        }
+
+        .btn-priority1{
+            color: #fff;
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+        .btn-priority1:hover,
+        .btn-priority1:hover:focus,
+        .btn-priority1:focus,
+        .btn-priority1:active:focus,
+        .btn-priority1:active{
+            color: #fff;
+            background-color: #cc9a06;
+            border-color: #cc9a06;
+        }
+
+        .btn-priority2{
+            color: #fff;
+            background-color: #198754;
+            border-color: #198754;
+        }
+
+        .btn-priority2:hover,
+        .btn-priority2:hover:focus,
+        .btn-priority2:focus,
+        .btn-priority2:active:focus,
+        .btn-priority2:active{
+            color: #fff;
+            background-color: #146c43;
+            border-color: #146c43;
+        }
+
+    </style>
+
 </head>
 <body>
 
@@ -436,7 +525,8 @@
                                         <div th:class="${(show == 'open') ? 'col-4 col-lg-3 col-xxl-2' : 'col-3 col-lg-2'}">
                                             <div class="row">
                                                 <div class="col">
-                                                    <button class="btn btn-outline-secondary btn-square" th:title="${priorities.getName(tempIssue.priority)}">
+                                                    <button class="btn btn-square" th:classappend="${'btn-priority'+tempIssue.priority}"
+                                                            th:title="${priorities.getName(tempIssue.priority)}">
                                                         <i th:if="${tempIssue.priority == 2}" class="bi bi-exclamation-lg"></i>
                                                         <i th:if="${tempIssue.priority == 1}"class="bi bi-exclamation-square"></i>
                                                         <i th:if="${tempIssue.priority == 0}"class="bi bi-exclamation-square-fill"></i>
@@ -444,7 +534,7 @@
                                                 </div>
                                                 <div class="col">
                                                     <div class="dropdown">
-                                                        <button class="btn btn-outline-secondary btn-square"
+                                                        <button class="btn btn-square" th:classappend="${(tempIssue.issueType == null) ? 'btn-outline-secondary' : 'btn-type'+tempIssue.issueType.id}"
                                                                 type="button" data-bs-toggle="dropdown"
                                                                 th:title="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"
                                                                 aria-expanded="false">
@@ -467,7 +557,7 @@
                                                 </div>
                                                 <div class="col" th:if="${show == 'open'}">
                                                     <div class="dropdown">
-                                                        <button class="btn btn-outline-secondary btn-square"
+                                                        <button class="btn btn-square" th:classappend="${(tempIssue.issueStatus == null) ? 'btn-outline-secondary' : 'btn-status'+tempIssue.issueStatus.id}"
                                                                 type="button" data-bs-toggle="dropdown"
                                                                 th:title="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"
                                                                 aria-expanded="false">

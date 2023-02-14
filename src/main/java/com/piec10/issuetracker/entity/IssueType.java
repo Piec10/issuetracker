@@ -20,6 +20,9 @@ public class IssueType {
     @Column(name = "color")
     private String color;
 
+    @Column(name = "active_color")
+    private String activeColor;
+
     public IssueType() {
     }
 
@@ -59,6 +62,14 @@ public class IssueType {
         this.color = color;
     }
 
+    public String getActiveColor() {
+        return activeColor;
+    }
+
+    public void setActiveColor(String activeColor) {
+        this.activeColor = activeColor;
+    }
+
     @Override
     public String toString() {
         return "IssueType{" +
@@ -66,6 +77,7 @@ public class IssueType {
                 ", name='" + name + '\'' +
                 ", icon='" + icon + '\'' +
                 ", color='" + color + '\'' +
+                ", activeColor='" + activeColor + '\'' +
                 '}';
     }
 }

@@ -20,6 +20,9 @@ public class IssueStatus {
     @Column(name = "color")
     private String color;
 
+    @Column(name = "active_color")
+    private String activeColor;
+
     public IssueStatus() {
     }
 
@@ -55,6 +58,14 @@ public class IssueStatus {
         this.color = color;
     }
 
+    public String getActiveColor() {
+        return activeColor;
+    }
+
+    public void setActiveColor(String activeColor) {
+        this.activeColor = activeColor;
+    }
+
     @Override
     public String toString() {
         return "IssueStatus{" +
@@ -62,6 +73,7 @@ public class IssueStatus {
                 ", name='" + name + '\'' +
                 ", icon='" + icon + '\'' +
                 ", color='" + color + '\'' +
+                ", activeColor='" + activeColor + '\'' +
                 '}';
     }
 }
