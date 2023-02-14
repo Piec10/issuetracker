@@ -17,6 +17,8 @@
 
     <title th:text="${(formIssue.id == 0) ? 'Issue Tracker | New Issue' : 'Issue Tracker | Edit Issue'}"/>
 
+    <div th:replace="dashboard/issue-inline-css :: issue-css"></div>
+
 </head>
 <body>
 <div th:replace="dashboard/dashboard-navbar :: navbar(dashboard)"></div>
@@ -91,8 +93,10 @@
                                                                th:value="${issueType.id}"
                                                                th:field="*{issueTypeId}"/>
                                                         <label class="btn btn-outline-secondary"
-                                                               th:for="'issueTypeId'+${stat.count}"
-                                                               th:text="${issueType.name}"/>
+                                                               th:for="'issueTypeId'+${stat.count}">
+                                                            <i class="bi" th:classappend="${issueType.icon}"></i>
+                                                            <span th:text="${issueType.name}"/>
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -105,8 +109,10 @@
                                                                th:value="${issueStatus.id}"
                                                                th:field="*{issueStatusId}"/>
                                                         <label class="btn btn-outline-secondary"
-                                                               th:for="'issueStatusId'+${stat.count}"
-                                                               th:text="${issueStatus.name}"/>
+                                                               th:for="'issueStatusId'+${stat.count}">
+                                                            <i class="bi" th:classappend="${issueStatus.icon}"></i>
+                                                            <span th:text="${issueStatus.name}"/>
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>

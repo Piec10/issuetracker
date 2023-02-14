@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<div th:fragment="issue-css">
+    <style th:inline="css" th:each="issueType : ${allIssueTypes}">
+
+        .btn-type[[${issueType.id}]]{
+            color: #fff;
+            background-color: #[[${issueType.color}]];
+            border-color: #[[${issueType.color}]];
+        }
+
+        .btn-type[[${issueType.id}]]:hover,
+        .btn-type[[${issueType.id}]]:hover:focus,
+        .btn-type[[${issueType.id}]]:focus,
+        .btn-type[[${issueType.id}]]:active:focus,
+        .btn-type[[${issueType.id}]]:active{
+            color: #fff;
+            background-color: #[(${issueType.activeColor})];
+            border-color: #[(${issueType.activeColor})];
+        }
+    </style>
+
+    <style th:inline="css" th:each="issueStatus : ${allIssueStatuses}">
+
+        .btn-status[(${issueStatus.id})]{
+            color: #fff;
+            background-color: #[(${issueStatus.color})];
+            border-color: #[(${issueStatus.color})];
+        }
+
+        .btn-status[(${issueStatus.id})]:hover,
+        .btn-status[(${issueStatus.id})]:hover:focus,
+        .btn-status[(${issueStatus.id})]:focus,
+        .btn-status[(${issueStatus.id})]:active:focus,
+        .btn-status[(${issueStatus.id})]:active{
+            color: #fff;
+            background-color: #[(${issueStatus.activeColor})];
+            border-color: #[(${issueStatus.activeColor})];
+        }
+    </style>
+</div>
