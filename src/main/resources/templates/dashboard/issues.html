@@ -466,17 +466,20 @@
                                                 </div>
                                                 <div class="col" th:if="${show == 'open'}">
                                                     <div class="dropdown">
-                                                        <button class="btn w-100 btn-sm btn-outline-secondary"
-                                                                style="font-size: 0.8rem;"
+                                                        <button class="btn w-100 btn-outline-secondary"
                                                                 type="button" data-bs-toggle="dropdown"
+                                                                th:title="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"
                                                                 aria-expanded="false">
-                                                            <span th:text="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"/>
+                                                            <i class="bi"
+                                                               th:classappend="${(tempIssue.issueStatus == null) ? ' bi-dot' : ' '+tempIssue.issueStatus.icon}"></i>
                                                         </button>
                                                         <ul class="dropdown-menu"
                                                             th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
                                                             <li th:each="issueStatus : ${allIssueStatuses}">
                                                                 <a class="dropdown-item"
                                                                    th:href="'javascript: document.changeIssueStatusForm_'+${tempIssue.id}+${issueStatus.id}+'.submit()'">
+                                                                    <i class="bi"
+                                                                       th:classappend="${issueStatus.icon}"></i>
                                                                     <span th:text="${issueStatus.name}"/>
                                                                 </a>
                                                             </li>
