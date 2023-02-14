@@ -125,8 +125,8 @@
                                 </div>
 
                                 <div class="d-none d-md-block">
-                                    <div class="row p-2 mx-0 fw-bold">
-                                        <div th:class="${(show == 'open') ? 'col-6 col-lg-5 col-xl-4 col-xxl-3' : 'col-4 col-lg-3 col-xxl-2'}">
+                                    <div class="row p-2 mx-0 fw-bold" style="font-size: 0.8rem">
+                                        <div th:class="${(show == 'open') ? 'col-4 col-lg-3 col-xxl-2' : 'col-3 col-lg-2'}">
                                             <div class="row">
                                                 <div class="col">
                                                     <div th:switch="${sort == 'noop' or sort == 'priorityDesc'}">
@@ -433,17 +433,18 @@
                                     <hr class="hr-table">
 
                                     <div class="row clickable-row p-2 mx-0">
-                                        <div th:class="${(show == 'open') ? 'col-6 col-lg-5 col-xl-4 col-xxl-3' : 'col-4 col-lg-3 col-xxl-2'}">
+                                        <div th:class="${(show == 'open') ? 'col-4 col-lg-3 col-xxl-2' : 'col-3 col-lg-2'}">
                                             <div class="row">
                                                 <div class="col">
-                                                    <button class="btn w-100 btn-sm btn-outline-secondary"
-                                                            style="font-size: 0.8rem">
-                                                        <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                    <button class="btn btn-outline-secondary btn-square" th:title="${priorities.getName(tempIssue.priority)}">
+                                                        <i th:if="${tempIssue.priority == 2}" class="bi bi-exclamation-lg"></i>
+                                                        <i th:if="${tempIssue.priority == 1}"class="bi bi-exclamation-square"></i>
+                                                        <i th:if="${tempIssue.priority == 0}"class="bi bi-exclamation-square-fill"></i>
                                                     </button>
                                                 </div>
                                                 <div class="col">
                                                     <div class="dropdown">
-                                                        <button class="btn w-100 btn-outline-secondary"
+                                                        <button class="btn btn-outline-secondary btn-square"
                                                                 type="button" data-bs-toggle="dropdown"
                                                                 th:title="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"
                                                                 aria-expanded="false">
@@ -466,7 +467,7 @@
                                                 </div>
                                                 <div class="col" th:if="${show == 'open'}">
                                                     <div class="dropdown">
-                                                        <button class="btn w-100 btn-outline-secondary"
+                                                        <button class="btn btn-outline-secondary btn-square"
                                                                 type="button" data-bs-toggle="dropdown"
                                                                 th:title="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"
                                                                 aria-expanded="false">
