@@ -443,11 +443,12 @@
 
 
                                                     <div class="dropdown">
-                                                        <button class="btn w-100 btn-sm btn-outline-secondary"
-                                                                style="font-size: 0.8rem;"
+                                                        <button class="btn w-100 btn-outline-secondary"
+
                                                                 type="button" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
-                                                            <span th:text="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"/>
+<!--                                                            <span th:text="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"/>-->
+                                                            <i class="bi" th:classappend="${(tempIssue.issueType == null) ? ' bi-dot' : ' '+tempIssue.issueType.icon}"></i>
                                                         </button>
                                                         <ul class="dropdown-menu"
                                                             th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">

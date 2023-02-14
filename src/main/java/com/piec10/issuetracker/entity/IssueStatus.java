@@ -14,6 +14,12 @@ public class IssueStatus {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "icon")
+    private String icon;
+
+    @Column(name = "color")
+    private String color;
+
     public IssueStatus() {
     }
 
@@ -33,11 +39,29 @@ public class IssueStatus {
         this.name = name;
     }
 
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     @Override
     public String toString() {
         return "IssueStatus{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", icon='" + icon + '\'' +
+                ", color='" + color + '\'' +
                 '}';
     }
 }
