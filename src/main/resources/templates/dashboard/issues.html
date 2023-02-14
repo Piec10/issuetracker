@@ -20,6 +20,8 @@
 
 </head>
 <body>
+
+
 <div th:replace="dashboard/dashboard-navbar :: navbar(dashboard)"></div>
 
 
@@ -440,21 +442,21 @@
                                                     </button>
                                                 </div>
                                                 <div class="col">
-
-
                                                     <div class="dropdown">
                                                         <button class="btn w-100 btn-outline-secondary"
-
                                                                 type="button" data-bs-toggle="dropdown"
+                                                                th:title="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"
                                                                 aria-expanded="false">
-<!--                                                            <span th:text="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"/>-->
-                                                            <i class="bi" th:classappend="${(tempIssue.issueType == null) ? ' bi-dot' : ' '+tempIssue.issueType.icon}"></i>
+                                                            <i class="bi"
+                                                               th:classappend="${(tempIssue.issueType == null) ? ' bi-dot' : ' '+tempIssue.issueType.icon}"></i>
                                                         </button>
                                                         <ul class="dropdown-menu"
                                                             th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
                                                             <li th:each="issueType : ${allIssueTypes}">
                                                                 <a class="dropdown-item"
                                                                    th:href="'javascript: document.changeIssueTypeForm_'+${tempIssue.id}+${issueType.id}+'.submit()'">
+                                                                    <i class="bi"
+                                                                       th:classappend="${issueType.icon}"></i>
                                                                     <span th:text="${issueType.name}"/>
                                                                 </a>
                                                             </li>
@@ -537,10 +539,10 @@
     </div>
 
 </div>
-
 <!-- JavaScript Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
+
 </body>
 </html>
