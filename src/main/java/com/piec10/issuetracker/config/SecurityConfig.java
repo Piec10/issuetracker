@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +31,7 @@ public class SecurityConfig {
                 .formLogin()
                     .loginPage("/login")
                     .loginProcessingUrl("/authenticateTheUser")
-                    .defaultSuccessUrl("/dashboard/")
+                    .successHandler(globalAuthenticationSuccessHandler())
                     .permitAll()
                 .and()
                 .logout()
@@ -39,6 +40,11 @@ public class SecurityConfig {
                 .exceptionHandling().accessDeniedPage("/access-denied");
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler globalAuthenticationSuccessHandler () {
+        return new GlobalAuthenticationSuccessHandler();
     }
 
     @Bean
