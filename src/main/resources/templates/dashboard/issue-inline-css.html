@@ -6,6 +6,7 @@
 <div th:fragment="issue-css">
     <style th:inline="css" th:each="issueType : ${allIssueTypes}">
 
+        .btn-type[[${issueType.id}]].disabled,
         .btn-type[[${issueType.id}]]{
             color: #fff;
             background-color: #[[${issueType.color}]];

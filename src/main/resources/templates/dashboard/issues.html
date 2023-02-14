@@ -21,6 +21,7 @@
     <div th:replace="dashboard/issue-inline-css :: issue-css"></div>
 
     <style>
+        .btn-priority0:disabled,
         .btn-priority0{
             color: #fff;
             background-color: #dc3545;
@@ -37,6 +38,7 @@
             border-color: #b02a37;
         }
 
+        .btn-priority1:disabled,
         .btn-priority1{
             color: #fff;
             background-color: #ffc107;
@@ -53,6 +55,7 @@
             border-color: #cc9a06;
         }
 
+        .btn-priority2:disabled,
         .btn-priority2{
             color: #fff;
             background-color: #198754;
@@ -276,18 +279,28 @@
                                             <div class="modal-body">
                                                 <div class="card">
                                                     <div class="card-header">
-                                                        <div class="row row-cols-2 row-cols-md-3 text-md-center gy-2">
+                                                        <div class="row row-cols-2 row-cols-lg-3 text-md-center gy-2">
                                                             <div class="col">
-                                                                Priority:
-                                                                <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                                <button class="btn w-100" th:classappend="${'btn-priority'+tempIssue.priority}">
+                                                                    <i th:if="${tempIssue.priority == 2}" class="bi bi-exclamation-lg"></i>
+                                                                    <i th:if="${tempIssue.priority == 1}"class="bi bi-exclamation-square"></i>
+                                                                    <i th:if="${tempIssue.priority == 0}"class="bi bi-exclamation-square-fill"></i>
+                                                                    <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                                </button>
                                                             </div>
                                                             <div class="col">
-                                                                Type:
-                                                                <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
+                                                                    <button class="btn w-100" th:classappend="${(tempIssue.issueType == null) ? 'btn-outline-secondary' : 'btn-type'+tempIssue.issueType.id}">
+                                                                        <i class="bi"
+                                                                           th:classappend="${(tempIssue.issueType == null) ? ' bi-dot' : ' '+tempIssue.issueType.icon}"></i>
+                                                                        <span th:text="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"/>
+                                                                    </button>
                                                             </div>
                                                             <div class="col">
-                                                                Status:
-                                                                <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
+                                                                    <button class="btn w-100" th:classappend="${(tempIssue.issueStatus == null) ? 'btn-outline-secondary' : 'btn-status'+tempIssue.issueStatus.id}">
+                                                                        <i class="bi"
+                                                                           th:classappend="${(tempIssue.issueStatus == null) ? ' bi-dot' : ' '+tempIssue.issueStatus.icon}"></i>
+                                                                        <span th:text="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"/>
+                                                                    </button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -429,16 +442,56 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-6">
-                                                            Type:
-                                                            <span th:text="${(tempIssue.issueType == null) ? '' : tempIssue.issueType.name}"/>
+                                                            <button class="btn w-100" th:classappend="${'btn-priority'+tempIssue.priority}">
+                                                                <i th:if="${tempIssue.priority == 2}" class="bi bi-exclamation-lg"></i>
+                                                                <i th:if="${tempIssue.priority == 1}"class="bi bi-exclamation-square"></i>
+                                                                <i th:if="${tempIssue.priority == 0}"class="bi bi-exclamation-square-fill"></i>
+                                                                <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                            </button>
                                                         </div>
                                                         <div class="col-6">
-                                                            Priority:
-                                                            <span th:text="${priorities.getName(tempIssue.priority)}"/>
+                                                            <div class="dropdown">
+                                                                <button class="btn w-100" th:classappend="${(tempIssue.issueType == null) ? 'btn-outline-secondary' : 'btn-type'+tempIssue.issueType.id}"
+                                                                        type="button" data-bs-toggle="dropdown"
+                                                                        aria-expanded="false">
+                                                                    <i class="bi"
+                                                                       th:classappend="${(tempIssue.issueType == null) ? ' bi-dot' : ' '+tempIssue.issueType.icon}"></i>
+                                                                    <span th:text="${(tempIssue.issueType == null) ? 'Set type:' : tempIssue.issueType.name}"/>
+                                                                </button>
+                                                                <ul class="dropdown-menu"
+                                                                    th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
+                                                                    <li th:each="issueType : ${allIssueTypes}">
+                                                                        <a class="dropdown-item"
+                                                                           th:href="'javascript: document.changeIssueTypeForm_'+${tempIssue.id}+${issueType.id}+'.submit()'">
+                                                                            <i class="bi"
+                                                                               th:classappend="${issueType.icon}"></i>
+                                                                            <span th:text="${issueType.name}"/>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                        <div class="col-12" th:if="${show == 'open'}">
-                                                            Status:
-                                                            <span th:text="${(tempIssue.issueStatus == null) ? '' : tempIssue.issueStatus.name}"/>
+                                                        <div class="col-6" th:if="${show == 'open'}">
+                                                            <div class="dropdown">
+                                                                <button class="btn w-100" th:classappend="${(tempIssue.issueStatus == null) ? 'btn-outline-secondary' : 'btn-status'+tempIssue.issueStatus.id}"
+                                                                        type="button" data-bs-toggle="dropdown"
+                                                                        aria-expanded="false">
+                                                                    <i class="bi"
+                                                                       th:classappend="${(tempIssue.issueStatus == null) ? ' bi-dot' : ' '+tempIssue.issueStatus.icon}"></i>
+                                                                    <span th:text="${(tempIssue.issueStatus == null) ? 'Set status:' : tempIssue.issueStatus.name}"/>
+                                                                </button>
+                                                                <ul class="dropdown-menu"
+                                                                    th:if="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')') or (projectRoles.isOwner) or (tempIssue.createdBy != null ? (tempIssue.createdBy.username == #authentication.getPrincipal().getUsername()) : false)}">
+                                                                    <li th:each="issueStatus : ${allIssueStatuses}">
+                                                                        <a class="dropdown-item"
+                                                                           th:href="'javascript: document.changeIssueStatusForm_'+${tempIssue.id}+${issueStatus.id}+'.submit()'">
+                                                                            <i class="bi"
+                                                                               th:classappend="${issueStatus.icon}"></i>
+                                                                            <span th:text="${issueStatus.name}"/>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div th:switch="${tempIssue.createdBy == null}">
